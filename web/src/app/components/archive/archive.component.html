@@ -1,0 +1,9 @@
+<section *ngFor="let articleArray of archives">
+  <h4>{{articleArray[0].date.getFullYear()}}</h4>
+  <ul>
+    <li *ngFor="let article of articleArray">
+      <time class="margin-h">{{article.date | date: 'yyyy-MM-dd'}}</time> —
+      <a class="primary-link" [routerLink]="['/articles', article._id]">{{article.title}}</a>
+    </li>
+  </ul>
+</section>

@@ -1,0 +1,23 @@
+{
+  "name": "test-express",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "build": "webpack --color --progress"
+  },
+  "dependencies": {
+    "body-parser": "~1.16.0",
+    "commander": "^2.9.0",
+    "cookie-parser": "~1.4.3",
+    "express": "~4.14.1",
+    "highlight.js": "^9.10.0",
+    "mongodb": "^2.2.24",
+    "morgan": "^1.8.1",
+    "rotating-file-stream": "^1.1.9"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

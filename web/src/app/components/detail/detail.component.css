@@ -1,0 +1,89 @@
+:host /deep/ .hljs-comment, :host /deep/ .hljs-quote {
+  color: #93a1a1;
+}
+
+:host /deep/ .hljs-keyword, :host /deep/ .hljs-selector-tag, :host /deep/ .hljs-addition {
+  color: #859900;
+}
+
+:host /deep/ .hljs-number, :host /deep/ .hljs-string, :host /deep/ .hljs-meta .hljs-meta-string, :host /deep/ .hljs-literal, :host /deep/ .hljs-doctag, :host /deep/ .hljs-regexp {
+  color: #2aa198;
+}
+
+:host /deep/ .hljs-title, :host /deep/ .hljs-section, :host /deep/ .hljs-name, :host /deep/ .hljs-selector-id, :host /deep/ .hljs-selector-class {
+  color: #268bd2;
+}
+
+:host /deep/ .hljs-attribute, :host /deep/ .hljs-attr, :host /deep/ .hljs-variable, :host /deep/ .hljs-template-variable, :host /deep/ .hljs-class .hljs-title, :host /deep/ .hljs-type {
+  color: #b58900;
+}
+
+:host /deep/ .hljs-symbol, :host /deep/ .hljs-bullet, :host /deep/ .hljs-subst, :host /deep/ .hljs-meta, :host /deep/ .hljs-meta .hljs-keyword, :host /deep/ .hljs-selector-attr, :host /deep/ .hljs-selector-pseudo, :host /deep/ .hljs-link {
+  color: #e91e63;
+}
+
+:host /deep/ .hljs-built_in, :host /deep/ .hljs-deletion {
+  color: #009688;
+}
+
+:host /deep/ .hljs-formula {
+  background: #eee8d5;
+}
+
+:host /deep/ .hljs-emphasis {
+  font-style: italic;
+}
+
+:host /deep/ .hljs-strong {
+  font-weight: bold;
+}
+
+:host /deep/ pre {
+  border-radius: 2px;
+}
+
+:host /deep/ pre code {
+  display: block;
+  overflow-x: auto;
+  padding: 16px;
+  background: #edf3f7;
+  color: #657b83;
+}
+
+:host /deep/ blockquote {
+  border-left: 4px solid #0c96f3;
+  margin: 16px 0;
+  padding: 1px 16px;
+  background: #edf3f7;
+}
+
+:host /deep/ blockquote p {
+  margin: 8px 0;
+}
+
+:host /deep/ li {
+  margin: 0;
+  line-height: 1.8;
+}
+
+:host /deep/ pre code::-webkit-scrollbar {
+  height: 8px;
+}
+
+:host /deep/ pre code::-webkit-scrollbar-thumb {
+  background-color: #93a1a1;
+  border-radius: 2px;
+}
+
+:host /deep/ p code {
+  background-color: #daeff7;
+  padding: 2px 4px;
+  margin: 0 4px;
+  border-radius: 2px;
+  color: #335d71;
+  line-height: 1.4;
+}
+
+:host /deep/ h1, :host /deep/ h2, :host /deep/ h3， :host /deep/ h4， :host /deep/ h5， :host /deep/ h6 {
+  margin: 20px 0;
+}

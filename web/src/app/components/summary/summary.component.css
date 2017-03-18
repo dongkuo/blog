@@ -1,0 +1,16 @@
+.label {
+  padding: 0 4px;
+  border-radius: 2px;
+  font-size: 14px;
+  margin-right: 8px;
+  border: 1px solid #0F88EB;
+  color: #0F88EB;
+}
+
+section {
+  border-bottom: 1px dashed #cfd8dc;
+}
+
+.wrapper:last-child {
+  border: none;
+}

@@ -1,0 +1,8 @@
+<article>
+  <h1>{{article.title}}
+    <time class="float-right">{{article.date | date: 'yyyy/MM/dd hh:mm'}}</time>
+  </h1>
+  <p class="hint">字数 {{article.word}}　阅读 {{article.view}}　评论 {{article.comment || 0}}</p>
+  <div [innerHTML]="article.html"></div>
+</article>
+<blog-divider [tip]="'© 转载请注明出处，谢谢 :-)'"></blog-divider>
