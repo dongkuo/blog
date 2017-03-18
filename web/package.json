@@ -6,7 +6,6 @@
     "start": "ng serve",
     "build": "ng build --aot -prod"
   },
-  "private": true,
   "dependencies": {
     "@angular/common": "^2.4.9",
     "@angular/compiler": "^2.4.9",

@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "build": "webpack --color --progress"
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "body-parser": "~1.16.0",
