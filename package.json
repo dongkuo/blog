@@ -1,0 +1,27 @@
+{
+  "name": "NiceBlog",
+  "description": "a web blog application",
+  "main": "index.js",
+  "repository": "git@github.com:derker94/NiceBlog.git",
+  "author": "derker <893309018@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "compression": "^1.6.2",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "express-session": "^1.15.3",
+    "highlight.js": "^9.11.0",
+    "marked": "^0.3.6",
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.27",
+    "morgan": "^1.8.2",
+    "rotating-file-stream": "^1.2.2",
+    "serve-favicon": "^2.4.2",
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,96 @@
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/public/lib/editormd/css/editormd.min.css"/>
+  <script src="/public/lib/jquery-2.2.4.min.js"></script>
+  <script src="/public/lib/editormd/editormd.min.js"></script>
+  <style>
+    body {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<div id="editormd">
+  <textarea style="display:none;"></textarea>
+  <script type="text/javascript">
+    $(function () {
+      var editor = editormd("editormd", {
+        path: "/public/lib/editormd/lib/",
+        toolbarIcons: function () {
+          return editormd.toolbarModes['mini'].concat(['|', 'title', 'date', '||', 'save']);
+        },
+        toolbarIconsClass: {
+          save: "fa-save"
+        },
+        toolbarCustomIcons: {
+          title: "<label style='margin-left: 20px'>标题：<input id='title' style='width: 230px'></label>",
+          date: "<label style='margin-left: 20px'>日期：<input id='date' type='datetime-local'></label>"
+        },
+        toolbarHandlers: {
+          save: saveOrUpdate
+        },
+        onload: function () {
+          $('#date').val(formatDate(new Date()));
+          var that = this;
+          if ('<%= id %>') {
+            $.get('/api/articles/<%= id %>').success(function (res) {
+              that.cm.setValue(res.data.markdown);
+              $('#date').val(formatDate(new Date(res.data.date)));
+              $('#title').val(res.data.title);
+            }).error(function (err) {
+              alert('该文章没有找到...')
+              location.href = '/manage/articles';
+            });
+          }
+        }
+      });
+
+      function saveOrUpdate(cm) {
+        var title = $('#title').val();
+        var date = new Date($('#date').val());
+        var markdown = cm.getValue();
+        if (!title) {
+          alert('标题不能为空');
+          return;
+        }
+        if (!date) {
+          alert('日期不能为空');
+          return;
+        }
+        if (!markdown) {
+          alert('内容不能为空');
+          return;
+        }
+        $.ajax({
+          url: "/api/articles/<%= id %>",
+          type: '<%= id %>' ? 'PUT' : 'POST',
+          data: {title: title, date: date, markdown: markdown},
+          dataType: 'json',
+          cache: false,
+          success: function (res) {
+            location.href = '/blog/' + (res.data._id || '<%= id %>');
+          },
+          error: function (err) {
+            alert(err);
+          }
+        });
+      }
+
+      function formatDate(date) {
+        return date.getFullYear() + '-' + paddingZero(date.getMonth() + 1) + '-' + paddingZero(date.getDate()) + 'T'
+          + paddingZero(date.getHours()) + ':' + paddingZero(date.getMinutes());
+      }
+
+      function paddingZero(num) {
+        if (num <= 9) {
+          return '0' + num;
+        }
+        return num + '';
+      }
+    });
+  </script>
+</div>
+</body>
+</html>
+

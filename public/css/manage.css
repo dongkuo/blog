@@ -1,0 +1,28 @@
+.container{
+  max-width: 1200px;
+}
+
+table {
+  table-layout: fixed;
+}
+
+thead{
+  padding: 8px 0;
+}
+
+tr{
+  text-align: center;
+}
+
+th{
+  padding: 4px 0;
+  border-bottom: 2px solid #5a5239;
+}
+
+td{
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5d7;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

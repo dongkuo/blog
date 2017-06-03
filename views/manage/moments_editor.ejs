@@ -1,0 +1,64 @@
+<html>
+<% include ../open/head.ejs %>
+<body>
+<% include ../open/header.ejs %>
+<main class="container moments">
+  <form id="form-moment">
+    <p>
+      <label for="textarea-moment">
+        <strong>Date: </strong>
+        <input id="date" type="datetime-local" name="date">
+      </label>
+    </p>
+    <p class="position-relative">
+      <textarea id="textarea-moment" maxlength="200" name="content"><%= data.content %></textarea>
+      <span id="word" class="text-hint word"><span id="word-count" class="word-count">0</span> / <span
+          class="word-limit">200</span></span>
+    </p>
+    <p>
+      <button id="btn-save" class="button-block"><%= action %></button>
+    </p>
+  </form>
+</main>
+<% include ../common/footer.ejs %>
+<script src="/public/lib/jquery-2.2.4.min.js"></script>
+<script>
+  let date = '<%= data.date %>' ? new Date('<%= data.date %>') : new Date();
+  $('#date').val(formatDate(date));
+  $('#textarea-moment').focus();
+
+  $('#textarea-moment').bind('input', function () {
+    var length = $(this).val().length;
+    $('#word-count').text(length);
+    $('#word').css('color', length >= 200 ? '#CD9B1D' : '#a0a08b');
+  });
+
+  $('#btn-save').click(function () {
+    $.ajax({
+      url: '/api/moments/<%=id%>',
+      method: '<%= action %>' === '保存' ? 'POST' : 'PUT',
+      data: $('#form-moment').serialize(),
+      success: function (res) {
+        location.href = '/moments';
+      },
+      error: function (err) {
+        alert(err);
+      }
+    });
+    return false;
+  });
+
+  function formatDate(date) {
+    return date.getFullYear() + '-' + paddingZero(date.getMonth() + 1) + '-' + paddingZero(date.getDate()) + 'T'
+      + paddingZero(date.getHours()) + ':' + paddingZero(date.getMinutes());
+  }
+
+  function paddingZero(num) {
+    if (num <= 9) {
+      return '0' + num;
+    }
+    return num + '';
+  }
+</script>
+</body>
+</html>

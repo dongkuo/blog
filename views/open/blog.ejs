@@ -1,0 +1,13 @@
+<html>
+<% include head.ejs %>
+<body>
+<% include header.ejs %>
+<main class="container blog">
+  <h1><%= data.title %></h1>
+  <time class="text-hint"><%= moment(data.date).format('YYYY年MM月DD日 HH:mm') %></time>
+  <%- data.html %>
+  <p class="divider"><strong class="tip">End</strong></p>
+</main>
+<% include ../common/footer.ejs %>
+</body>
+</html>
