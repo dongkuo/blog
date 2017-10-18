@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="SpringBootTest" packages="cn.derker">
+    <Appenders>
+        <Console name="CONSOLE">
+            <!--%highlight{%d %-5level %l: %m%n%throwable}{FATAL=Red, ERROR=Red, WARN=Yellow, INFO=Black, DEBUG=Green}-->
+            <PatternLayout
+                    pattern="%highlight{%d %-5level %c{1.}: %m%n%throwable}{FATAL=Red, ERROR=Red, WARN=Yellow, INFO=Black, DEBUG=Green}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+        <Logger name="cn.derker.blog" level="debug"/>
+        <Logger name="org.springframework.transaction" level="debug"/>
+        <Logger name="org.springframework.orm.jpa.JpaTransactionManager" level="debug"/>
+        <Logger name="level.tk.mybatis" level="trace"/>
+    </Loggers>
+</Configuration>
