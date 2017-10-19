@@ -20,21 +20,30 @@ export default new Router({
       path: '/',
       component: PortalFrame,
       children: [
-        {path: '/', redirect: 'writing'},
-        {path: '/writing', component: PortalWriting},
-        {path: '/programing', component: PortalPrograming},
-        {path: '/archives', component: PortalArchive},
-        {path: '/moments', component: PortalMoment},
-        {path: '/about', component: PortalAbout},
-        {path: '/posts/:id', component: PortalPost},
+        { path: '/', redirect: 'writing' },
+        { path: '/writing', component: PortalWriting },
+        { path: '/programing', component: PortalPrograming },
+        { path: '/archives', component: PortalArchive },
+        { path: '/moments', component: PortalMoment },
+        { path: '/about', component: PortalAbout },
+        { path: '/posts/:id', component: PortalPost },
       ]
     },
     {
       path: '/management',
       component: ManagementFrame,
       children: [
-        {path: '', alias: 'home', component: ManagementHome}
+        { path: '', alias: 'home', component: ManagementHome }
       ]
     }
-  ]
+  ],
+  mode: 'history',
+  scrollBehavior(to, from, savedPosition) {
+    console.log("scrollBehavior")
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })

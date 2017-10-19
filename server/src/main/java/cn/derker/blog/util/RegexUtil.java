@@ -22,8 +22,8 @@ public class RegexUtil {
      * @return
      */
     public static String filterHtmlTag(String html, int limit) {
-        String content = html.replaceAll("</?[^>]+>", ""); //剔出html的标签
-        content = content.replaceAll("[\r\n\t]*", "");//去除字符串中的回车,换行符,制表符
+        String content = html.replaceAll("</?[^>]+>", "");
+        content = content.replaceAll("[\r\n\t]*", "");
         return content.substring(0, Math.min(150, content.length()));
 
     }

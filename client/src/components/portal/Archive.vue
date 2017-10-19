@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-for="posts in archives">
-      <h2 class="title">{{posts[0].createdTime | date('yyyy')}}</h2>
+    <div v-for="posts in archives" :key="posts.id">
+      <h2 class="title">{{posts[0].year}}</h2>
       <ul>
-        <li v-for="post in posts" class="item"><span class="text-gray">{{post.createdTime | date('yyyy.MM.dd')}}</span>
+        <li v-for="post in posts" :key="post.id" class="item"><span class="text-gray time">{{post.finished_time | date('yyyy.MM.dd')}}</span>
           — <a href="" class="link-primary">{{post.title}}</a></li>
       </ul>
     </div>
@@ -12,25 +12,32 @@
 
 <script>
   export default {
+    created(){
+      this.getArchives();
+    },
     data() {
       return {
-        archives: [
-          [
-            {title: '梵高先生', createdTime: new Date("2015-03-15")},
-          ],
-          [
-            {title: '遇见', createdTime: new Date("2014-09-14")},
-            {title: '八月', createdTime: new Date("2014-09-13")},
-            {title: '五月', createdTime: new Date("2014-05-21")},
-            {title: '生如夏花', createdTime: new Date("2014-04-29")},
-            {title: '你', createdTime: new Date("2014-03-09")},
-            {title: '我的大学', createdTime: new Date("2014-02-10")}
-          ],
-          [
-            {title: '十八岁的青春', createdTime: new Date("2013-12-10")},
-            {title: '关于旅行', createdTime: new Date("2013-10-12")}
-          ]
-        ]
+        archives: []
+      }
+    },
+    methods:{
+      getArchives(){
+        this.$http.api.post.all().then(resp => {
+          let lastPost = null
+          let array = []
+          resp.data.data.forEach(post => {
+            let year = new Date(post.finished_time).getFullYear();
+            post.year = year
+            if(!lastPost || new Date(lastPost.finished_time).getFullYear() !== year){
+              array = []
+              this.archives.push(array)
+            }
+            array.push(post)
+            lastPost = post
+          });
+        }).catch(err => {
+          console.log(err)
+        });
       }
     }
   }
@@ -43,6 +50,10 @@
 
   .item {
     margin: 16px 0;
+  }
+
+  .time{
+    letter-spacing: 2px;
   }
 
   @media screen and (max-width: 720px) {

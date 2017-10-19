@@ -2,6 +2,7 @@ package cn.derker.blog.web.api;
 
 import cn.derker.blog.annotation.Api;
 import cn.derker.blog.annotation.ApiExclude;
+import cn.derker.blog.annotation.ApiInclude;
 import cn.derker.blog.domain.entity.Post;
 import cn.derker.blog.domain.model.ApiResult;
 import cn.derker.blog.domain.model.Pageable;
@@ -28,6 +29,15 @@ public class PostApi {
 
     @Autowired
     private PostService postService;
+
+    /**
+     * 获取文章归档
+     */
+    @GetMapping("/all")
+    @ApiInclude(clazz = Post.class, fields = {"id", "finished_time", "title"})
+    public ApiResult allPost() {
+        return ApiResult.ok(postService.allPost());
+    }
 
     /**
      * 获取文章列表
@@ -99,7 +109,7 @@ public class PostApi {
         System.out.println(html.length());
 
         // summary
-        String summary = RegexUtil.filterHtmlTag(html, 150);
+        String summary = RegexUtil.filterHtmlTag(html, 200);
         newPost.setSummary(summary);
 
         // 保证finishedTime有值

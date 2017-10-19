@@ -29,6 +29,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> listPost(Pageable pageable) {
         Example example = new Example(Post.class);
+        example.setOrderByClause("finished_time DESC");
         example.excludeProperties("html", "markdown");
         List<Post> content = postMapper.selectByExampleAndRowBounds(example, pageable.getPageRowBounds());
         int total = postMapper.selectCount(null);
@@ -55,5 +56,13 @@ public class PostServiceImpl implements PostService {
             throw new InsertException("添加文章失败");
         }
         return row;
+    }
+
+    @Override
+    public List<Post> allPost() {
+        Example example = new Example(Post.class);
+        example.selectProperties("id", "title", "finishedTime");
+        example.setOrderByClause("finished_time DESC");
+        return postMapper.selectByExample(example);
     }
 }

@@ -114,14 +114,28 @@ p, li {
 }
 
 /*post页面*/
+#post{
+  margin-top: 32px;
+}
+
+#post a{
+  color: #1296db;
+  cursor: crosshair;
+}
+
+#post a:hover{
+  color: #024a6e;
+}
+
 #post figure {
   width: 100%;
   padding: 0;
   margin: 32px 0;
+  text-align: center;
 }
 
 #post figure img {
-  width: 100%;
+  max-width: 100%;
 }
 
 #post figure figcaption {
@@ -130,6 +144,31 @@ p, li {
   margin: 8px 0;
   color: #6d7789;
   font-style: italic;
+}
+
+#post pre{
+  overflow: auto;
+  background: #f4f6f7;
+  padding: 8px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+#post .tex{
+  text-align: center;
+}
+
+#post blockquote{
+  background: #f4f6f7;
+  margin: 0;
+  padding: 10px 16px;
+  border-left: 6px solid #1296db;
+  border-radius: 2px;
+  font-size: 15px;
+}
+
+#post blockquote>p{
+  margin: 0;
 }
 
 @media screen and (max-width: 720px) {

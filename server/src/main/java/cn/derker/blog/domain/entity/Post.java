@@ -12,6 +12,27 @@ import java.util.Date;
 @Table(name = "tb_post")
 public class Post extends BaseEntity {
 
+    /**
+     * 写作
+     */
+    public static final int TYPE_WRITING = 0;
+    /**
+     * 编程
+     */
+    public static final int TYPE_PROGRAMING = 1;
+
+    /**
+     * 正常
+     */
+    public static final int STATUS_NORMAL = 0;
+    /**
+     * 下线
+     */
+    public static final int STATUS_OFFLINE = 1;
+
+
+    private Integer type = 0;
+    private Integer state = 0;
     private String coverImage;
     private String coverCaption;
     private String title;
@@ -22,6 +43,22 @@ public class Post extends BaseEntity {
     private Integer likeNumber = 0;
     private Integer commentingNumber = 0;
     private Date finishedTime;
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public String getCoverImage() {
         return coverImage;
