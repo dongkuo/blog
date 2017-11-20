@@ -30,18 +30,53 @@ public class Post extends BaseEntity {
      */
     public static final int STATUS_OFFLINE = 1;
 
-
+    /**
+     * 文章类型，0：写作，1：编程
+     */
     private Integer type = 0;
+    /**
+     * 文章状态，0：正常，1：下线
+     */
     private Integer state = 0;
+    /**
+     * 文章封面，500字符以内
+     */
     private String coverImage;
+    /**
+     * 文章封面说明，50字以内
+     */
     private String coverCaption;
+    /**
+     * 文章标题，50字以内
+     */
     private String title;
+    /**
+     * 文章摘要，500字以内
+     */
     private String summary;
+    /**
+     * 文章html格式内容
+     */
     private String html;
+    /**
+     * 文章markdown格式内容
+     */
     private String markdown;
+    /**
+     * 阅读数
+     */
     private Integer readingNumber = 0;
+    /**
+     * 点赞数
+     */
     private Integer likeNumber = 0;
+    /**
+     * 评论数
+     */
     private Integer commentingNumber = 0;
+    /**
+     * 文章完成时间
+     */
     private Date finishedTime;
 
     public Integer getState() {
@@ -138,5 +173,24 @@ public class Post extends BaseEntity {
 
     public void setFinishedTime(Date finishedTime) {
         this.finishedTime = finishedTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + getId() +
+                ", type=" + type +
+                ", state=" + state +
+                ", coverImage='" + coverImage + '\'' +
+                ", coverCaption='" + coverCaption + '\'' +
+                ", title='" + title + '\'' +
+                ", summary='" + summary + '\'' +
+                ", html='" + html + '\'' +
+                ", markdown='" + markdown + '\'' +
+                ", readingNumber=" + readingNumber +
+                ", likeNumber=" + likeNumber +
+                ", commentingNumber=" + commentingNumber +
+                ", finishedTime=" + finishedTime +
+                '}';
     }
 }

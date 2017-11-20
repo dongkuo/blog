@@ -1,9 +1,6 @@
 package cn.derker.blog.util;
 
 
-import com.alibaba.druid.util.Utils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeoutException;

@@ -11,11 +11,15 @@ import cn.derker.blog.util.BeanUtil;
 import cn.derker.blog.util.IdUtil;
 import cn.derker.blog.util.MarkdownUtil;
 import cn.derker.blog.util.RegexUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Date;
 
 /**
@@ -27,13 +31,15 @@ import java.util.Date;
 @RequestMapping("/posts")
 public class PostApi {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostApi.class);
+
     @Autowired
     private PostService postService;
 
     /**
      * 获取文章归档
      */
-    @GetMapping("/all")
+    @GetMapping("/archives")
     @ApiInclude(clazz = Post.class, fields = {"id", "finished_time", "title"})
     public ApiResult allPost() {
         return ApiResult.ok(postService.allPost());
@@ -45,7 +51,7 @@ public class PostApi {
      * @param pageable
      * @return
      */
-    @GetMapping("/list")
+    @GetMapping
     @ApiExclude(clazz = Post.class, fields = {"html", "markdown"})
     public ApiResult listPost(Pageable pageable) {
         return ApiResult.ok(postService.listPost(pageable));
@@ -83,7 +89,7 @@ public class PostApi {
      * @return
      */
     @PostMapping
-    public ApiResult insertPost(@RequestBody Post post) {
+    public ResponseEntity savePost(@RequestBody Post post) {
         Post newPost = new Post();
 
         // title（必须）
@@ -106,8 +112,6 @@ public class PostApi {
         Assert.hasLength(html, "markdown解析失败.");
         newPost.setHtml(html);
 
-        System.out.println(html.length());
-
         // summary
         String summary = RegexUtil.filterHtmlTag(html, 200);
         newPost.setSummary(summary);
@@ -116,9 +120,9 @@ public class PostApi {
         if (newPost.getFinishedTime() == null) {
             newPost.setFinishedTime(new Date());
         }
-
         postService.insertPost(newPost);
-        return ApiResult.empty();
+        LOGGER.debug("保存文章：{}", newPost);
+        return ResponseEntity.created(URI.create("/posts/" + newPost.getId())).build();
     }
 }
 
