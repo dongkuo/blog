@@ -2,9 +2,8 @@
 <Configuration status="warn" name="SpringBootTest" packages="cn.derker">
     <Appenders>
         <Console name="CONSOLE">
-            <!--%highlight{%d %-5level %l: %m%n%throwable}{FATAL=Red, ERROR=Red, WARN=Yellow, INFO=Black, DEBUG=Green}-->
             <PatternLayout
-                    pattern="%highlight{%d %-5level %c{1.}: %m%n%throwable}{FATAL=Red, ERROR=Red, WARN=Yellow, INFO=Black, DEBUG=Green}"/>
+                    pattern="%highlight{%d %-5level %c{1.}: %m%n%throwable}{STYLE=Logback}"/>
         </Console>
     </Appenders>
 

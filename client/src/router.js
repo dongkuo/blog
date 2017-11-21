@@ -1,16 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import PortalFrame from './components/portal/Frame'
-import PortalWriting from './components/portal/Writing'
-import PortalPrograming from './components/portal/Programing'
-import PortalArchive from './components/portal/Archive'
-import PortalMoment from './components/portal/Moment'
-import PortalAbout from './components/portal/About'
-import PortalPost from './components/portal/Post'
+import PortalFrame from './components/portal/Frame.vue'
+import PortalWriting from './components/portal/Writing.vue'
+import PortalPrograming from './components/portal/Programing.vue'
+import PortalArchive from './components/portal/Archive.vue'
+import PortalMoment from './components/portal/Moment.vue'
+import PortalAbout from './components/portal/About.vue'
+import PortalPost from './components/portal/Post.vue'
 
-import ManagementFrame from './components/management/Frame'
-import ManagementHome from './components/management/Home'
+import ManagementFrame from './components/management/Frame.vue'
+import ManagementHome from './components/management/Home.vue'
+import ManagementWrite from './components/management/Write.vue'
 
 Vue.use(Router)
 
@@ -33,7 +34,8 @@ export default new Router({
       path: '/management',
       component: ManagementFrame,
       children: [
-        { path: '', alias: 'home', component: ManagementHome }
+        { path: '', alias: 'home', component: ManagementHome },
+        { path: 'write', component: ManagementWrite }
       ]
     }
   ],

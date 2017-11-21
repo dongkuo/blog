@@ -20,7 +20,7 @@
       </span>
       <span class="attribute">
         <i class="fa fa-calendar"></i>
-        {{post.created_time | date('friendly')}}
+        {{post.finished_time | date}}
       </span>
     </div>
     <!--正文-->

@@ -8,7 +8,7 @@
       <p class="content">
         <span>{{post.summary}}</span>
         <router-link :to="'/posts/' + post.id" class="link-primary">
-          <img :src="post.cover_image ||  'http://oy1w6h5oy.bkt.clouddn.com/picture.svg'" class="cover">
+          <img :src="post.cover_image ||  'http://ojapxw8c8.bkt.clouddn.com/default_img.png'" class="cover">
         </router-link>
       </p>
       <span class="label" v-for="label in post.labels" :key="label">{{label}}</span>
@@ -27,13 +27,11 @@
     </li>
     <infinite-loading @infinite="getPosts">
       <app-loading slot="spinner"></app-loading>
-      <p slot="no-more">
-        <app-emoji>🙈</app-emoji>
-        没有啦...
-      </p>
+      <div slot="no-more">
+        <p><app-emoji :size="2">🙈</app-emoji><br/>没有啦 ~</p>
+      </div>
       <p slot="no-results">
-        <app-emoji>🙈</app-emoji>
-        啥都没有...
+        <app-emoji :size="2">🐒</app-emoji><br/>啥都没有啊 …
       </p>
     </infinite-loading>
   </ul>

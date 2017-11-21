@@ -27,13 +27,16 @@ http.interceptors.response.use(response => {
 http.api = {}
 http.api.post = {
   list(queries){
-    return http.get(`${config.dev.apiPrefix}/posts/list?${url.buildQueries(queries)}`)
+    return http.get(`${config.dev.apiPrefix}/posts?${url.buildQueries(queries)}`)
   },
   get(id) {
     return http.get(`${config.dev.apiPrefix}/posts/${id}`)
   },
   all(){
-    return http.get(`${config.dev.apiPrefix}/posts/all`)
+    return http.get(`${config.dev.apiPrefix}/posts/archives`)
+  },
+  save(post){
+    return http.post(`${config.dev.apiPrefix}/posts`, post)
   }
 }
 export default http
