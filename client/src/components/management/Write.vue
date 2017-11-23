@@ -2,8 +2,8 @@
   <div>
     <p>类　　型：
       <select v-model="post.type">
-        <option value="0">写作</option>
-        <option value="1">编程</option>
+        <option :value="0">写作</option>
+        <option :value="1">编程</option>
       </select>
     </p>
     <p>

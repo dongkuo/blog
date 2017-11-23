@@ -53,8 +53,8 @@ public class PostApi {
      */
     @GetMapping
     @ApiExclude(clazz = Post.class, fields = {"html", "markdown"})
-    public ApiResult listPost(Pageable pageable) {
-        return ApiResult.ok(postService.listPost(pageable));
+    public ApiResult listPost(Integer type, Pageable pageable) {
+        return ApiResult.ok(postService.listPost(type, pageable));
     }
 
     /**
@@ -120,6 +120,8 @@ public class PostApi {
         if (newPost.getFinishedTime() == null) {
             newPost.setFinishedTime(new Date());
         }
+
+        newPost.setType(post.getType());
         postService.insertPost(newPost);
         LOGGER.debug("保存文章：{}", newPost);
         return ResponseEntity.created(URI.create("/posts/" + newPost.getId())).build();

@@ -48,7 +48,7 @@
     background: #3b90c8;
     position: absolute;
     top: 0;
-    left: 26px;
+    left: 23px;
     z-index: 1;
   }
 
@@ -67,7 +67,7 @@
     left: 0;
     top: 0;
     z-index: 2;
-    background: #FFFFF0;
+    background: #fbfcfc;
     border-radius: 50%;
     padding: 2px;
   }

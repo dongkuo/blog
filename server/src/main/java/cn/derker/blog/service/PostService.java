@@ -11,7 +11,7 @@ import java.util.List;
  * @since 2017-10-10 19:16
  */
 public interface PostService {
-    Page<Post> listPost(Pageable pageable);
+    Page<Post> listPost(Integer type, Pageable pageable);
 
     Post getPost(Integer id);
 

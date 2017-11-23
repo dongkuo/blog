@@ -5,6 +5,7 @@ import cn.derker.blog.exception.base.BaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,25 +38,46 @@ public class ExceptionControllerAdvice {
     }
 
     /**
-     * 400， 不合法参数异常
+     * 400
      */
     @ExceptionHandler(value = IllegalArgumentException.class)
     @ResponseBody
     public ResponseEntity handle(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "parameters is illegal"));
     }
 
     /**
-     * 400， 不合法参数异常
+     * 400
      */
-    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    @ExceptionHandler(value = {BindException.class})
+    @ResponseBody
+    public ResponseEntity handle(BindException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "parameters is illegal"));
+    }
+
+    /**
+     * 405
+     */
+    @ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
     @ResponseBody
     public ResponseEntity handle(HttpRequestMethodNotSupportedException e) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                .body(ApiResult.error(HttpStatus.METHOD_NOT_ALLOWED.value(), e.getMessage()));
+                .body(ApiResult.error(HttpStatus.METHOD_NOT_ALLOWED.value(), "request method not allowed"));
     }
 
+
+    /**
+     * 其他异常
+     */
+    @ExceptionHandler(value = Exception.class)
+    @ResponseBody
+    public ResponseEntity handle(Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResult.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "server is too busy"));
+    }
 
 
 }

@@ -13,6 +13,8 @@ import ManagementFrame from './components/management/Frame.vue'
 import ManagementHome from './components/management/Home.vue'
 import ManagementWrite from './components/management/Write.vue'
 
+import NotFound from './components/public/NotFound.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -21,7 +23,7 @@ export default new Router({
       path: '/',
       component: PortalFrame,
       children: [
-        { path: '/', redirect: 'writing' },
+        { path: '', alias: ['index', 'index.html'], redirect: 'writing' },
         { path: '/writing', component: PortalWriting },
         { path: '/programing', component: PortalPrograming },
         { path: '/archives', component: PortalArchive },
@@ -37,6 +39,9 @@ export default new Router({
         { path: '', alias: 'home', component: ManagementHome },
         { path: 'write', component: ManagementWrite }
       ]
+    },
+    {
+      path: '*', component: NotFound
     }
   ],
   mode: 'history',

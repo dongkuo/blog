@@ -28,10 +28,14 @@
     <infinite-loading @infinite="getPosts">
       <app-loading slot="spinner"></app-loading>
       <div slot="no-more">
-        <p><app-emoji :size="2">🙈</app-emoji><br/>没有啦 ~</p>
+        <p>
+          <app-emoji :size="2">🙈</app-emoji>
+          <br/>没有啦 ~
+        </p>
       </div>
       <p slot="no-results">
-        <app-emoji :size="2">🐒</app-emoji><br/>啥都没有啊 …
+        <app-emoji :size="2">🐒</app-emoji>
+        <br/>啥都没有啊 …
       </p>
     </infinite-loading>
   </ul>
@@ -64,7 +68,7 @@
           return;
         }
         this.$http.api.post
-          .list({page: nextPage, size: this.size})
+          .list({page: nextPage, size: this.size, type: 0})
           .then(resp => {
             this.total = resp.data.data.total;
             this.page = resp.data.data.page;

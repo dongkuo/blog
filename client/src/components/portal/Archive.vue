@@ -4,7 +4,7 @@
       <h2 class="title">{{posts[0].year}}</h2>
       <ul>
         <li v-for="post in posts" :key="post.id" class="item"><span class="text-gray time">{{post.finished_time | date('yyyy.MM.dd')}}</span>
-          — <a href="" class="link-primary">{{post.title}}</a></li>
+          — <router-link class="link-primary" :to="'/posts/' + post.id">{{post.title}}</router-link></li>
       </ul>
     </div>
   </div>
@@ -50,10 +50,6 @@
 
   .item {
     margin: 16px 0;
-  }
-
-  .time{
-    letter-spacing: 2px;
   }
 
   @media screen and (max-width: 720px) {

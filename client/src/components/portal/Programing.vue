@@ -1,158 +1,159 @@
 <template>
   <ul class="post-list">
-    <li class="post" v-for="post in posts">
+    <li class="post" v-for="post in posts" :key="post.id">
       <h2 class="title">
-        <a href="" class="link-primary">{{post.title}}</a>
+        <router-link :to="'/posts/' + post.id" class="link-primary">{{post.title}}</router-link>
       </h2>
-      <span class="date">{{post.createdTime}}</span>
+      <span class="date" :title="post.finished_time | date">{{post.finished_time | date('friendly')}}</span>
       <p class="content">
         <span>{{post.summary}}</span>
-        <a href=""><img :src="post.cover" class="cover"></a>
+        <router-link :to="'/posts/' + post.id" class="link-primary">
+          <img :src="post.cover_image ||  'http://ojapxw8c8.bkt.clouddn.com/default_img.png'" class="cover">
+        </router-link>
       </p>
-      <span class="label" v-for="label in post.labels">{{label}}</span>
+      <span class="label" v-for="label in post.labels" :key="label">{{label}}</span>
       <span class="attribute">
         <i class="fa fa-eye" aria-hidden="true"></i>
-        {{post.readingNumber}}
+        {{post.reading_number}}
       </span>
       <span class="attribute">
         <i class="fa fa-heart" aria-hidden="true"></i>
-        {{post.likeNumber}}
+        {{post.like_number}}
       </span>
       <span class="attribute">
         <i class="fa fa-commenting" aria-hidden="true"></i>
-        {{post.commentingNumber}}
+        {{post.commenting_number}}
       </span>
     </li>
     <infinite-loading @infinite="getPosts">
       <app-loading slot="spinner"></app-loading>
-      <app-divider slot="no-more">没有啦...
-        <app-emoji>🙈</app-emoji>
-      </app-divider>
+      <div slot="no-more">
+        <p><app-emoji :size="2">🙈</app-emoji><br/>没有啦 ~</p>
+      </div>
+      <p slot="no-results">
+        <app-emoji :size="2">🐒</app-emoji><br/>啥都没有啊 …
+      </p>
     </infinite-loading>
   </ul>
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
-import AppLoading from './Loading.vue'
-import AppEmoji from '../public/Emoji'
-import AppDivider from '../public/Divider'
+  import InfiniteLoading from "vue-infinite-loading";
+  import AppLoading from "./Loading.vue";
+  import AppEmoji from "../public/Emoji";
 
-export default {
-  components: {
-    InfiniteLoading,
-    AppLoading,
-    AppEmoji,
-    AppDivider
-  },
-  data() {
-    return {
-      page: 0,
-      size: 10,
-      posts: []
-    }
-  },
-  methods: {
-    /**
-     *获取编程类型的文章
-     */
-    getPosts($state) {
-      if (this.page === 3) {
-        $state.complete()
-        return
-      }
-      setTimeout(() => {
-        const temp = []
-        for (let i = this.posts.length; i < this.posts.length + this.size; i++) {
-          temp.push({
-            title: '老海棠树' + (i + 1),
-            summary: '如果可能，如果有一块空地，不论窗前窗后，要是能随我的心愿种点什么，我就种两棵树。一棵合欢，纪念母亲。一棵海棠，纪念奶奶。奶奶和一棵老海棠树，在我的记忆里不能分开；好像她们从来就在一起，奶奶一生一世都在那棵老海棠树的影子里张望。老海棠树近房高的地方，有两条粗壮的枝丫，弯曲如一把躺椅，小时候我常爬上去',
-            cover: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506695525761&di=147a130b5c43c1119781db3a305e32f9&imgtype=0&src=http%3A%2F%2Fwww.xiedingshan.com%2FUpload%2Fplpro2015073114331470812.jpg',
-            labels: ['读书', '散文'],
-            readingNumber: 2302,
-            likeNumber: 1029,
-            commentingNumber: 1872,
-            createdTime: "2分钟以前"
-          })
+  export default {
+    components: {
+      InfiniteLoading,
+      AppLoading,
+      AppEmoji
+    },
+    data() {
+      return {
+        page: 0,
+        size: 10,
+        total: Number.POSITIVE_INFINITY,
+        posts: []
+      };
+    },
+    methods: {
+      getPosts($state) {
+        const nextPage = this.page + 1;
+        if (this.page * this.size >= this.total) {
+          $state.complete();
+          return;
         }
-        this.posts = this.posts.concat(temp);
-        this.page++;
-        $state.loaded();
-      }, 1500)
+        this.$http.api.post
+          .list({page: nextPage, size: this.size, type: 1})
+          .then(resp => {
+            this.total = resp.data.data.total;
+            this.page = resp.data.data.page;
+            if (resp.data.data.content.length === 0) {
+              $state.complete();
+              return;
+            }
+            resp.data.data.content.forEach(post => {
+              this.posts.push(post);
+              $state.loaded();
+            }, this);
+          })
+          .catch(e => {
+            console.error(e);
+            $state.complete();
+          });
+      }
     }
-  }
-}
+  };
 </script>
 
 <style scoped>
-.post-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-.post {
-  position: relative;
-  padding: 16px 0;
-  border-bottom: 1px dashed #dfe9eb;
-}
+  .post {
+    position: relative;
+    padding: 16px 0;
+    border-bottom: 1px dashed #dfe9eb;
+  }
 
-.post .title {
-  margin: 0 0 16px 0;
-  font-size: 1.4em;
-  line-height: 1;
-}
+  .post .title {
+    margin: 0 0 16px 0;
+    font-size: 1.4em;
+    line-height: 1;
+  }
 
-.post .date {
-  position: absolute;
-  top: 16px;
-  line-height: 1;
-  right: 0;
-  color: #99a4b9;
-  font-size: 14px;
-}
-
-.post .content {
-  position: relative;
-  height: 108px;
-  padding-right: 160px;
-  overflow: hidden;
-  font-size: 14px;
-}
-
-.post .cover {
-  width: 144px;
-  height: 108px;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.post .label {
-  border: 1px solid #1296db;
-  border-radius: 2px;
-  padding: 2px 4px;
-  color: #1296db;
-  margin-right: 8px;
-  font-size: 14px;
-}
-
-.post .attribute {
-  color: #8590a6;
-  font-size: 14px;
-  margin-right: 8px;
-}
-
-@media screen and (max-width: 720px) {
+  .post .date {
+    position: absolute;
+    top: 16px;
+    line-height: 1;
+    right: 0;
+    color: #99a4b9;
+    font-size: 14px;
+  }
 
   .post .content {
-    padding-right: 104px;
-    height: 72px;
+    position: relative;
+    height: 108px;
+    padding-right: 160px;
+    overflow: hidden;
+    font-size: 14px;
   }
 
   .post .cover {
-    width: 96px;
-    height: 72px;
+    width: 144px;
+    height: 108px;
+    position: absolute;
+    top: 0;
+    right: 0;
   }
-}
+
+  .post .label {
+    border: 1px solid #1296db;
+    border-radius: 2px;
+    padding: 2px 4px;
+    color: #1296db;
+    margin-right: 8px;
+    font-size: 14px;
+  }
+
+  .post .attribute {
+    color: #8590a6;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  @media screen and (max-width: 720px) {
+    .post .content {
+      padding-right: 104px;
+      height: 72px;
+    }
+
+    .post .cover {
+      width: 96px;
+      height: 72px;
+    }
+  }
 </style>

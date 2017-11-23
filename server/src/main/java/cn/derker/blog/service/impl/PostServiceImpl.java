@@ -27,10 +27,11 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public Page<Post> listPost(Pageable pageable) {
+    public Page<Post> listPost(Integer type, Pageable pageable) {
         Example example = new Example(Post.class);
         example.setOrderByClause("finished_time DESC");
         example.excludeProperties("html", "markdown");
+        example.createCriteria().andEqualTo("type", type);
         List<Post> content = postMapper.selectByExampleAndRowBounds(example, pageable.getPageRowBounds());
         int total = postMapper.selectCount(null);
         return new Page<>(content, pageable, total);
