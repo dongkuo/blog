@@ -6,6 +6,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
+ *  文章实体
  * @author derker
  * @since 2017-10-10 19:13
  */

@@ -15,7 +15,7 @@ http.interceptors.response.use(response => {
   return response;
 }, error => {
   if (error.response.status === 401) {
-    router.replace({ path: '/login', query: { redirect: router.currentRoute.fullPath } });
+    router.replace({path: '/login', query: {redirect: router.currentRoute.fullPath}});
   }
   if (http.onError instanceof Function) {
     http.onError(error);
@@ -26,17 +26,22 @@ http.interceptors.response.use(response => {
 // api
 http.api = {}
 http.api.post = {
-  list(queries){
+  list(queries) {
     return http.get(`${config.dev.apiPrefix}/posts?${url.buildQueries(queries)}`)
   },
   get(id) {
     return http.get(`${config.dev.apiPrefix}/posts/${id}`)
   },
-  all(){
+  all() {
     return http.get(`${config.dev.apiPrefix}/posts/archives`)
   },
-  save(post){
+  save(post) {
     return http.post(`${config.dev.apiPrefix}/posts`, post)
+  }
+}
+http.api.moments = {
+  list(page, size) {
+    return http.get(`${config.dev.apiPrefix}/moments?page=${page}&size=${size}`)
   }
 }
 export default http

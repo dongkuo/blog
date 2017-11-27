@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 class="title">评论
-      <small class="caption">/ 32</small>
+      <small class="caption">/ {{comments && comments.length || 0}}</small>
     </h3>
     <!--评论框-->
     <app-comment-input ref="commentInput" :showToolbar="false" @cancel="onCancelCommentInput"></app-comment-input>

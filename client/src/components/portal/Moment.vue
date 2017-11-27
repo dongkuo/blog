@@ -1,34 +1,98 @@
 <template>
   <div class="wrapper">
-    <div class="timeline">
-      <div class="label-wrapper label-wrapper-title">
-        <div class="label-box label-box-title">Sep</div>
+    <div v-for="group in momentGroups">
+      <!--年月-->
+      <div class="timeline">
+        <div class="label-wrapper label-wrapper-title">
+          <div class="label-box label-box-title">{{new Date(group.time).toDateString().split(' ')[1]}}</div>
+        </div>
+        <h2 class="content content-title">{{group.time | date('yyyy年MM月')}}</h2>
       </div>
-      <h2 class="content content-title">2017年09月</h2>
+      <!--日期、内容-->
+      <div v-for="moment in group.moments" class="timeline">
+        <div class="label-wrapper">
+          <div class="label-box">{{moment.created_time | date('dd')}}</div>
+        </div>
+        <p class="content">{{moment.content}}</p>
+      </div>
     </div>
-    <div class="timeline">
-      <div class="label-wrapper"><div class="label-box">24</div></div>
-      <p class="content">
-        抱一抱，就当作从没有在一起。好不好，要解释都已经来不及……因为成长，我们逼不得已要习惯。因为成长，我们忽尔间说散就散——JC，说散就散
+    <infinite-loading @infinite="getMoments">
+      <!--结束-->
+      <div class="timeline timeline-end" slot="no-more">
+        <div class="label-wrapper label-wrapper-end">
+          <div class="label-box label-box-end">End</div>
+        </div>
+        <h2 class="content content-title"></h2>
+      </div>
+      <p slot="no-results">
+        <app-emoji :size="2">🐒</app-emoji><br/>啥都没有啊 …
       </p>
-    </div>
-    <div class="timeline">
-      <div class="label-wrapper"><div class="label-box">24</div></div>
-      <p class="content">
-        零点的钟声响起，还有20多个小时的时间和这里说再见。3年前，我曾许下期愿——在我某天转身离开这座城市的刹那，我会想，也许我的颠沛流离是值得的。如今到了还愿的时刻，我不知道这个愿望是否已经实现。4年的大学时光里，我收获了重要的知识与爱的人；但在时间面前，我知道，我们都是失败者。</p>
-    </div>
-    <div class="timeline">
-      <div class="label-wrapper label-wrapper-end"><div class="label-box label-box-end">End</div></div>
-      <h2 class="content content-title"></h2>
-    </div>
+    </infinite-loading>
   </div>
 </template>
 
 <script>
+  import InfiniteLoading from "vue-infinite-loading";
+  import AppEmoji from "../public/Emoji";
+
   export default {
+    components: {
+      InfiniteLoading,
+      AppEmoji
+    },
     data() {
       return {
-        moments: []
+        page: 0,
+        size: 10,
+        total: Number.POSITIVE_INFINITY,
+        momentGroups: []
+      }
+    },
+    methods: {
+      getMoments($state) {
+        if (this.page * this.size >= this.total) {
+          $state.complete();
+          return;
+        }
+        this.$http.api.moments
+          .list(this.page + 1, this.size)
+          .then(resp => {
+            if (resp.data.data.content.length === 0) {
+              $state.complete();
+              return;
+            }
+            resp.data.data.content.forEach(moment => {
+              let date = new Date(moment.created_time)
+              let group = this.searchGroup(new Date(date.getFullYear() + '-' + (date.getMonth() + 1)).getTime())
+              group.moments.push(moment)
+            })
+            this.page = resp.data.data.page
+            this.total = resp.data.data.total;
+            $state.loaded();
+          })
+          .catch(e => {
+            console.error(e)
+            $state.complete();
+          })
+      },
+      searchGroup(time) {
+        // 二分法查找
+        let low = 0, high = this.momentGroups.length - 1
+        while (low <= high) {
+          let mid = parseInt((low + high) / 2)
+          if (this.momentGroups[mid].time === time) {
+            return this.momentGroups[mid]
+          }
+          if (this.momentGroups[mid].time > time) {
+            low = mid + 1
+          } else {
+            high = mid - 1
+          }
+        }
+        // 未找到
+        let newGroup = {time, moments: []}
+        this.momentGroups.push(newGroup)
+        return newGroup
       }
     }
   }
@@ -57,6 +121,10 @@
     margin-bottom: 48px;
   }
 
+  .timeline-end{
+    margin: 0;
+  }
+
   .label-wrapper {
     display: inline-block;
     width: 40px;
@@ -80,17 +148,17 @@
     line-height: 40px;
   }
 
-  .label-wrapper-title{
+  .label-wrapper-title {
     border-radius: 0;
   }
 
-  .label-box-title{
+  .label-box-title {
     font-size: 14px;
     color: white;
     background: #1296db;
   }
 
-  .label-box-end{
+  .label-box-end {
     color: #ffffff;
     font-size: 14px;
   }
@@ -129,16 +197,16 @@
     }
 
     .wrapper:before {
-      left: 20px;
+      left: 21px;
       z-index: 1;
     }
 
-    .label-wrapper{
+    .label-wrapper {
       width: 36px;
       height: 36px;
     }
 
-    .label-box{
+    .label-box {
       font-size: 14px;
       line-height: 36px;
     }

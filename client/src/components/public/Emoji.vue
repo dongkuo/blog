@@ -14,7 +14,6 @@
     },
     mounted() {
       twemoji.parse(this.$el)
-      console.log('size = ', this.size)
     }
   }
 

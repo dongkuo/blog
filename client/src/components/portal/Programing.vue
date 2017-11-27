@@ -74,8 +74,8 @@
             }
             resp.data.data.content.forEach(post => {
               this.posts.push(post);
-              $state.loaded();
             }, this);
+            $state.loaded();
           })
           .catch(e => {
             console.error(e);

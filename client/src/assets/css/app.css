@@ -171,6 +171,10 @@ p, li {
   margin: 0;
 }
 
+.infinite-status-prompt{
+  padding: 0!important;
+}
+
 @media screen and (max-width: 720px) {
   #post figure {
     margin: 16px 0;

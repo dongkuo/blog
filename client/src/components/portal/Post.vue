@@ -6,22 +6,9 @@
 
     <h1 class="title">{{post.title}}</h1>
     <div>
-      <span class="attribute">
-        <i class="fa fa-eye" aria-hidden="true"></i>
-        {{post.reading_number}}
-      </span>
-      <span class="attribute">
-        <i class="fa fa-heart" aria-hidden="true"></i>
-        {{post.like_number}}
-      </span>
-      <span class="attribute">
-          <i class="fa fa-commenting" aria-hidden="true"></i>
-          {{post.commenting_number}}
-      </span>
-      <span class="attribute">
-        <i class="fa fa-calendar"></i>
-        {{post.finished_time | date}}
-      </span>
+      <span class="attribute">阅读 {{post.reading_number}}</span>
+      <span class="attribute">喜欢 {{post.like_number}}</span>
+      <span class="attribute">评论 {{post.commenting_number}}</span>
     </div>
     <!--正文-->
     <div id="post">
@@ -39,7 +26,7 @@
         </span>
       </p>
       <!--end-->
-      <app-divider>End</app-divider>
+      <app-divider>{{post.finished_time | date('yyyy/MM/dd')}}</app-divider>
       <!--点赞-->
       <p class="text-center">
         <app-thumbs-up :number="post.like_number"></app-thumbs-up>
@@ -73,53 +60,53 @@ export default {
         // createdTime: new Date()
       },
       comments: [
-        {
-          avatar: "http://www.qq1234.org/uploads/allimg/140715/163JTZ3-13.png",
-          nickname: "Janus Zhang",
-          content: "别人晚上困觉 我到夜半精神 岂是造物所致 内心烦杂交困 上帝向左，我向右",
-          createdTime: new Date("2016-05-01 08:13:09"),
-          isShowReply: false,
-          isShowReplyInput: false
-        },
-        {
-          avatar:
-            "http://img5.imgtn.bdimg.com/it/u=2748888549,3523102698&fm=27&gp=0.jpg",
-          nickname: "狂曲想",
-          content: "写的很好，文笔不错！，正如青春无悔，怎奈失去才珍惜！人生本是不断救赎与反思中，每一次脱胎换骨是为了飞向天空的铺垫。",
-          createdTime: new Date("2017-03-04 12:43:09"),
-          isShowReply: false,
-          isShowReplyInput: false,
-          replies: [
-            {
-              avatar:
-                "http://img1.2345.com/duoteimg/qqTxImg/11/2012091910313510745.jpg",
-              nickname: "装病的疯子",
-              content: "所以，求教师兄有什么好的建议",
-              createdTime: new Date("2017-03-04 16:21:45"),
-              isShowReply: false,
-              isShowReplyInput: false
-            },
-            {
-              avatar:
-                "http://www.shishanghezi.com/data/attachment/forum/201310/05/230529hen06yvddrrt68o0.jpg",
-              nickname: "花晓柳",
-              content:
-                "其实，按照别人说的改也没什么不好，前期自己的储备量不够，多听听别人的建议，但一定要明白为什么他要这么改，有没有更好的办法，以后遇到类似的该怎么处理",
-              createdTime: new Date("2017-03-05 09:22:19"),
-              isShowReply: false,
-              isShowReplyInput: false
-            }
-          ]
-        },
-        {
-          avatar: "http://p.3761.com/pic/31241424996562-lp.jpg",
-          nickname: "蒋小坏",
-          content:
-            "是的，通常公司是不会让一个人掌握研发和采购两个渠道的资源的，因为这样锻炼出来的员工留下来的几率很小，人的想法是随着能力的不断提升而改变的，眼界也是，所以一个单兵能力强的人，最后的归属一定一定自主创业，这是唯一的出路。",
-          createdTime: new Date("2017-09-30 18:25:24"),
-          isShowReply: false,
-          isShowReplyInput: false
-        }
+//        {
+//          avatar: "http://www.qq1234.org/uploads/allimg/140715/163JTZ3-13.png",
+//          nickname: "Janus Zhang",
+//          content: "别人晚上困觉 我到夜半精神 岂是造物所致 内心烦杂交困 上帝向左，我向右",
+//          createdTime: new Date("2016-05-01 08:13:09"),
+//          isShowReply: false,
+//          isShowReplyInput: false
+//        },
+//        {
+//          avatar:
+//            "http://img5.imgtn.bdimg.com/it/u=2748888549,3523102698&fm=27&gp=0.jpg",
+//          nickname: "狂曲想",
+//          content: "写的很好，文笔不错！，正如青春无悔，怎奈失去才珍惜！人生本是不断救赎与反思中，每一次脱胎换骨是为了飞向天空的铺垫。",
+//          createdTime: new Date("2017-03-04 12:43:09"),
+//          isShowReply: false,
+//          isShowReplyInput: false,
+//          replies: [
+//            {
+//              avatar:
+//                "http://img1.2345.com/duoteimg/qqTxImg/11/2012091910313510745.jpg",
+//              nickname: "装病的疯子",
+//              content: "所以，求教师兄有什么好的建议",
+//              createdTime: new Date("2017-03-04 16:21:45"),
+//              isShowReply: false,
+//              isShowReplyInput: false
+//            },
+//            {
+//              avatar:
+//                "http://www.shishanghezi.com/data/attachment/forum/201310/05/230529hen06yvddrrt68o0.jpg",
+//              nickname: "花晓柳",
+//              content:
+//                "其实，按照别人说的改也没什么不好，前期自己的储备量不够，多听听别人的建议，但一定要明白为什么他要这么改，有没有更好的办法，以后遇到类似的该怎么处理",
+//              createdTime: new Date("2017-03-05 09:22:19"),
+//              isShowReply: false,
+//              isShowReplyInput: false
+//            }
+//          ]
+//        },
+//        {
+//          avatar: "http://p.3761.com/pic/31241424996562-lp.jpg",
+//          nickname: "蒋小坏",
+//          content:
+//            "是的，通常公司是不会让一个人掌握研发和采购两个渠道的资源的，因为这样锻炼出来的员工留下来的几率很小，人的想法是随着能力的不断提升而改变的，眼界也是，所以一个单兵能力强的人，最后的归属一定一定自主创业，这是唯一的出路。",
+//          createdTime: new Date("2017-09-30 18:25:24"),
+//          isShowReply: false,
+//          isShowReplyInput: false
+//        }
       ]
     };
   },
@@ -128,7 +115,6 @@ export default {
       this.$http.api.post
         .get(this.$route.params.id)
         .then(resp => {
-          console.log(resp.data);
           this.post = resp.data.data;
         })
         .catch(err => {
@@ -147,7 +133,7 @@ export default {
 
 .attribute {
   color: #8590a6;
-  font-size: 14px;
+  font-size: 13px;
   margin-right: 8px;
 }
 

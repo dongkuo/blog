@@ -41,7 +41,7 @@ public class PostApi {
      */
     @GetMapping("/archives")
     @ApiInclude(clazz = Post.class, fields = {"id", "finished_time", "title"})
-    public ApiResult allPost() {
+    public ApiResult all() {
         return ApiResult.ok(postService.allPost());
     }
 
@@ -53,7 +53,7 @@ public class PostApi {
      */
     @GetMapping
     @ApiExclude(clazz = Post.class, fields = {"html", "markdown"})
-    public ApiResult listPost(Integer type, Pageable pageable) {
+    public ApiResult list(Integer type, Pageable pageable) {
         return ApiResult.ok(postService.listPost(type, pageable));
     }
 
@@ -64,7 +64,7 @@ public class PostApi {
      * @return
      */
     @GetMapping("/{id}")
-    public ApiResult getPost(@PathVariable Integer id) {
+    public ApiResult get(@PathVariable Integer id) {
         id = IdUtil.decode(id);
         return ApiResult.ok(postService.getPost(id));
     }
@@ -76,7 +76,7 @@ public class PostApi {
      * @return
      */
     @DeleteMapping("/{id}")
-    public ApiResult removePost(@PathVariable Integer id) {
+    public ApiResult remove(@PathVariable Integer id) {
         id = IdUtil.decode(id);
         postService.removePost(id);
         return ApiResult.empty();
@@ -89,7 +89,7 @@ public class PostApi {
      * @return
      */
     @PostMapping
-    public ResponseEntity savePost(@RequestBody Post post) {
+    public ResponseEntity save(@RequestBody Post post) {
         Post newPost = new Post();
 
         // title（必须）
