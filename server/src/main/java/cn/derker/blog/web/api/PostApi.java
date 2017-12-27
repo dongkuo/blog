@@ -4,6 +4,7 @@ import cn.derker.blog.annotation.Api;
 import cn.derker.blog.annotation.ApiExclude;
 import cn.derker.blog.annotation.ApiInclude;
 import cn.derker.blog.domain.entity.Post;
+import cn.derker.blog.domain.entity.PostCategory;
 import cn.derker.blog.domain.model.ApiResult;
 import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.service.PostService;
@@ -36,13 +37,19 @@ public class PostApi {
     @Autowired
     private PostService postService;
 
+    @GetMapping("/categories")
+    @ApiInclude(clazz = PostCategory.class, fields = {"id", "name", "url"})
+    public ApiResult allCategories() {
+        return ApiResult.ok(postService.listPostCategory());
+    }
+
     /**
      * 获取文章归档
      */
     @GetMapping("/archives")
     @ApiInclude(clazz = Post.class, fields = {"id", "finished_time", "title"})
     public ApiResult all() {
-        return ApiResult.ok(postService.allPost());
+        return ApiResult.ok(postService.listPost());
     }
 
     /**
@@ -53,8 +60,9 @@ public class PostApi {
      */
     @GetMapping
     @ApiExclude(clazz = Post.class, fields = {"html", "markdown"})
-    public ApiResult list(Integer type, Pageable pageable) {
-        return ApiResult.ok(postService.listPost(type, pageable));
+    public ApiResult list(Integer categoryId, Pageable pageable) {
+        Integer decodedId = categoryId == null ? null : IdUtil.decode(categoryId);
+        return ApiResult.ok(postService.listPost(decodedId, pageable));
     }
 
     /**
@@ -64,6 +72,7 @@ public class PostApi {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiExclude(clazz = Post.class, fields = "category_id")
     public ApiResult get(@PathVariable Integer id) {
         id = IdUtil.decode(id);
         return ApiResult.ok(postService.getPost(id));
@@ -121,7 +130,7 @@ public class PostApi {
             newPost.setFinishedTime(new Date());
         }
 
-        newPost.setType(post.getType());
+        newPost.setCategoryId(post.getCategoryId());
         postService.insertPost(newPost);
         LOGGER.debug("保存文章：{}", newPost);
         return ResponseEntity.created(URI.create("/posts/" + newPost.getId())).build();

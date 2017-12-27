@@ -11,10 +11,10 @@ public class Page<T> {
 
     private int page; // 页码（从1开始计数）
     private int size; // 页面大小
-    private int total; // 数据总数
+    private long total; // 数据总数
     private List<T> content;
 
-    public Page(List<T> content, Pageable pageable, int total) {
+    public Page(List<T> content, Pageable pageable, long total) {
         this.content = content;
         this.page = pageable.getPage();
         this.size = pageable.getSize();
@@ -44,11 +44,11 @@ public class Page<T> {
         this.size = size;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(long total) {
         this.total = total;
     }
 

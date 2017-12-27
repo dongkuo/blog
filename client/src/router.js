@@ -1,56 +1,34 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-import PortalFrame from './components/portal/Frame.vue'
-import PortalWriting from './components/portal/Writing.vue'
-import PortalPrograming from './components/portal/Programing.vue'
-import PortalArchive from './components/portal/Archive.vue'
-import PortalMoment from './components/portal/Moment.vue'
-import PortalAbout from './components/portal/About.vue'
-import PortalPost from './components/portal/Post.vue'
-
-import ManagementFrame from './components/management/Frame.vue'
-import ManagementHome from './components/management/Home.vue'
-import ManagementWrite from './components/management/Write.vue'
-
-import NotFound from './components/public/NotFound.vue'
+import PostList from './components/PostList'
+import Archive from './components/Archive'
+import About from './components/About'
+import PostDetail from './components/PostDetail'
+import Writer from './components/Writer'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      component: PortalFrame,
-      children: [
-        { path: '', alias: ['index', 'index.html'], redirect: 'writing' },
-        { path: '/writing', component: PortalWriting },
-        { path: '/programing', component: PortalPrograming },
-        { path: '/archives', component: PortalArchive },
-        { path: '/moments', component: PortalMoment },
-        { path: '/about', component: PortalAbout },
-        { path: '/posts/:id', component: PortalPost },
-      ]
+      path: '/post_categories/:category_id/posts',
+      component: PostList,
     },
     {
-      path: '/management',
-      component: ManagementFrame,
-      children: [
-        { path: '', alias: 'home', component: ManagementHome },
-        { path: 'write', component: ManagementWrite }
-      ]
+      path: '/archives',
+      component: Archive
     },
     {
-      path: '*', component: NotFound
+      path: '/about',
+      component: About
+    },
+    {
+      path: '/posts/:id',
+      component: PostDetail
+    },
+    {
+      path: '/writer',
+      component: Writer
     }
-  ],
-  mode: 'history',
-  scrollBehavior(to, from, savedPosition) {
-    console.log("scrollBehavior")
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { x: 0, y: 0 }
-    }
-  }
+  ]
 })

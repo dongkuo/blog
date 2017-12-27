@@ -1,7 +1,7 @@
 import http from 'axios'
-import router from '../router'
-import url from '../utils/url'
-import config from '../../config'
+import router from './router'
+import url from './url'
+import config from '../config'
 
 // 统一添加请求头
 http.interceptors.request.use(config => {
@@ -24,8 +24,13 @@ http.interceptors.response.use(response => {
 });
 
 // api
-http.api = {}
-http.api.post = {
+const api = {}
+api.category = {
+  list() {
+    return http.get(`${config.dev.apiPrefix}/posts/categories`)
+  }
+}
+api.post = {
   list(queries) {
     return http.get(`${config.dev.apiPrefix}/posts?${url.buildQueries(queries)}`)
   },
@@ -39,9 +44,14 @@ http.api.post = {
     return http.post(`${config.dev.apiPrefix}/posts`, post)
   }
 }
-http.api.moments = {
+api.moments = {
   list(page, size) {
     return http.get(`${config.dev.apiPrefix}/moments?page=${page}&size=${size}`)
   }
 }
-export default http
+api.about = {
+  get(){
+    return http.get(`${config.dev.apiPrefix}/about`)
+  }
+}
+export default api

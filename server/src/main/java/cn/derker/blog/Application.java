@@ -35,18 +35,34 @@ public class Application implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... strings) throws Exception {
+    public void run(String... strings) {
         initTables();
     }
 
     /**
      * 初始化数据库表
      */
-    private void initTables() throws SQLException, IOException {
-        String sql = readInitSqlFile();
-        Connection connection = dataSource.getConnection();
-        Statement statement = connection.createStatement();
-        statement.execute(sql);
+    private void initTables() {
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+            connection.setAutoCommit(false);
+            Statement statement = connection.createStatement();
+            for (String sql : readInitSqlFile().split(";")) {
+                statement.addBatch(sql);
+            }
+            statement.executeBatch();
+            connection.commit();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
     }
 
     /**

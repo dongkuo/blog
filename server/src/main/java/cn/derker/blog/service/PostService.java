@@ -1,6 +1,7 @@
 package cn.derker.blog.service;
 
 import cn.derker.blog.domain.entity.Post;
+import cn.derker.blog.domain.entity.PostCategory;
 import cn.derker.blog.domain.model.Page;
 import cn.derker.blog.domain.model.Pageable;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @since 2017-10-10 19:16
  */
 public interface PostService {
-    Page<Post> listPost(Integer type, Pageable pageable);
+    Page<Post> listPost(Integer categoryId, Pageable pageable);
 
     Post getPost(Integer id);
 
@@ -19,5 +20,7 @@ public interface PostService {
 
     int insertPost(Post postPostser);
 
-    List<Post> allPost();
+    List<Post> listPost();
+
+    List<PostCategory> listPostCategory();
 }

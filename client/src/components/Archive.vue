@@ -1,17 +1,26 @@
 <template>
   <div>
-    <div v-for="posts in archives" :key="posts.id">
+    <!--导航栏-->
+    <app-primary-nav></app-primary-nav>
+    <!--主要内容-->
+    <div class="main-wrapper" v-for="posts in archives" :key="posts.id">
       <h2 class="title">{{posts[0].year}}</h2>
-      <ul>
-        <li v-for="post in posts" :key="post.id" class="item"><span class="text-gray time">{{post.finished_time | date('yyyy.MM.dd')}}</span>
-          — <router-link class="link-primary" :to="'/posts/' + post.id">{{post.title}}</router-link></li>
+      <ul class="archive-list">
+        <li v-for="post in posts" :key="post.id" class="item">
+          <span class="text-gray time">{{post.finished_time | date('yyyy.MM.dd')}}</span> —
+          <router-link class="text-body-color" :to="'/posts/' + post.id">{{post.title}}</router-link></li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+  import AppPrimaryNav from "./PrimaryNav.vue";
+
   export default {
+    components: {
+      AppPrimaryNav
+    },
     created(){
       this.getArchives();
     },
@@ -22,7 +31,7 @@
     },
     methods:{
       getArchives(){
-        this.$http.api.post.all().then(resp => {
+        this.$api.post.all().then(resp => {
           let lastPost = null
           let array = []
           resp.data.data.forEach(post => {
@@ -43,13 +52,21 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import "../assets/scss/variables.scss";
+
+  .main-wrapper{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $page-width;
+  }
   .title {
     font-size: 22px;
+    font-weight: bold;
   }
 
-  .item {
-    margin: 16px 0;
+  .archive-list{
+    padding-left: 36px;
   }
 
   @media screen and (max-width: 720px) {

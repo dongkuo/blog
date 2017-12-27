@@ -7,7 +7,10 @@ package cn.derker.blog.util;
 public class IdUtil {
 
 
-    public static int encode(int id) {
+    public static Integer encode(Integer id) {
+        if (id == null) {
+            return null;
+        }
         int b1 = (id & 0x7F); // 7 bit
         int b2 = (id >> 7 & 0xFF); // 8 bit
         int b3 = (id >> 15 & 0x7F); // 7 bit
@@ -17,7 +20,10 @@ public class IdUtil {
         return nb4 << 22 | b1 << 15 | nb2 << 7 | b3;
     }
 
-    public static int decode(int num) {
+    public static Integer decode(Integer num) {
+        if (num == null) {
+            return null;
+        }
         int nb4 = (num >> 22 & 0xFF); // 8 bit
         int nb3 = (num >> 15 & 0x7F); // 7 bit
         int nb2 = (num >> 7 & 0xFF); // 8 bit

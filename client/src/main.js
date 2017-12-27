@@ -3,19 +3,37 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import http from './utils/http'
-import './assets/css/app.css'
-import date from './utils/date'
+import './assets/scss/global.scss'
+import api from './api'
+import date from './date'
 
 Vue.config.productionTip = false
+Vue.prototype.$api = api
+Vue.prototype.$categories = []
 
 // 自定义过滤器
 Vue.filter('date', date)
-Vue.prototype.$http = http;
 
 new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })
+
+// 请求目录，并缓存
+api.category.list().then(resp => {
+  let routes = []
+  resp.data.data.forEach((category, index) => {
+    Vue.prototype.$categories.push(category)
+    routes.push({path: `/post_categories/${category.id}/posts`, alias: category.url})
+    if (index === 0) {
+      routes.push({path: `/`, redirect: category.url})
+    }
+  })
+  // 添加路由
+  router.addRoutes(routes)
+}).catch(e => {
+  console.error(e)
+})
+

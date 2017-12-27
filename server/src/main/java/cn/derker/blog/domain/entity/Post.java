@@ -14,15 +14,6 @@ import java.util.Date;
 public class Post extends BaseEntity {
 
     /**
-     * 写作
-     */
-    public static final int TYPE_WRITING = 0;
-    /**
-     * 编程
-     */
-    public static final int TYPE_PROGRAMING = 1;
-
-    /**
      * 正常
      */
     public static final int STATUS_NORMAL = 0;
@@ -32,9 +23,10 @@ public class Post extends BaseEntity {
     public static final int STATUS_OFFLINE = 1;
 
     /**
-     * 文章类型，0：写作，1：编程
+     * 分类id
      */
-    private Integer type = 0;
+    private Integer categoryId;
+
     /**
      * 文章状态，0：正常，1：下线
      */
@@ -88,12 +80,12 @@ public class Post extends BaseEntity {
         this.state = state;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getCoverImage() {
@@ -179,8 +171,7 @@ public class Post extends BaseEntity {
     @Override
     public String toString() {
         return "Post{" +
-                "id=" + getId() +
-                ", type=" + type +
+                "categoryId=" + categoryId +
                 ", state=" + state +
                 ", coverImage='" + coverImage + '\'' +
                 ", coverCaption='" + coverCaption + '\'' +

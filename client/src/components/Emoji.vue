@@ -4,7 +4,6 @@
 
 <script>
   import twemoji from 'twemoji'
-
   export default {
     props: {
       size: {
@@ -16,7 +15,6 @@
       twemoji.parse(this.$el)
     }
   }
-
 </script>
 
 <style>
