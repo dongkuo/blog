@@ -37,18 +37,12 @@ public class PostApi {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/categories")
-    @ApiInclude(clazz = PostCategory.class, fields = {"id", "name", "url"})
-    public ApiResult allCategories() {
-        return ApiResult.ok(postService.listPostCategory());
-    }
-
     /**
      * 获取文章归档
      */
     @GetMapping("/archives")
     @ApiInclude(clazz = Post.class, fields = {"id", "finished_time", "title"})
-    public ApiResult all() {
+    public ApiResult allPosts() {
         return ApiResult.ok(postService.listPost());
     }
 
@@ -60,7 +54,7 @@ public class PostApi {
      */
     @GetMapping
     @ApiExclude(clazz = Post.class, fields = {"html", "markdown"})
-    public ApiResult list(Integer categoryId, Pageable pageable) {
+    public ApiResult listPosts(Integer categoryId, Pageable pageable) {
         Integer decodedId = categoryId == null ? null : IdUtil.decode(categoryId);
         return ApiResult.ok(postService.listPost(decodedId, pageable));
     }
@@ -73,7 +67,7 @@ public class PostApi {
      */
     @GetMapping("/{id}")
     @ApiExclude(clazz = Post.class, fields = "category_id")
-    public ApiResult get(@PathVariable Integer id) {
+    public ApiResult getPost(@PathVariable Integer id) {
         id = IdUtil.decode(id);
         return ApiResult.ok(postService.getPost(id));
     }
@@ -85,7 +79,7 @@ public class PostApi {
      * @return
      */
     @DeleteMapping("/{id}")
-    public ApiResult remove(@PathVariable Integer id) {
+    public ApiResult removePost(@PathVariable Integer id) {
         id = IdUtil.decode(id);
         postService.removePost(id);
         return ApiResult.empty();
@@ -98,7 +92,7 @@ public class PostApi {
      * @return
      */
     @PostMapping
-    public ResponseEntity save(@RequestBody Post post) {
+    public ResponseEntity savePost(@RequestBody Post post) {
         Post newPost = new Post();
 
         // title（必须）

@@ -25,9 +25,12 @@ http.interceptors.response.use(response => {
 
 // api
 const api = {}
-api.category = {
+api.postCategory = {
   list() {
-    return http.get(`${config.dev.apiPrefix}/posts/categories`)
+    return http.get(`${config.dev.apiPrefix}/post_categories`)
+  },
+  save(postCategory){
+    return http.post(`${config.dev.apiPrefix}/post_categories`, postCategory)
   }
 }
 api.post = {

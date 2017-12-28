@@ -13,8 +13,8 @@ public class PostCategory extends BaseEntity {
 
     private String name;
     private String url;
-    private Boolean visible;
-    private Integer sortValue;
+    private Boolean visible = true;
+    private Integer sortValue = 0;
 
     public String getName() {
         return name;
@@ -46,5 +46,15 @@ public class PostCategory extends BaseEntity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "PostCategory{" +
+                "name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", visible=" + visible +
+                ", sortValue=" + sortValue +
+                '}';
     }
 }

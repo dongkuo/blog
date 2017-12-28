@@ -21,6 +21,4 @@ public interface PostService {
     int insertPost(Post postPostser);
 
     List<Post> listPost();
-
-    List<PostCategory> listPostCategory();
 }

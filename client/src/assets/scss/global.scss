@@ -5,12 +5,14 @@
 @import "~spectre.css/src/typography";
 @import "~spectre.css/src/tables";
 @import "~spectre.css/src/buttons";
+@import "~spectre.css/src/layout";
 @import "~spectre.css/src/forms";
 @import "~spectre.css/src/labels";
 @import "~spectre.css/src/codes";
 @import "~spectre.css/src/media";
 @import "~spectre.css/src/animations";
 @import "~spectre.css/src/utilities";
+@import "~spectre.css/src/modals";
 
 html, body {
   background-color: $page-background-color;
@@ -48,6 +50,10 @@ blockquote {
 .text-small{
   font-size: $font-size-sm;
 }
+.text-hint{
+  font-size: $font-size-smer;
+  color: $gray-color;
+}
 
 a {
   color: $link-color;
@@ -74,4 +80,15 @@ a {
 .figure .figure-caption{
   font-style: italic;
   font-size: .7rem ;
+}
+
+.form-input-hint {
+  margin-top: .2rem;
+  margin-bottom: 0;
+}
+.modal:target, .modal.active {
+  z-index: 1600;
+}
+button, html [type="button"], [type="reset"], [type="submit"] {
+  -webkit-appearance: inherit;
 }

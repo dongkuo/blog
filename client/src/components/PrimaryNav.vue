@@ -15,9 +15,16 @@
 </template>
 <script>
   export default {
+    created() {
+      this.$api.postCategory.list().then(resp => {
+        this.categories = resp.data.data
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     data() {
       return {
-        categories: this.$categories
+        categories: []
       }
     }
   }

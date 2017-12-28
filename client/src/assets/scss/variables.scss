@@ -3,7 +3,7 @@ $primary-color: #0099CC;
 $error-color: #f33a23;
 $body-font-color: #353d4e;
 $gray-color: lighten($dark-color, 35%);
-$body-font-family: $cjk-zh-font-family;
+$body-font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 $page-width: 660px;
 $font-size-smer: .6rem;
 $page-background-color: #FBFCFC;
@@ -13,5 +13,5 @@ $nav-height-sm: $nav-height - $unit-1; /*56px*/
 $writer-category-panel-width: 240px;
 $writer-category-panel-color: #c0c0c0;
 $writer-category-panel-background-color: #36383e;
-$post-category-panel-width: 300px;
+$writer-post-panel-width: 320px;
 

@@ -1,9 +1,7 @@
 package cn.derker.blog.service.impl;
 
-import cn.derker.blog.dao.mapper.PostCategoryMapper;
 import cn.derker.blog.dao.mapper.PostMapper;
 import cn.derker.blog.domain.entity.Post;
-import cn.derker.blog.domain.entity.PostCategory;
 import cn.derker.blog.domain.model.Page;
 import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.exception.InsertException;
@@ -27,9 +25,6 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostMapper postMapper;
-    @Autowired
-    private PostCategoryMapper postCategoryMapper;
-
 
     @Override
     public Page<Post> listPost(Integer categoryId, Pageable pageable) {
@@ -71,12 +66,5 @@ public class PostServiceImpl implements PostService {
         example.selectProperties("id", "title", "finishedTime");
         example.setOrderByClause("finished_time DESC");
         return postMapper.selectByExample(example);
-    }
-
-    @Override
-    public List<PostCategory> listPostCategory() {
-        Example example = new Example(PostCategory.class);
-        example.setOrderByClause("sort_value ASC");
-        return postCategoryMapper.selectByExample(example);
     }
 }
