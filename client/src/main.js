@@ -1,20 +1,20 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import './assets/scss/global.scss'
 import api from './api'
 import date from './date'
+import ElementUI from 'element-ui'
 import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
 import dragging from './directives/dragging'
-import toast from './components/toast'
+import 'mavon-editor/dist/css/index.css'
+import './assets/scss/index.scss'
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api
 
+Vue.use(ElementUI)
 Vue.use(mavonEditor)
 Vue.use(dragging)
-Vue.prototype.$toast = toast
 // 自定义过滤器
 Vue.filter('date', date)
 

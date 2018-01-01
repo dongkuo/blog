@@ -1,36 +1,37 @@
 <template>
   <div>
-    <!--导航-->
-    <app-primary-nav></app-primary-nav>
-    <!--正文-->
+    <!--header-->
+    <app-header></app-header>
+    <!--main-->
     <div class="main-wrapper post-detail-wrapper">
       <!--标题-->
-      <h2>{{post.title}}</h2>
-      <p class="text-gray text-small statistic">
-        <span>喜欢 {{post.like_number}}</span>
-        <span>评论 {{post.commenting_number}}</span>
-        <span>阅读 {{post.reading_number}}</span>
-        <span>写于{{post.finished_time | date('friendly')}}</span>
+      <h1>{{post.title}}</h1>
+      <p class="text-hint statistic">
+        <span class="item">喜欢 {{post.like_number}}</span>
+        <span class="item">评论 {{post.commenting_number}}</span>
+        <span class="item">阅读 {{post.reading_number}}</span>
+        <span class="item">写于 {{post.finished_time | date('friendly')}}</span>
       </p>
       <!--封面-->
-      <figure class="figure">
+      <figure>
         <img :src="post.cover_image" class="img-responsive" :alt="post.cover_caption">
         <figcaption class="figure-caption text-center">{{post.cover_caption}}</figcaption>
       </figure>
       <!--正文-->
-      <div v-html="post.html"></div>
+      <div class="post-detail" v-html="post.html"></div>
     </div>
+    <!--footer-->
     <app-footer></app-footer>
   </div>
 </template>
 
 <script>
-  import AppPrimaryNav from './PrimaryNav'
+  import AppHeader from './Header'
   import AppFooter from './Footer'
 
   export default {
     components: {
-      AppPrimaryNav,
+      AppHeader,
       AppFooter
     },
     data() {
@@ -51,15 +52,7 @@
 
 <style lang="scss" scoped>
   @import "../assets/scss/variables.scss";
-
-  .main-wrapper {
-    max-width: $page-width;
-    margin-left: auto;
-    margin-right: auto;
+  .statistic .item{
+    margin-right: $space;
   }
-
-  .statistic span{
-    margin-right: $unit-2;
-  }
-
 </style>

@@ -1,17 +1,28 @@
-$primary-color: #0099CC;
-@import "~spectre.css/src/variables";
-$error-color: #f33a23;
-$body-font-color: #353d4e;
-$gray-color: lighten($dark-color, 35%);
-$body-font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
-$page-width: 660px;
-$font-size-smer: .6rem;
-$page-background-color: #FBFCFC;
-$nav-background-color: #FFFFFF;
-$nav-height: 2.8rem; /*56px*/
-$nav-height-sm: $nav-height - $unit-1; /*56px*/
-$writer-category-panel-width: 240px;
-$writer-category-panel-color: #c0c0c0;
-$writer-category-panel-background-color: #36383e;
-$writer-post-panel-width: 320px;
+/*dimension*/
+$page-font-size-sm: 0.875rem;
+$page-font-size: 16px;
+$header-height: 40px;
+$space-sm: 4px;
+$space: 8px;
+$space-lg: 16px;
+$space-lg-x: 24px;
 
+$post-list-cover-width: 120px;
+$post-list-cover-height: 90px;
+
+$writer-category-layout-width: 300px;
+$writer-post-layout-width: 300px;
+/*color*/
+$page-font-color: #465064;
+$page-font-color-light: lighten($page-font-color, 24%);
+$page-font-color-dark: darken($page-font-color, 16%);
+$page-background-color: #FBFBFF;
+$text-color-primary: #1296db;
+$text-color-primary-dark: darken($text-color-primary, 8%);
+
+$header-divider-background-color: #ebeefa;
+
+$post-list-divider-background-color: #d8dbe7;
+
+$writer-category-layout-background: $page-font-color;
+$writer-category-layout-color: #9caecf;

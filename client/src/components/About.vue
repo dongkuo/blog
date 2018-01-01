@@ -1,24 +1,23 @@
 <template>
   <div>
-    <app-primary-nav></app-primary-nav>
-    <div class="main-wrapper" v-html="content.html">
-    </div>
+    <app-header></app-header>
+    <div class="main-wrapper" v-html="content.html"></div>
   </div>
 </template>
 
 <script>
-  import AppPrimaryNav from "./PrimaryNav.vue";
+  import AppHeader from "./Header.vue";
 
   export default {
     components: {
-      AppPrimaryNav
+      AppHeader
     },
     data() {
       return {
         content: ''
       }
     },
-    created(){
+    created() {
       this.getAbout();
     },
     methods: {
@@ -35,10 +34,4 @@
 
 <style lang="scss" scoped>
   @import "../assets/scss/variables.scss";
-
-  .main-wrapper{
-    margin-left: auto;
-    margin-right: auto;
-    max-width: $page-width;
-  }
 </style>

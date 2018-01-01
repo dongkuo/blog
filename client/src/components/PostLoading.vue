@@ -19,7 +19,7 @@
 
   .title {
     height: 25px;
-    background: $gray-color-light;
+    background: #E5E9F2;
   }
   .content {
     padding-right: 144px;
@@ -27,7 +27,7 @@
   }
   .paragraph {
     height: 14px;
-    background: $gray-color-light;
+    background: #E5E9F2;
     margin-bottom: 12px;
   }
   .cover {
@@ -36,7 +36,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    background: $gray-color-light;
+    background: #E5E9F2;
   }
   .loading-25{
     animation:loading-25 1.5s infinite ease;

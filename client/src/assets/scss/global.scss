@@ -1,94 +1,120 @@
 @import "variables";
-@import "~spectre.css/src/mixins";
-@import "~spectre.css/src/normalize";
-@import "~spectre.css/src/base";
-@import "~spectre.css/src/typography";
-@import "~spectre.css/src/tables";
-@import "~spectre.css/src/buttons";
-@import "~spectre.css/src/layout";
-@import "~spectre.css/src/forms";
-@import "~spectre.css/src/labels";
-@import "~spectre.css/src/codes";
-@import "~spectre.css/src/media";
-@import "~spectre.css/src/animations";
-@import "~spectre.css/src/utilities";
-@import "~spectre.css/src/modals";
 
 html, body {
-  background-color: $page-background-color;
-  width: 100%;
   height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-size: $page-font-size;
+  color: $page-font-color;
+  background-color: $page-background-color;
+
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.375rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6, p, hr, figure, blockquote {
+  margin: 1rem 0;
+}
+
+figure img {
+  max-width: 100%;
+}
+
+figure figcaption {
+  text-align: center;
+  margin: $space-sm 0;
+  font-size: $page-font-size-sm;
+  color: $page-font-color-light;
+  font-style: italic;
+}
+
+p {
+  line-height: 1.4rem;
+}
+
+ul, ol {
+  padding: 0;
+}
+
+a {
+  color: $text-color-primary;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $text-color-primary;
 }
 
 img {
   border-radius: 2px;
 }
 
-h1, h2, h3, h4, h5, h6{
-  font-weight: bold;
+.main-wrapper {
+  max-width: 660px;
+  margin: 0 auto;
 }
 
-h1, h2, h3, h4, h5, h6, ul, ol, p, figure{
-  margin: 0.8rem 0;
+.text-align-center {
+  text-align: center;
 }
 
-ul li, ol li{
-  margin: 0;
+.text-color-light {
+  color: $page-font-color-light;
 }
 
-blockquote {
-  border-left: 0.2rem solid $primary-color;
-  margin-left: 0;
-  padding: 0 0.8rem;
-  font-style: italic;
-  font-size: .75rem;
+.text-hint {
+  font-size: $page-font-size-sm;
+  color: $page-font-color-light;
 }
 
-.text-body-color {
-  color: $body-font-color;
-}
-.text-small{
-  font-size: $font-size-sm;
-}
-.text-hint{
-  font-size: $font-size-smer;
-  color: $gray-color;
+.link-primary {
+  color: $page-font-color;
 }
 
-a {
-  color: $link-color;
-  outline: none;
-  text-decoration: none;
+.link-primary:hover {
+  color: $page-font-color-dark;
+}
 
-  &:focus {
-    box-shadow: none;
+.post-detail {
+  blockquote, figure, p {
+    margin: 1.25rem 0;
+  }
+  p {
+    line-height: 1.75rem;
   }
 
-  &:focus,
-  &:hover,
-  &:active,
-  &.active {
-    color: $link-color-dark;
-    text-decoration: none;
+  blockquote {
+    padding: 0 1rem;
+    border-left: 4px solid $text-color-primary;
+    background-color: darken($page-background-color, 0.75%);
+    color: lighten($page-font-color, 20%);
+
+    p{
+      margin: 0;
+      padding: 0.5rem 0;
+    }
   }
-}
-
-.post-detail-wrapper p{
-  line-height: 1.8;
-}
-
-.figure .figure-caption{
-  font-style: italic;
-  font-size: .7rem ;
-}
-
-.form-input-hint {
-  margin-top: .2rem;
-  margin-bottom: 0;
-}
-.modal:target, .modal.active {
-  z-index: 1600;
-}
-button, html [type="button"], [type="reset"], [type="submit"] {
-  -webkit-appearance: inherit;
 }
