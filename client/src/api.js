@@ -34,6 +34,9 @@ api.postCategory = {
   },
   delete(id) {
     return http.delete(`${config.dev.apiPrefix}/post_categories/${id}`)
+  },
+  patch(postCategory) {
+    return http.patch(`${config.dev.apiPrefix}/post_categories/${postCategory.id}`, postCategory)
   }
 }
 api.post = {

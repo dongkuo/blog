@@ -20,9 +20,12 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     private PostCategoryMapper postCategoryMapper;
 
     @Override
-    public List<PostCategory> listPostCategory() {
+    public List<PostCategory> listPostCategory(boolean showInvisible) {
         Example example = new Example(PostCategory.class);
         example.setOrderByClause("sort_value ASC");
+        if (!showInvisible) {
+            example.createCriteria().andEqualTo("visible", true);
+        }
         return postCategoryMapper.selectByExample(example);
     }
 
@@ -34,5 +37,10 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     @Override
     public int deletePostCategory(Integer id) {
         return postCategoryMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int updatePostCategory(PostCategory postCategory) {
+        return postCategoryMapper.updateByPrimaryKeySelective(postCategory);
     }
 }

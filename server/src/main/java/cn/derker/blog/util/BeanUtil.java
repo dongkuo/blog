@@ -40,10 +40,21 @@ public class BeanUtil {
         });
     }
 
-    public static void copyNonNullProperties(Object src, Object target) {
-        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
+    /**
+     * 将src对象中非空的字段赋值给trg
+     * @param src
+     * @param trg
+     */
+    public static void copyNonNullProperties(Object src, Object trg) {
+        BeanUtils.copyProperties(src, trg, getNullPropertyNames(src));
     }
 
+    /**
+     * 将src对象指定的字段赋值给trg
+     * @param src
+     * @param trg
+     * @param specifiedProperties
+     */
     public static void copySpecifiedProperties(Object src, Object trg, String... specifiedProperties) {
         BeanWrapper srcWrap = PropertyAccessorFactory.forBeanPropertyAccess(src);
         BeanWrapper trgWrap = PropertyAccessorFactory.forBeanPropertyAccess(trg);

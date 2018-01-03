@@ -1,7 +1,5 @@
 package cn.derker.blog.domain.base;
 
-import cn.derker.blog.util.IdUtil;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +23,7 @@ public abstract class BaseEntity implements Serializable {
     }
 
     public void setId(Integer id) {
-        this.id = IdUtil.encode(id);
+        this.id = id;
     }
 
     public Date getCreatedTime() {

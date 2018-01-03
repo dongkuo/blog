@@ -10,9 +10,11 @@ import java.util.List;
  */
 public interface PostCategoryService {
 
-    List<PostCategory> listPostCategory();
+    List<PostCategory> listPostCategory(boolean showInvisible);
 
     int savePostCategory(PostCategory postCategory);
 
     int deletePostCategory(Integer id);
+
+    int updatePostCategory(PostCategory postCategory);
 }

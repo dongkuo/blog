@@ -4,7 +4,6 @@ import cn.derker.blog.annotation.Api;
 import cn.derker.blog.annotation.ApiExclude;
 import cn.derker.blog.annotation.ApiInclude;
 import cn.derker.blog.domain.entity.Post;
-import cn.derker.blog.domain.entity.PostCategory;
 import cn.derker.blog.domain.model.ApiResult;
 import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.service.PostService;
@@ -55,8 +54,7 @@ public class PostApi {
     @GetMapping
     @ApiExclude(clazz = Post.class, fields = {"html", "markdown"})
     public ApiResult listPosts(Integer categoryId, Pageable pageable) {
-        Integer decodedId = categoryId == null ? null : IdUtil.decode(categoryId);
-        return ApiResult.ok(postService.listPost(decodedId, pageable));
+        return ApiResult.ok(postService.listPost(categoryId, pageable));
     }
 
     /**
@@ -68,7 +66,6 @@ public class PostApi {
     @GetMapping("/{id}")
     @ApiExclude(clazz = Post.class, fields = "category_id")
     public ApiResult getPost(@PathVariable Integer id) {
-        id = IdUtil.decode(id);
         return ApiResult.ok(postService.getPost(id));
     }
 

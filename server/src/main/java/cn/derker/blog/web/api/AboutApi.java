@@ -6,7 +6,6 @@ import cn.derker.blog.domain.entity.About;
 import cn.derker.blog.domain.model.ApiResult;
 import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.service.AboutService;
-import cn.derker.blog.util.IdUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,6 @@ public class AboutApi {
     @GetMapping
     @ApiExclude(clazz = About.class, fields = "visible")
     public ApiResult get(Integer id) {
-        id = id == null ? 1 : IdUtil.decode(id);
         return ApiResult.ok(aboutService.getAbout(id, true, new Pageable(1, 1)));
     }
 }
