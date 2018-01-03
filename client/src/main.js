@@ -8,6 +8,7 @@ import mavonEditor from 'mavon-editor'
 import dragging from './directives/dragging'
 import 'mavon-editor/dist/css/index.css'
 import './assets/scss/index.scss'
+import './main'
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api

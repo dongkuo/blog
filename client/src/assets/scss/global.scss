@@ -70,6 +70,7 @@ a:hover {
 
 img {
   border-radius: 2px;
+  vertical-align: text-bottom;
 }
 
 .main-wrapper {
@@ -96,6 +97,14 @@ img {
 
 .link-primary:hover {
   color: $page-font-color-dark;
+}
+
+.cursor-move{
+  cursor: move;
+}
+
+.cursor-pointer{
+  cursor: pointer;
 }
 
 .post-detail {

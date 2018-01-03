@@ -141,7 +141,6 @@
 
   .statistic img{
     margin-right: $space-sm;
-    vertical-align: text-bottom;
   }
 
   .divider{

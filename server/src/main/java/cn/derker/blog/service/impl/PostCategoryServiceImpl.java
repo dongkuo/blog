@@ -30,4 +30,9 @@ public class PostCategoryServiceImpl implements PostCategoryService {
     public int savePostCategory(PostCategory postCategory) {
         return postCategoryMapper.insert(postCategory);
     }
+
+    @Override
+    public int deletePostCategory(Integer id) {
+        return postCategoryMapper.deleteByPrimaryKey(id);
+    }
 }

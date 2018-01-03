@@ -34,7 +34,7 @@ public class ExceptionControllerAdvice {
     @ResponseBody
     public ResponseEntity handle(HttpMessageNotReadableException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "request body is missing or illegal"));
+                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "请求体为空或不合法"));
     }
 
     /**
@@ -44,7 +44,7 @@ public class ExceptionControllerAdvice {
     @ResponseBody
     public ResponseEntity handle(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "parameters is illegal"));
+                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "请求参数不合法"));
     }
 
     /**
@@ -54,7 +54,7 @@ public class ExceptionControllerAdvice {
     @ResponseBody
     public ResponseEntity handle(BindException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "parameters is illegal"));
+                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "请求参数不合法"));
     }
 
     /**
@@ -64,7 +64,7 @@ public class ExceptionControllerAdvice {
     @ResponseBody
     public ResponseEntity handle(HttpRequestMethodNotSupportedException e) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
-                .body(ApiResult.error(HttpStatus.METHOD_NOT_ALLOWED.value(), "request method not allowed"));
+                .body(ApiResult.error(HttpStatus.METHOD_NOT_ALLOWED.value(), "请求方法不允许"));
     }
 
 
@@ -76,7 +76,7 @@ public class ExceptionControllerAdvice {
     public ResponseEntity handle(Exception e) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResult.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "server is too busy"));
+                .body(ApiResult.error(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器繁忙"));
     }
 
 

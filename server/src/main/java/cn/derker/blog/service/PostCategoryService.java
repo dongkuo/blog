@@ -13,4 +13,6 @@ public interface PostCategoryService {
     List<PostCategory> listPostCategory();
 
     int savePostCategory(PostCategory postCategory);
+
+    int deletePostCategory(Integer id);
 }

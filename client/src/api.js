@@ -29,8 +29,11 @@ api.postCategory = {
   list() {
     return http.get(`${config.dev.apiPrefix}/post_categories`)
   },
-  save(postCategory){
+  save(postCategory) {
     return http.post(`${config.dev.apiPrefix}/post_categories`, postCategory)
+  },
+  delete(id) {
+    return http.delete(`${config.dev.apiPrefix}/post_categories/${id}`)
   }
 }
 api.post = {
@@ -53,7 +56,7 @@ api.moments = {
   }
 }
 api.about = {
-  get(){
+  get() {
     return http.get(`${config.dev.apiPrefix}/about`)
   }
 }
