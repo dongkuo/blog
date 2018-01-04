@@ -50,7 +50,7 @@
   }
   .header-link-group a{
     margin: 0 $space-lg;
-    color: $page-font-color-light;
+    color: $page-font-color-lighter;
     position: relative;
     padding-bottom: $space;
   }

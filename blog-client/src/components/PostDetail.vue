@@ -52,7 +52,32 @@
 
 <style lang="scss" scoped>
   @import "../assets/scss/variables.scss";
-  .statistic .item{
+
+  .statistic .item {
     margin-right: $space;
+  }
+</style>
+<style lang="scss">
+  @import "../assets/scss/variables.scss";
+
+  .post-detail {
+    blockquote, figure, p {
+      margin: 1.25rem 0;
+    }
+    p {
+      line-height: 1.75rem;
+    }
+
+    blockquote {
+      padding: 0 1rem;
+      border-left: 4px solid $text-color-primary;
+      background-color: darken($page-background-color, 0.75%);
+      color: lighten($page-font-color, 20%);
+
+      p {
+        margin: 0;
+        padding: 0.5rem 0;
+      }
+    }
   }
 </style>

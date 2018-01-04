@@ -1,4 +1,5 @@
 /*dimension*/
+$page-font-size-mini: 0.75rem;
 $page-font-size-sm: 0.875rem;
 $page-font-size: 16px;
 $header-height: 40px;
@@ -10,11 +11,14 @@ $space-lg-x: 24px;
 $post-list-cover-width: 120px;
 $post-list-cover-height: 90px;
 
-$writer-category-layout-width: 300px;
-$writer-post-layout-width: 300px;
+$writer-category-list-layout-width: 250px;
+$writer-post-list-layout-width: 300px;
+$writer-editor-layout-title-height: 52px;
+$writer-editor-layout-title-font: 1.5rem;
 /*color*/
 $page-font-color: #465064;
-$page-font-color-light: lighten($page-font-color, 24%);
+$page-font-color-light: lighten($page-font-color, 6%);
+$page-font-color-lighter: lighten($page-font-color, 24%);
 $page-font-color-dark: darken($page-font-color, 16%);
 $page-background-color: #FBFBFF;
 $text-color-primary: #1296db;
@@ -24,5 +28,6 @@ $header-divider-background-color: #ebeefa;
 
 $post-list-divider-background-color: #d8dbe7;
 
-$writer-category-layout-background: #3b4354;
-$writer-category-layout-color: #a8b5cb;
+$writer-category-list-layout-background: #3b4354;
+$writer-category-list-layout-color: #a8b5cb;
+$writer-post-list-layout-item-background: #ebeefa;

@@ -1,60 +1,50 @@
 <template>
   <div class="wrapper" v-on:keyup.esc="dismissAllModal">
     <!--分类-->
-    <app-writer-category-layout></app-writer-category-layout>
+    <app-category-list-layout class="category-layout" :categories="categories"></app-category-list-layout>
     <!--文章-->
-    <div class="post-layout">
-      <div class="function-group">
-        <span class="function-item" @click="isAddPostModalActive = true"><i class="material-icons">edit</i>写文章</span>
-      </div>
-      <ul>
-        <li class="selected">
-          <i class="material-icons icon-article">insert_drive_file</i>
-          <p class="text-ellipsis">我是文章标题，我可能很长很长很长很长</p>
-          <p class="statistic">
-            <span class="item text-hint">喜欢 121</span>
-            <span class="item text-hint">评论 122</span>
-            <span class="item text-hint">阅读 73</span>
-            <span class="item text-hint">3天前</span>
-          </p>
-          <a href="javascript:void(0)" class="material-icons btn-delete" title="删除">delete</a>
-        </li>
-        <li>
-          <i class="material-icons icon-article">insert_drive_file</i>
-          <p class="text-ellipsis">我是文章标题，我可能很长很长很长很长</p>
-          <p class="statistic">
-            <span class="item text-hint">喜欢 121</span>
-            <span class="item text-hint">评论 122</span>
-            <span class="item text-hint">阅读 73</span>
-            <span class="item text-hint">3天前</span>
-          </p>
-          <a href="javascript:void(0)" class="material-icons btn-delete" title="删除">delete</a>
-        </li>
-      </ul>
-    </div>
+    <app-post-list-layout class="post-layout" :posts="posts"></app-post-list-layout>
     <!--编辑器-->
-    <div class="editor-layout">
-      <input type="text" class="input-title" placeholder="请输入文章标题">
-      <div class="editor-wrapper">
-        <mavon-editor v-model="markdown" class="editor"></mavon-editor>
-      </div>
-    </div>
+    <app-editor-layout class="editor-layout" v-model="post"></app-editor-layout>
   </div>
 </template>
 
 <script>
-  import AppWriterCategoryLayout from "./WriterCategoryLayout.vue";
+  import AppCategoryListLayout from "./WriterCategoryListLayout";
+  import AppPostListLayout from "./WriterPostListLayout";
+  import AppEditorLayout from "./WriterPostEditorLayout";
 
   export default {
     components: {
-      AppWriterCategoryLayout
+      AppCategoryListLayout,
+      AppPostListLayout,
+      AppEditorLayout
+    },
+    created() {
+      this.getCategories();
     },
     data() {
       return {
-        markdown: ''
+        categories: [],
+        posts: [],
+        post: {
+          title: '测试标题',
+          markdown: '我是内容'
+        }
       }
     },
-    methods: {}
+    methods: {
+      getCategories() {
+        this.$api.postCategory.list().then(resp => {
+          this.categories = resp.data.data
+          if (this.categories.length > 0) {
+            this.categories[0].selected = true
+          }
+        }).catch(err => {
+          console.error(err)
+        })
+      },
+    }
   }
 </script>
 
@@ -66,14 +56,25 @@
     height: 100%;
   }
 
-  .post-layout {
-    width: $writer-post-layout-width;
+  .category-layout {
+    width: $writer-category-list-layout-width;
     position: absolute;
     top: 0;
-    left: $writer-category-layout-width;
+    left: 0;
+    background-color: $writer-category-list-layout-background;
+    color: $writer-category-list-layout-color;
+    height: 100%;
+  }
+
+  .post-layout {
+    width: $writer-post-list-layout-width;
+    position: absolute;
+    top: 0;
+    left: $writer-category-list-layout-width;
   }
 
   .editor-layout {
-    padding-left: $writer-category-layout-width + $writer-post-layout-width;
+    height: 100%;
+    padding-left: $writer-category-list-layout-width + $writer-post-list-layout-width;
   }
 </style>

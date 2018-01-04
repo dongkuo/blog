@@ -47,7 +47,7 @@ figure figcaption {
   text-align: center;
   margin: $space-sm 0;
   font-size: $page-font-size-sm;
-  color: $page-font-color-light;
+  color: $page-font-color-lighter;
   font-style: italic;
 }
 
@@ -83,12 +83,18 @@ img {
 }
 
 .text-color-light {
-  color: $page-font-color-light;
+  color: $page-font-color-lighter;
 }
 
 .text-hint {
   font-size: $page-font-size-sm;
-  color: $page-font-color-light;
+  color: $page-font-color-lighter;
+}
+
+.text-ellipsis{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }
 
 .link-primary {
@@ -106,24 +112,10 @@ img {
 .cursor-pointer{
   cursor: pointer;
 }
+.float-left{
+  float: left;
+}
 
-.post-detail {
-  blockquote, figure, p {
-    margin: 1.25rem 0;
-  }
-  p {
-    line-height: 1.75rem;
-  }
-
-  blockquote {
-    padding: 0 1rem;
-    border-left: 4px solid $text-color-primary;
-    background-color: darken($page-background-color, 0.75%);
-    color: lighten($page-font-color, 20%);
-
-    p{
-      margin: 0;
-      padding: 0.5rem 0;
-    }
-  }
+.float-right{
+  float: right;
 }

@@ -6,9 +6,9 @@ import date from './date'
 import ElementUI from 'element-ui'
 import mavonEditor from 'mavon-editor'
 import dragging from './directives/dragging'
+import './prototype'
 import 'mavon-editor/dist/css/index.css'
 import './assets/scss/index.scss'
-import './prototype'
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api
