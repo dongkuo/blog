@@ -4,16 +4,15 @@
       <span class="function-item" @click="isAddPostModalActive = true">
         <img src="../assets/img/pen.png" class="icon">写文章</span>
     </div>
-    <ul>
-      <li class="post-item" :class="{selected: post.isSelected}" v-for="post in posts">
-        <!--<img :src="'/static/img/' + (post.isEditing ? 'article_editing.png': 'article.png')" class="post-item-icon">-->
+    <ul class="post-list">
+      <li class="post-item" :class="{selected: post.selected}" v-for="post in posts">
         <p class="title">{{post.title}}</p>
         <span class="finished-time">{{post.finishedTime | date('friendly')}}</span>
         <p class="summary">{{post.summary}}</p>
         <p class="meta">
-          <span>喜欢 {{post.likeNumber}}</span>
-          <span>评论 {{post.commentingNumber}}</span>
-          <span>阅读 {{post.readingNumber}}</span>
+          <span>喜欢 {{post.like_number}}</span>
+          <span>评论 {{post.commenting_number}}</span>
+          <span>阅读 {{post.reading_number}}</span>
         </p>
         <span title="删除文章" class="delete-btn"></span>
       </li>
@@ -31,7 +30,9 @@
     created() {
 
     },
-    methods: {}
+    methods: {
+
+    }
   }
 </script>
 
@@ -40,8 +41,9 @@
   @import "../assets/scss/global.scss";
 
   .function-group {
-    margin: $space-lg $space;
+    padding: $space-lg $space;
     text-align: right;
+    border-bottom: 1px solid $header-divider-background-color;
   }
 
   .function-item {
@@ -56,6 +58,10 @@
 
   .function-item .icon {
     margin-right: $space-sm;
+  }
+
+  .post-list{
+    margin: 0;
   }
 
   .post-item {

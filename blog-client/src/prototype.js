@@ -7,6 +7,12 @@ Array.prototype.remove = function (obj, fun) {
   }
 };
 
+Array.prototype.addAll = function (array) {
+  array.forEach(obj => {
+    this.push(obj)
+  })
+}
+
 Array.prototype.contains = function (needle, equal) {
   if (!(needle instanceof Array)) {
     for (let value of this) {

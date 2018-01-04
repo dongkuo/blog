@@ -2,7 +2,7 @@
   <div>
     <input type="text" class="title-input" placeholder="文章标题" v-model="value.title">
     <div class="editor-wrapper">
-      <mavon-editor v-model="value.markdown" ></mavon-editor>
+      <mavon-editor v-model="value.markdown" class="editor"></mavon-editor>
     </div>
   </div>
 </template>

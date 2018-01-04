@@ -3,9 +3,9 @@
     <!--分类-->
     <app-category-list-layout class="category-layout" :categories="categories"></app-category-list-layout>
     <!--文章-->
-    <app-post-list-layout class="post-layout" :posts="posts"></app-post-list-layout>
+    <app-post-list-layout class="post-layout" :posts="currentCategory && currentCategory.posts"></app-post-list-layout>
     <!--编辑器-->
-    <app-editor-layout class="editor-layout" v-model="post"></app-editor-layout>
+    <app-editor-layout class="editor-layout" v-model="currentPost"></app-editor-layout>
   </div>
 </template>
 
@@ -26,24 +26,43 @@
     data() {
       return {
         categories: [],
-        posts: [],
-        post: {
-          title: '测试标题',
-          markdown: '我是内容'
-        }
+        currentCategory: {},
+        currentPost: {}
       }
     },
     methods: {
+      /*获取所有分类*/
       getCategories() {
         this.$api.postCategory.list().then(resp => {
           this.categories = resp.data.data
           if (this.categories.length > 0) {
-            this.categories[0].selected = true
+            this.currentCategory = this.categories[0]
+            this.currentCategory.selected = true
+            this.getPosts()
           }
         }).catch(err => {
           console.error(err)
         })
       },
+      /*获取当前分类下的文章*/
+      getPosts() {
+        if (!this.currentCategory) {
+          return
+        }
+        if (!this.currentCategory.content) {
+          this.currentCategory.content = {page: 0, posts: []}
+        }
+        let query = {page: this.currentCategory.content.page + 1, size: 10, categoryId: this.currentCategory.id}
+        this.$api.post.list(query).then(resp => {
+          this.currentCategory.content.page = resp.data.data.page
+          if (posts.length > 0) {
+            this.currentPost = posts[0]
+            this.currentPost.selected = true
+          }
+        }).catch(err => {
+
+        })
+      }
     }
   }
 </script>
