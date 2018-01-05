@@ -5,6 +5,7 @@ import Archive from './components/Archive'
 import About from './components/About'
 import PostDetail from './components/PostDetail'
 import Writer from './components/Writer'
+import Test from './components/Test'
 
 Vue.use(Router)
 
@@ -29,6 +30,10 @@ export default new Router({
     {
       path: '/writer',
       component: Writer
+    },
+    {
+      path: '/test',
+      component: Test
     }
   ]
 })

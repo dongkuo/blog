@@ -5,9 +5,9 @@
         <img src="../assets/img/pen.png" class="icon">写文章</span>
     </div>
     <ul class="post-list">
-      <li class="post-item" :class="{selected: post.selected}" v-for="post in posts">
+      <li class="post-item" :class="{selected: post.selected}" @click="onSelected(post)" v-for="post in posts">
         <p class="title">{{post.title}}</p>
-        <span class="finished-time">{{post.finishedTime | date('friendly')}}</span>
+        <span class="finished-time">{{post.finished_time | date('friendly')}}</span>
         <p class="summary">{{post.summary}}</p>
         <p class="meta">
           <span>喜欢 {{post.like_number}}</span>
@@ -16,22 +16,79 @@
         </p>
         <span title="删除文章" class="delete-btn"></span>
       </li>
+      <app-infinite-loading @infinite="getPosts" spinner="waveDots" ref="infiniteLoading">
+        <div slot="no-more"></div>
+        <p slot="no-results">
+          <app-emoji :size="2">🐒</app-emoji>
+          <br/>啥都没有啊 …
+        </p>
+      </app-infinite-loading>
     </ul>
   </div>
 </template>
 
 <script>
+  import AppInfiniteLoading from "vue-infinite-loading";
+  import AppEmoji from "./Emoji.vue";
+
   export default {
-    props: ['posts'],
+    components: {
+      AppInfiniteLoading,
+      AppEmoji
+    },
+    props: ['categoryId'],
     data() {
       return {
+        posts: [],
+        postsCache: {}
       }
     },
     created() {
 
     },
     methods: {
-
+      getPosts($state) {
+        let data = this.postsCache[this.categoryId]
+        if (!data) {
+          data = {page: 0, total: Infinity, size: 10, posts: []}
+          this.postsCache[this.categoryId] = data
+        }
+        this.posts = data.posts
+        if (data.page * data.size >= data.total) {
+          if (data.total !== 0) {
+            $state.loaded();
+          }
+          $state.complete();
+          return;
+        }
+        this.$api.post
+          .list({page: data.page + 1, size: data.size, categoryId: this.categoryId})
+          .then(resp => {
+            data.total = resp.data.data.total;
+            data.page = resp.data.data.page;
+            if (resp.data.data.content.length === 0) {
+              $state.complete();
+              return;
+            }
+            resp.data.data.content.forEach(post => post.selected = false)
+            data.posts.addAll(resp.data.data.content)
+            $state.loaded();
+          })
+          .catch(e => {
+            console.error(e);
+            $state.complete();
+          });
+      },
+      onSelected(post) {
+        this.posts.forEach(post => post.selected = false)
+        post.selected = true
+        this.$emit('onSelected', {id: post.id, title: post.title})
+      }
+    },
+    watch: {
+      categoryId: function (oldVal, newVal) {
+        this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+      }
     }
   }
 </script>
@@ -60,7 +117,7 @@
     margin-right: $space-sm;
   }
 
-  .post-list{
+  .post-list {
     margin: 0;
   }
 
@@ -136,4 +193,5 @@
       background-image: url("../assets/img/delete_18_danger.png");
     }
   }
+
 </style>

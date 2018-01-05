@@ -71,7 +71,7 @@
     methods: {
       reset() {
         this.page = 0
-        this.total = Number.POSITIVE_INFINITY
+        this.total = Infinity
         this.posts = []
       },
       getPosts($state) {

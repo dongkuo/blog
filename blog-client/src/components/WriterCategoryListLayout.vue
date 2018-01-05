@@ -9,18 +9,17 @@
       </span>
     </div>
     <ul class="category-list">
-      <li v-for="category in categories"
+      <li v-for="category in categories" :key="category.id"
+          class="item" :class="{selected: category.selected}"
           v-dragging="{ item: category, list: categories, group: 'postCategory' }"
-          class="item"
-          :class="{selected: category.selected}"
-          :key="category.id">
+          @click="selectCategory(category)">
         <img src="../assets/img/class.png">
         <span class="category-name">{{category.name}}</span>
         <span class="btn-group text-gray">
           <img src="../assets/img/build.png" class="btn cursor-pointer" title="修改分类"
-               @click="showUpdateCategoryModal(category)">
+               @click.stop="showUpdateCategoryModal(category)">
           <img src="../assets/img/delete.png" class="btn cursor-pointer" title="删除分类"
-               @click="confirmDeleteCategory(category)">
+               @click.stop="confirmDeleteCategory(category)">
           <span class="btn cursor-move btn-drag" title="拖动排序"
                 @mouseenter="allowCategoryDrag = true" @mouseleave="allowCategoryDrag = false"></span>
         </span>
@@ -73,9 +72,9 @@
         }
       })
     },
-    props: ['categories'],
     data() {
       return {
+        categories: [],
         addCategoryDialogVisible: false,
         updateCategoryDialogVisible: false,
         allowCategoryDrag: false,
@@ -90,6 +89,9 @@
           ],
         }
       }
+    },
+    created() {
+      this.getCategories();
     },
     methods: {
       showAddCategoryModal() {
@@ -153,6 +155,28 @@
             this.$message.error('修改文章分类失败：' + err.response.data.error);
           })
         })
+      },
+      getCategories() {
+        this.$api.postCategory.list().then(resp => {
+          let categories = resp.data.data
+          for (let i = 0; i < categories.length; i++) {
+            if (i === 0) {
+              this.selectCategory(categories[0])
+            } else {
+              categories[i].selected = false
+            }
+          }
+          this.categories.addAll(categories)
+        }).catch(err => {
+          console.error(err)
+        })
+      },
+      selectCategory(category) {
+        for (let c of this.categories) {
+          c.selected = false
+        }
+        category.selected = true
+        this.$emit('onSelected', {id: category.id, name: category.name})
       }
     }
   }
@@ -194,6 +218,7 @@
   .category-list .item .btn-group > .btn {
     margin-right: $space-sm;
   }
+
   .category-list .item .btn-group > .btn.btn-drag {
     background: url("../assets/img/drag.png");
     width: 20px;

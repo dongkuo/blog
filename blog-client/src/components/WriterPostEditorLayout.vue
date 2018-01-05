@@ -1,24 +1,27 @@
 <template>
   <div>
-    <input type="text" class="title-input" placeholder="文章标题" v-model="value.title">
-    <div class="editor-wrapper">
-      <mavon-editor v-model="value.markdown" class="editor"></mavon-editor>
+    <div class="mask" v-if="!post">
+      <input type="text" class="title-input" placeholder="文章标题">
+      <div class="editor-box">
+        <mavon-editor class="editor"></mavon-editor>
+      </div>
+    </div>
+    <div class="editor-wrapper" v-else>
+      <input type="text" class="title-input" placeholder="文章标题" :value="post.title">
+      <div class="editor-box">
+        <mavon-editor :value="post.markdown" class="editor"></mavon-editor>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    props: ['value'],
+    props: ['post'],
     data() {
-      return {
-      }
+      return {}
     },
-    methods: {
-      updateValue() {
-        this.$emit('input', this.markdown)
-      }
-    }
+    methods: {}
   }
 </script>
 
@@ -38,7 +41,20 @@
     color: $page-font-color;
   }
 
+  .mask {
+    width: 100%;
+    height: 100%;
+    background: gray;
+    position: fixed;
+    opacity: 0.8;
+    z-index: 9999999999999;
+  }
+
   .editor-wrapper {
+    height: 100%;
+  }
+
+  .editor-box {
     height: calc(100% - #{$writer-editor-layout-title-height});
   }
 
