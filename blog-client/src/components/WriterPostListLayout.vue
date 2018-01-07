@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="function-group">
-      <span class="function-item" @click="isAddPostModalActive = true">
-        <img src="../assets/img/pen.png" class="icon">写文章</span>
+      <span class="function-item" @click="newPost">
+        <img src="../assets/img/pen.png" class="icon">写文章
+      </span>
     </div>
     <ul class="post-list">
       <li class="post-item" :class="{selected: post.selected}" @click="onSelected(post)" v-for="post in posts">
@@ -10,9 +11,9 @@
         <span class="finished-time">{{post.finished_time | date('friendly')}}</span>
         <p class="summary">{{post.summary}}</p>
         <p class="meta">
-          <span>喜欢 {{post.like_number}}</span>
-          <span>评论 {{post.commenting_number}}</span>
-          <span>阅读 {{post.reading_number}}</span>
+          <span>喜欢 {{post.like_number || 0}}</span>
+          <span>评论 {{post.commenting_number || 0}}</span>
+          <span>阅读 {{post.reading_number || 0}}</span>
         </p>
         <span title="删除文章" class="delete-btn"></span>
       </li>
@@ -83,10 +84,25 @@
         this.posts.forEach(post => post.selected = false)
         post.selected = true
         this.$emit('onSelected', {id: post.id, title: post.title})
+      },
+      newPost() {
+        let newPost = {
+          id: -Date.now(),
+          title: '新建文章',
+          summary: '',
+          finished_time: Date.now()
+        }
+        this.onSelected(newPost)
+        this.postsCache[this.categoryId].posts.unshift(newPost)
       }
     },
     watch: {
-      categoryId: function (oldVal, newVal) {
+      categoryId: function () {
+        // 清除之前选中的文章
+        let data = this.postsCache[this.categoryId]
+        if (data) {
+          data.posts.forEach(post => post.selected = false)
+        }
         this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
       }
     }

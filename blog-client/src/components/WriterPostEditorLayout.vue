@@ -1,15 +1,10 @@
 <template>
   <div>
-    <div class="mask" v-if="!post">
-      <input type="text" class="title-input" placeholder="文章标题">
+    <div class="mask" v-if="!postId"></div>
+    <div class="editor-wrapper">
+      <input type="text" class="title-input" placeholder="文章标题" v-model="post.title">
       <div class="editor-box">
-        <mavon-editor class="editor"></mavon-editor>
-      </div>
-    </div>
-    <div class="editor-wrapper" v-else>
-      <input type="text" class="title-input" placeholder="文章标题" :value="post.title">
-      <div class="editor-box">
-        <mavon-editor :value="post.markdown" class="editor"></mavon-editor>
+        <!--<mavon-editor class="editor" v-model="post.markdown"></mavon-editor>-->
       </div>
     </div>
   </div>
@@ -17,11 +12,43 @@
 
 <script>
   export default {
-    props: ['post'],
+    props: ['postId'],
     data() {
-      return {}
+      return {
+        post: {title: '', markdown: ''},
+        postsCache: {}
+      }
     },
-    methods: {}
+    methods: {},
+    watch: {
+      postId: function (postId) {
+        if (postId === 0) {
+          // postId = 0时，表示未选中任何文章，要清空标题和编辑器数据
+          this.post = {title: '', markdown: ''}
+          return
+        }
+        let post = this.postsCache[postId]
+        if (post) {
+          this.post = post
+          return
+        }
+        if (postId < 0) {
+          // postId < 0时，表示是新建的文章
+          this.post = {title: '新建文章', markdown: ''}
+          this.postsCache[postId] = this.post
+          return
+        }
+        this.$api.post.get(postId).then(resp => {
+          let post = resp.data.data
+          if (post) {
+            post.markdown = post.markdown || ''
+            this.post = post
+            this.postsCache[postId] = post
+          }
+        }).catch(err => {
+        })
+      }
+    }
   }
 </script>
 
@@ -44,10 +71,11 @@
   .mask {
     width: 100%;
     height: 100%;
-    background: gray;
+    background: white;
     position: fixed;
-    opacity: 0.8;
-    z-index: 9999999999999;
+    opacity: 0.6;
+    z-index: 1600;
+    cursor: not-allowed;
   }
 
   .editor-wrapper {

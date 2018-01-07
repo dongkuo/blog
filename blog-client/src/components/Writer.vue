@@ -6,7 +6,7 @@
     <app-post-list-layout class="post-layout" :categoryId="categoryId"
                           @onSelected="onPostSelected"></app-post-list-layout>
     <!--编辑器-->
-    <app-editor-layout class="editor-layout" :post="post"></app-editor-layout>
+    <app-editor-layout class="editor-layout" :postId="postId"></app-editor-layout>
   </div>
 </template>
 
@@ -24,15 +24,16 @@
     data() {
       return {
         categoryId: null,
-        post: null
+        postId: 0
       }
     },
     methods: {
       OnCategorySelected(category) {
         this.categoryId = category.id
+        this.postId = 0
       },
       onPostSelected(post) {
-        this.post = post
+        this.postId = post.id
       }
     }
   }

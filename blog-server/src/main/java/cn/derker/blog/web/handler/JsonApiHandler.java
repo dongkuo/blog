@@ -56,11 +56,6 @@ public class JsonApiHandler implements HandlerMethodReturnValueHandler {
         // 获得注解并执行filter方法 最后返回
         HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        if (returnValue instanceof ApiResult && ((ApiResult) returnValue).getData() == null) {
-            response.setStatus(((ApiResult) returnValue).getStatus());
-            return;
-        }
-
 
         Map<Class<?>, String[]> includeMap = new HashMap<>();
         Map<Class<?>, String[]> excludeMap = new HashMap<>();

@@ -4,17 +4,15 @@ import router from './router'
 import api from './api'
 import date from './date'
 import ElementUI from 'element-ui'
-import mavonEditor from 'mavon-editor'
 import dragging from './directives/dragging'
 import './prototype'
-import 'mavon-editor/dist/css/index.css'
 import './assets/scss/index.scss'
+import 'editor.md/css/editormd.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api
 
 Vue.use(ElementUI)
-Vue.use(mavonEditor)
 Vue.use(dragging)
 // 自定义过滤器
 Vue.filter('date', date)
