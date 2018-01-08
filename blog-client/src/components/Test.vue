@@ -1,19 +1,20 @@
 <template>
   <div>
     <h1>editor.md</h1>
-    <app-editor-md class="editor"></app-editor-md>
+    <app-editormd class="editor"></app-editormd>
   </div>
 </template>
 
 <script>
-  import AppEditorMd from "./EditorMd";
+  import AppEditormd from "./editormd/Editormd.vue";
+
   export default {
-    components:{AppEditorMd}
+    components: {AppEditormd}
   }
 </script>
 
 <style scoped>
-  .editor{
+  .editor {
     height: 500px;
   }
 </style>

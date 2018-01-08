@@ -7,19 +7,16 @@
 </template>
 
 <script>
-  // import jQuery from 'jquery'
-  // import editormd from 'editor.md/editormd'
+  import jQuery from 'jquery'
+  import editormdFactory from './editormd'
 
   export default {
     mounted() {
-      // window.jQuery = jQuery
-      // window.$ = jQuery
-      // var editor = editormd("editormd", {
-      //   path: "../lib/" // Autoload modules mode, codemirror, marked... dependents libs path
-      // });
-      // editor.fn.init("editormd", {
-      //   path: "/static/lib/"
-      // })
+      console.log('jQuery', jQuery)
+      var editor = editormdFactory(jQuery)("editormd", {
+        path: "/static/lib/"
+      });
+
     }
   }
 </script>
