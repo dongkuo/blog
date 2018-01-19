@@ -1,22 +1,54 @@
 <template>
-  <div>
-    <div id="editormd">
-      <textarea style="display:none;">### Hello Editor.md !</textarea>
-    </div>
+  <div :id="id">
+    <textarea style="display:none;">{{value}}</textarea>
   </div>
 </template>
 
 <script>
-  import jQuery from 'jquery'
-  import editormdFactory from './editormd'
+  import editormd from './editormd'
+
+  function randomId() {
+    let chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    let res = "";
+    for (let i = 0; i < 6; i++) {
+      let id = Math.ceil(Math.random() * 9);
+      res += chars[id];
+    }
+    return 'editormd-' + res;
+  }
 
   export default {
+    props: ['value', 'options'],
+    data() {
+      return {
+        id: randomId(),
+        editor: null,
+      }
+    },
     mounted() {
-      console.log('jQuery', jQuery)
-      var editor = editormdFactory(jQuery)("editormd", {
-        path: "/static/lib/"
-      });
-
+      this.editor = editormd(this.id, this.options);
+    },
+    methods: {
+      getMarkdown() {
+        return this.editor ? this.editor.getMarkdown() : ''
+      },
+      getSummary(length) {
+        if (!this.editor) {
+          return ''
+        }
+        if (!length) {
+          length = 100
+        }
+        let text = this.editor.getPreviewedText() || '';
+        return text.substr(0, length);
+      }
+    },
+    watch: {
+      value: function (newVal) {
+        if (this.editor) {
+          this.editor.setValue(newVal)
+        }
+      }
     }
   }
 </script>

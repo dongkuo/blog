@@ -29,3 +29,14 @@ Array.prototype.contains = function (needle, equal) {
   }
   return true;
 };
+
+Array.prototype.search = function (condition, callback, interrupt) {
+  for (let item of this) {
+    if (condition instanceof Function && condition(item) && callback instanceof Function) {
+      callback(item)
+      if (interrupt) {
+        break;
+      }
+    }
+  }
+}

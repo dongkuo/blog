@@ -30,7 +30,7 @@ module.exports = {
     apiPrefix: '/api',
     proxyTable: {
       '/api': {
-        target: 'http://127.0.0.1:9966/',
+        target: 'http://127.0.0.1:9090/',
         changeOrigin: true
       }
     },

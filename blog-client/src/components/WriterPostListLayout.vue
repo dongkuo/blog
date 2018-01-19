@@ -80,6 +80,12 @@
             $state.complete();
           });
       },
+      setPost(post) {
+        this.posts.search(item => item.id === post.id, item => {
+          item.title = post.title
+          item.summary = post.summary
+        }, true)
+      },
       onSelected(post) {
         this.posts.forEach(post => post.selected = false)
         post.selected = true
@@ -185,6 +191,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    min-height: 40px;
   }
 
   .meta {

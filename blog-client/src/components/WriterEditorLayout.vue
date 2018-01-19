@@ -4,22 +4,35 @@
     <div class="editor-wrapper">
       <input type="text" class="title-input" placeholder="文章标题" v-model="post.title">
       <div class="editor-box">
-        <!--<mavon-editor class="editor" v-model="post.markdown"></mavon-editor>-->
+        <app-editormd class="editor" :value="post.markdown" :options="options" ref="editormd"></app-editormd>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import AppEditormd from "./editormd/Editormd.vue";
+
   export default {
     props: ['postId'],
+    components: {AppEditormd},
     data() {
       return {
         post: {title: '', markdown: ''},
-        postsCache: {}
+        postsCache: {},
+        options: {
+          path: '/static/lib/',
+          tex: true,
+          onchange: this.onchange
+        }
       }
     },
-    methods: {},
+    methods: {
+      onchange() {
+        // this.post.markdown = this.$refs.editormd.getMarkdown()
+        this.$emit('onChange', {id: this.postId, title: this.post.title, summary: this.$refs.editormd.getSummary()})
+      }
+    },
     watch: {
       postId: function (postId) {
         if (postId === 0) {
@@ -47,6 +60,9 @@
           }
         }).catch(err => {
         })
+      },
+      'post.title': function (newVal) {
+        this.$emit('onChange', {id: this.postId, title: newVal, summary: this.$refs.editormd.getSummary()})
       }
     }
   }
@@ -63,8 +79,8 @@
     padding: 0 $space-lg;
     width: 100%;
     box-sizing: border-box;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.157), 0 0 4px rgba(0, 0, 0, 0.227);
     outline: none;
+    border-left: 1px solid #ddd;
     color: $page-font-color;
   }
 

@@ -4,16 +4,16 @@
     <app-category-list-layout class="category-layout" @onSelected="OnCategorySelected"></app-category-list-layout>
     <!--文章-->
     <app-post-list-layout class="post-layout" :categoryId="categoryId"
-                          @onSelected="onPostSelected"></app-post-list-layout>
+                          @onSelected="onPostSelected" ref="postListLayout"></app-post-list-layout>
     <!--编辑器-->
-    <app-editor-layout class="editor-layout" :postId="postId"></app-editor-layout>
+    <app-editor-layout class="editor-layout" :postId="postId" @onChange="onPostChange"></app-editor-layout>
   </div>
 </template>
 
 <script>
   import AppCategoryListLayout from "./WriterCategoryListLayout";
   import AppPostListLayout from "./WriterPostListLayout";
-  import AppEditorLayout from "./WriterPostEditorLayout";
+  import AppEditorLayout from "./WriterEditorLayout";
 
   export default {
     components: {
@@ -34,6 +34,9 @@
       },
       onPostSelected(post) {
         this.postId = post.id
+      },
+      onPostChange(post) {
+        this.$refs.postListLayout.setPost(post)
       }
     }
   }
