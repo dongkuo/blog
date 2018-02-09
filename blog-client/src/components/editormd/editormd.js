@@ -1,16 +1,5 @@
-/*
- * Editor.md
- *
- * @file        editormd.js
- * @version     v1.5.0
- * @description Open source online markdown editor.
- * @license     MIT License
- * @author      Pandao
- * {@link       https://github.com/pandao/editor.md}
- * @updateTime  2015-06-09
- */
-
-
+"use strict";
+import $ from 'jquery'
 /**
  * editormd
  *
@@ -19,7 +8,6 @@
  * @returns {Object} editormd     返回editormd对象
  */
 
-import $ from 'jquery'
 var editormd = function (id, options) {
   return new editormd.fn.init(id, options);
 };
@@ -104,6 +92,8 @@ editormd.defaults = {
   onresize: function () {
   },
   onchange: function () {
+  },
+  onready:function () {
   },
   onwatch: null,
   onunwatch: null,
@@ -631,6 +621,8 @@ editormd.prototype = editormd.fn = {
    * @returns {editormd}  返回editormd的实例对象
    */
 
+  isReady: false,
+
   setCodeMirror: function () {
     var settings = this.settings;
     var editor = this.editor;
@@ -686,7 +678,7 @@ editormd.prototype = editormd.fn = {
     if (!settings.lineNumbers) {
       this.codeMirror.find(".CodeMirror-gutters").css("border-right", "none");
     }
-
+    this.isReady = true;
     return this;
   },
 
@@ -1839,14 +1831,13 @@ editormd.prototype = editormd.fn = {
 
   save: function () {
 
-    var _this = this;
-    var state = this.state;
-    var settings = this.settings;
-
-    if (timer === null && !(!settings.watch && state.preview)) {
+    if (timer === null) {
       return this;
     }
 
+    var _this = this;
+    var state = this.state;
+    var settings = this.settings;
     var cm = this.cm;
     var cmValue = cm.getValue();
     var previewContainer = this.previewContainer;
@@ -2143,7 +2134,6 @@ editormd.prototype = editormd.fn = {
 
   setValue: function (value) {
     this.cm.setValue(value);
-
     return this;
   },
 
@@ -2203,16 +2193,6 @@ editormd.prototype = editormd.fn = {
     }
 
     return this.previewContainer.html();
-  },
-
-  getPreviewedText: function () {
-    if (!this.settings.watch) {
-      alert("Error: settings.watch == false");
-
-      return false;
-    }
-
-    return this.previewContainer.text()
   },
 
   /**
@@ -4361,4 +4341,5 @@ editormd.dateFormat = function (format) {
 
   return datefmt;
 };
+
 export default editormd

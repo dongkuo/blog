@@ -6,7 +6,7 @@
       </span>
     </div>
     <ul class="post-list">
-      <li class="post-item" :class="{selected: post.selected}" @click="onSelected(post)" v-for="post in posts">
+      <li class="post-item" :class="{selected: post.selected}" @click="onSelectPost(post)" v-for="post in posts">
         <p class="title">{{post.title}}</p>
         <span class="finished-time">{{post.finished_time | date('friendly')}}</span>
         <p class="summary">{{post.summary}}</p>
@@ -49,6 +49,7 @@
     },
     methods: {
       getPosts($state) {
+        console.log('getPosts')
         let data = this.postsCache[this.categoryId]
         if (!data) {
           data = {page: 0, total: Infinity, size: 10, posts: []}
@@ -80,16 +81,10 @@
             $state.complete();
           });
       },
-      setPost(post) {
-        this.posts.search(item => item.id === post.id, item => {
-          item.title = post.title
-          item.summary = post.summary
-        }, true)
-      },
-      onSelected(post) {
+      onSelectPost(post) {
         this.posts.forEach(post => post.selected = false)
         post.selected = true
-        this.$emit('onSelected', {id: post.id, title: post.title})
+        this.$emit('onSelectPost', post)
       },
       newPost() {
         let newPost = {
@@ -98,13 +93,10 @@
           summary: '',
           finished_time: Date.now()
         }
-        this.onSelected(newPost)
+        this.onSelectPost(newPost)
         this.postsCache[this.categoryId].posts.unshift(newPost)
-      }
-    },
-    watch: {
-      categoryId: function () {
-        // 清除之前选中的文章
+      },
+      reset() {
         let data = this.postsCache[this.categoryId]
         if (data) {
           data.posts.forEach(post => post.selected = false)
@@ -141,6 +133,7 @@
 
   .post-list {
     margin: 0;
+    height: 100%;
   }
 
   .post-item {

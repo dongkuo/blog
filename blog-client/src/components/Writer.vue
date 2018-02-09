@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper" v-on:keyup.esc="dismissAllModal">
     <!--分类-->
-    <app-category-list-layout class="category-layout" @onSelected="OnCategorySelected"></app-category-list-layout>
+    <app-category-list-layout class="category-layout" @onSelectCategory="onSelectCategory"></app-category-list-layout>
     <!--文章-->
     <app-post-list-layout class="post-layout" :categoryId="categoryId"
-                          @onSelected="onPostSelected" ref="postListLayout"></app-post-list-layout>
+                          @onSelectPost="onSelectPost" ref="postListLayout"></app-post-list-layout>
     <!--编辑器-->
-    <app-editor-layout class="editor-layout" :postId="postId" @onChange="onPostChange"></app-editor-layout>
+    <app-editor-layout class="editor-layout" v-model="post"></app-editor-layout>
   </div>
 </template>
 
@@ -24,19 +24,25 @@
     data() {
       return {
         categoryId: null,
-        postId: 0
+        post: {title: '', markdown: ''}
       }
     },
     methods: {
-      OnCategorySelected(category) {
+      onSelectCategory(category) {
         this.categoryId = category.id
-        this.postId = 0
+        this.post = {title: '', markdown: ''}
+        this.$refs['postListLayout'].reset()
       },
-      onPostSelected(post) {
-        this.postId = post.id
-      },
-      onPostChange(post) {
-        this.$refs.postListLayout.setPost(post)
+      onSelectPost(post) {
+        if (!post.markdown) {
+          this.$api.post.get(post.id).then(resp => {
+            post.markdown = resp.data.data.markdown
+            this.post = post
+          }).catch(err => {
+          })
+        } else {
+          this.post = post
+        }
       }
     }
   }

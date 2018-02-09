@@ -27,6 +27,13 @@
     },
     mounted() {
       this.editor = editormd(this.id, this.options);
+      this.editor.on('load', () => {
+        this.editor.cm.on('change', (editor, changeObj) => {
+          if (changeObj.origin === '+input') {
+            this.$emit('input', editor.getValue())
+          }
+        })
+      })
     },
     methods: {
       getMarkdown() {
@@ -45,7 +52,7 @@
     },
     watch: {
       value: function (newVal) {
-        if (this.editor) {
+        if (this.editor.isReady) {
           this.editor.setValue(newVal)
         }
       }

@@ -12,7 +12,7 @@
       <li v-for="category in categories" :key="category.id"
           class="item" :class="{selected: category.selected}"
           v-dragging="{ item: category, list: categories, group: 'postCategory' }"
-          @click="selectCategory(category)">
+          @click="onSelectCategory(category)">
         <img src="../assets/img/class.png">
         <span class="category-name">{{category.name}}</span>
         <span class="btn-group text-gray">
@@ -161,7 +161,7 @@
           let categories = resp.data.data
           for (let i = 0; i < categories.length; i++) {
             if (i === 0) {
-              this.selectCategory(categories[0])
+              this.onSelectCategory(categories[0])
             } else {
               categories[i].selected = false
             }
@@ -171,12 +171,12 @@
           console.error(err)
         })
       },
-      selectCategory(category) {
+      onSelectCategory(category) {
         for (let c of this.categories) {
           c.selected = false
         }
         category.selected = true
-        this.$emit('onSelected', {id: category.id, name: category.name})
+        this.$emit('onSelectCategory', category)
       }
     }
   }

@@ -7,7 +7,7 @@ import ElementUI from 'element-ui'
 import dragging from './directives/dragging'
 import './prototype'
 import './assets/scss/index.scss'
-import 'editor.md/css/editormd.css'
+import './components/editormd/editormd.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$api = api
