@@ -2,10 +2,10 @@
   <div>
     <div class="function-group">
       <router-link class="function-item" to="/">
-        <img src="../assets/img/home.png" class="icon">返回首页
+        <img src="../../assets/img/home.png" class="icon">返回首页
       </router-link>
       <span class="function-item cursor-pointer" @click="showAddCategoryModal">
-          <img src="../assets/img/add.png" class="icon">添加分类
+          <img src="../../assets/img/add.png" class="icon">添加分类
       </span>
     </div>
     <ul class="category-list">
@@ -13,12 +13,12 @@
           class="item" :class="{selected: category.selected}"
           v-dragging="{ item: category, list: categories, group: 'postCategory' }"
           @click="onSelectCategory(category)">
-        <img src="../assets/img/class.png">
+        <img src="../../assets/img/class.png">
         <span class="category-name">{{category.name}}</span>
         <span class="btn-group text-gray">
-          <img src="../assets/img/build.png" class="btn cursor-pointer" title="修改分类"
+          <img src="../../assets/img/build.png" class="btn cursor-pointer" title="修改分类"
                @click.stop="showUpdateCategoryModal(category)">
-          <img src="../assets/img/delete.png" class="btn cursor-pointer" title="删除分类"
+          <img src="../../assets/img/delete.png" class="btn cursor-pointer" title="删除分类"
                @click.stop="confirmDeleteCategory(category)">
           <span class="btn cursor-move btn-drag" title="拖动排序"
                 @mouseenter="allowCategoryDrag = true" @mouseleave="allowCategoryDrag = false"></span>
@@ -161,6 +161,7 @@
           let categories = resp.data.data
           for (let i = 0; i < categories.length; i++) {
             if (i === 0) {
+              // 默认选中第一个
               this.onSelectCategory(categories[0])
             } else {
               categories[i].selected = false
@@ -183,7 +184,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../assets/scss/variables.scss";
+  @import "../../assets/scss/variables";
 
   .function-group {
     margin: $space-lg 0;
@@ -220,7 +221,7 @@
   }
 
   .category-list .item .btn-group > .btn.btn-drag {
-    background: url("../assets/img/drag.png");
+    background: url("../../assets/img/drag.png");
     width: 20px;
     height: 20px;
     display: inline-block;

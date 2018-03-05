@@ -51,6 +51,9 @@ api.post = {
   },
   save(post) {
     return http.post(`${config.dev.apiPrefix}/posts`, post)
+  },
+  patch(post) {
+    return http.patch(`${config.dev.apiPrefix}/posts/${post.id}`, post)
   }
 }
 api.moments = {

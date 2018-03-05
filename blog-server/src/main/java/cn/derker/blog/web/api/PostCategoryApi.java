@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @author derker
  * @date 2017-12-28 15：49
  */
-@Controller
-@Api
+@RestController
 @RequestMapping("/post_categories")
 public class PostCategoryApi extends BaseApi {
 

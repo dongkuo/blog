@@ -4,7 +4,7 @@ import cn.derker.blog.annotation.Api;
 import cn.derker.blog.annotation.ApiExclude;
 import cn.derker.blog.annotation.ApiInclude;
 import cn.derker.blog.domain.entity.Post;
-import cn.derker.blog.domain.model.ApiResult;
+import cn.derker.blog.domain.model.Page;
 import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.service.PostService;
 import cn.derker.blog.util.BeanUtil;
@@ -14,13 +14,12 @@ import cn.derker.blog.util.RegexUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author derker
@@ -41,8 +40,8 @@ public class PostApi {
      */
     @GetMapping("/archives")
     @ApiInclude(clazz = Post.class, fields = {"id", "finished_time", "title"})
-    public ApiResult allPosts() {
-        return ApiResult.ok(postService.listPost());
+    public List<Post> getArchives() {
+        return postService.listPost();
     }
 
     /**
@@ -53,8 +52,8 @@ public class PostApi {
      */
     @GetMapping
     @ApiExclude(clazz = Post.class, fields = {"html", "markdown"})
-    public ApiResult listPosts(Integer categoryId, Pageable pageable) {
-        return ApiResult.ok(postService.listPost(categoryId, pageable));
+    public Page<Post> listPosts(Integer categoryId, Pageable pageable) {
+        return postService.listPost(categoryId, pageable);
     }
 
     /**
@@ -65,8 +64,8 @@ public class PostApi {
      */
     @GetMapping("/{id}")
     @ApiExclude(clazz = Post.class, fields = "category_id")
-    public ApiResult getPost(@PathVariable Integer id) {
-        return ApiResult.ok(postService.getPost(id));
+    public Post getPost(@PathVariable Integer id) {
+        return postService.getPost(id);
     }
 
     /**
@@ -76,10 +75,9 @@ public class PostApi {
      * @return
      */
     @DeleteMapping("/{id}")
-    public ApiResult removePost(@PathVariable Integer id) {
+    public void removePost(@PathVariable Integer id) {
         id = IdUtil.decode(id);
         postService.removePost(id);
-        return ApiResult.empty();
     }
 
     /**
@@ -89,7 +87,8 @@ public class PostApi {
      * @return
      */
     @PostMapping
-    public ResponseEntity savePost(@RequestBody Post post) {
+    @ApiInclude(clazz = Post.class, fields = {"id"})
+    public Post savePost(@RequestBody Post post) {
         Post newPost = new Post();
 
         // title（必须）
@@ -124,7 +123,42 @@ public class PostApi {
         newPost.setCategoryId(post.getCategoryId());
         postService.insertPost(newPost);
         LOGGER.debug("保存文章：{}", newPost);
-        return ResponseEntity.created(URI.create("/posts/" + newPost.getId())).build();
+        return newPost;
+    }
+
+    /**
+     * 修改文章
+     *
+     * @param id   文章id
+     * @param post 修改后的文章
+     * @return
+     */
+    @PatchMapping("/{id}")
+    public Object updatePost(@PathVariable("id") Integer id, @RequestBody Post post) {
+        Post updatedPost = new Post();
+
+        // id
+        Assert.notNull(id, "文章id不能为空");
+        updatedPost.setId(id);
+
+        // coverImage, coverCaption, readingNumber, likeNumber, commentingNumber(可选)
+        BeanUtil.copySpecifiedProperties(post, updatedPost, "title", "markdown",
+                "coverImage", "coverCaption", "readingNumber",
+                "likeNumber", "commentingNumber", "finishedTime");
+
+        // html, summary
+        String markdown = post.getMarkdown();
+        if (markdown != null) {
+            String html = MarkdownUtil.markdown2html(markdown);
+            Assert.hasLength(html, "markdown解析失败.");
+            updatedPost.setHtml(html);
+            String summary = RegexUtil.filterHtmlTag(html, 200);
+            updatedPost.setSummary(summary);
+        }
+
+        postService.updatePost(updatedPost);
+        LOGGER.debug("修改文章： {}", updatedPost);
+        return null;
     }
 }
 

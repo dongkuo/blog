@@ -5,7 +5,7 @@ import cn.derker.blog.domain.model.ApiResult;
 import cn.derker.blog.web.provider.FlexibleFilterProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -32,19 +32,19 @@ public class JsonApiHandler implements HandlerMethodReturnValueHandler {
     private Map<String, ObjectMapper> mapperCache = new HashMap<>();
 
     @Override
-    public boolean supportsReturnType(MethodParameter methodParameter) {
-        Class<?> declaringClass = methodParameter.getDeclaringClass();
-        return declaringClass.getAnnotation(Api.class) != null ||
-                declaringClass.getAnnotation(ApiExcludes.class) != null ||
-                declaringClass.getAnnotation(ApiIncludes.class) != null ||
-                declaringClass.getAnnotation(ApiExclude.class) != null ||
-                declaringClass.getAnnotation(ApiInclude.class) != null ||
+    public boolean supportsReturnType(MethodParameter returnType) {
+
+        return (AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), Api.class) ||
+                AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ApiExclude.class) ||
+                AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ApiInclude.class) ||
+                AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ApiExcludes.class) ||
+                AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), ApiIncludes.class) ||
                 //
-                methodParameter.getMethodAnnotation(Api.class) != null ||
-                methodParameter.getMethodAnnotation(ApiExcludes.class) != null ||
-                methodParameter.getMethodAnnotation(ApiIncludes.class) != null ||
-                methodParameter.getMethodAnnotation(ApiExclude.class) != null ||
-                methodParameter.getMethodAnnotation(ApiInclude.class) != null;
+                returnType.hasMethodAnnotation(Api.class) ||
+                returnType.hasMethodAnnotation(ApiExclude.class) ||
+                returnType.hasMethodAnnotation(ApiExcludes.class) ||
+                returnType.hasMethodAnnotation(ApiIncludes.class) ||
+                returnType.hasMethodAnnotation(ApiIncludes.class));
 
     }
 
@@ -53,6 +53,10 @@ public class JsonApiHandler implements HandlerMethodReturnValueHandler {
                                   ModelAndViewContainer container, NativeWebRequest webRequest) throws Exception {
         // 设置这个就是最终的处理类了，处理完不再去找下一个类进行处理
         container.setRequestHandled(true);
+
+        // 包装上ApiResult
+        returnValue = ApiResult.ok(returnValue);
+
         // 获得注解并执行filter方法 最后返回
         HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);

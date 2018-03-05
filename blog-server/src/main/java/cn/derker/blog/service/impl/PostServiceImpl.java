@@ -6,6 +6,7 @@ import cn.derker.blog.domain.model.Page;
 import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.exception.InsertException;
 import cn.derker.blog.exception.RemoveException;
+import cn.derker.blog.exception.UpdateException;
 import cn.derker.blog.service.PostService;
 import com.github.pagehelper.PageRowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,15 @@ public class PostServiceImpl implements PostService {
         int row = postMapper.insert(post);
         if (row == 0) {
             throw new InsertException("添加文章失败");
+        }
+        return row;
+    }
+
+    @Override
+    public int updatePost(Post post) {
+        int row = postMapper.updateByPrimaryKeySelective(post);
+        if (row == 0) {
+            throw new UpdateException("修改文章失败");
         }
         return row;
     }

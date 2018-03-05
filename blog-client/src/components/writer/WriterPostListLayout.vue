@@ -2,11 +2,11 @@
   <div>
     <div class="function-group">
       <span class="function-item" @click="newPost">
-        <img src="../assets/img/pen.png" class="icon">写文章
+        <img src="../../assets/img/pen.png" class="icon">写文章
       </span>
     </div>
     <ul class="post-list">
-      <li class="post-item" :class="{selected: post.selected}" @click="onSelectPost(post)" v-for="post in posts">
+      <li class="post-item" :class="{selected: post.selected, modified: post.modified}" @click="onSelectPost(post)" v-for="post in posts">
         <p class="title">{{post.title}}</p>
         <span class="finished-time">{{post.finished_time | date('friendly')}}</span>
         <p class="summary">{{post.summary}}</p>
@@ -30,7 +30,7 @@
 
 <script>
   import AppInfiniteLoading from "vue-infinite-loading";
-  import AppEmoji from "./Emoji.vue";
+  import AppEmoji from "../Emoji.vue";
 
   export default {
     components: {
@@ -49,7 +49,6 @@
     },
     methods: {
       getPosts($state) {
-        console.log('getPosts')
         let data = this.postsCache[this.categoryId]
         if (!data) {
           data = {page: 0, total: Infinity, size: 10, posts: []}
@@ -108,8 +107,8 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "../assets/scss/variables.scss";
-  @import "../assets/scss/global.scss";
+  @import "../../assets/scss/variables";
+  @import "../../assets/scss/global";
 
   .function-group {
     padding: $space-lg $space;
@@ -140,6 +139,7 @@
     position: relative;
     cursor: pointer;
     padding: $space;
+    border-left: $space-sm solid transparent;
     border-bottom: 1px solid $header-divider-background-color;
 
     p {
@@ -148,12 +148,21 @@
     }
   }
 
+  .post-item.selected{
+    border-left-color: $text-color-primary;
+  }
+
   .post-item:hover, .post-item.selected {
     background-color: $writer-post-list-layout-item-background;
 
     & .delete-btn {
       display: initial;
     }
+  }
+
+  .post-item.modified{
+    border-left-color: $color-danger;
+    background-color: lighten($color-danger, 36%);
   }
 
   .post-item-icon {
@@ -203,10 +212,10 @@
     position: absolute;
     right: $space;
     bottom: $space + 2px;
-    background-image: url("../assets/img/delete_18.png");
+    background-image: url("../../assets/img/delete_18.png");
 
     &:hover {
-      background-image: url("../assets/img/delete_18_danger.png");
+      background-image: url("../../assets/img/delete_18_danger.png");
     }
   }
 

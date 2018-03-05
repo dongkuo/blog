@@ -1,14 +1,13 @@
 package cn.derker.blog.web.api;
 
-import cn.derker.blog.annotation.Api;
 import cn.derker.blog.annotation.ApiExclude;
 import cn.derker.blog.domain.entity.About;
 import cn.derker.blog.domain.model.ApiResult;
 import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.service.AboutService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -18,8 +17,7 @@ import javax.annotation.Resource;
  * @author derker
  * @since 2017.12.17 17:16
  */
-@Controller
-@Api
+@RestController
 @RequestMapping("/about")
 public class AboutApi {
 

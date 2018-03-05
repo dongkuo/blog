@@ -18,7 +18,9 @@ public interface PostService {
 
     void removePost(Integer id);
 
-    int insertPost(Post postPostser);
+    int insertPost(Post post);
+
+    int updatePost(Post post);
 
     List<Post> listPost();
 }

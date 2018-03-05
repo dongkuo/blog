@@ -4,7 +4,7 @@ import PostList from './components/PostList'
 import Archive from './components/Archive'
 import About from './components/About'
 import PostDetail from './components/PostDetail'
-import Writer from './components/Writer'
+import Writer from './components/writer/Index'
 import Test from './components/Test'
 
 Vue.use(Router)

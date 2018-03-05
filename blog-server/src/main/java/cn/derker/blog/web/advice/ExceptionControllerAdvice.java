@@ -44,7 +44,7 @@ public class ExceptionControllerAdvice {
     @ResponseBody
     public ResponseEntity handle(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), "请求参数不合法"));
+                .body(ApiResult.error(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
 
     /**

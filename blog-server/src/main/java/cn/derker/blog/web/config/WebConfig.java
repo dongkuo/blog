@@ -1,4 +1,4 @@
-package cn.derker.blog.config;
+package cn.derker.blog.web.config;
 
 import cn.derker.blog.web.handler.JsonApiHandler;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +14,13 @@ import java.util.List;
  */
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
+
     @Resource
     private JsonApiHandler jsonApiHandler;
-
 
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
         returnValueHandlers.add(jsonApiHandler);
     }
+
 }

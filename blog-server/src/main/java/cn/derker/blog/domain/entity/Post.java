@@ -30,7 +30,7 @@ public class Post extends BaseEntity {
     /**
      * 文章状态，0：正常，1：下线
      */
-    private Integer state = 0;
+    private Integer state;
     /**
      * 文章封面，500字符以内
      */
@@ -58,15 +58,15 @@ public class Post extends BaseEntity {
     /**
      * 阅读数
      */
-    private Integer readingNumber = 0;
+    private Integer readingNumber;
     /**
      * 点赞数
      */
-    private Integer likeNumber = 0;
+    private Integer likeNumber;
     /**
      * 评论数
      */
-    private Integer commentingNumber = 0;
+    private Integer commentingNumber;
     /**
      * 文章完成时间
      */

@@ -29,7 +29,7 @@
       this.editor = editormd(this.id, this.options);
       this.editor.on('load', () => {
         this.editor.cm.on('change', (editor, changeObj) => {
-          if (changeObj.origin === '+input') {
+          if (changeObj.origin.startsWith('+')) {
             this.$emit('input', editor.getValue())
           }
         })
