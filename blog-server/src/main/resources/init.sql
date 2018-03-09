@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS tb_post_category(
   url VARCHAR(100),
   sort_value INTEGER DEFAULT 0,
   visible BIT,
-  created_time TIMESTAMP,
-  updated_time TIMESTAMP
+  created_time TIMESTAMP DEFAULT current_timestamp,
+  updated_time TIMESTAMP DEFAULT current_timestamp
 );
 CREATE INDEX IF NOT EXISTS tb_post_category_sort_value_index ON tb_post_category (sort_value ASC);
 CREATE TABLE IF NOT EXISTS tb_post(
@@ -18,18 +18,18 @@ CREATE TABLE IF NOT EXISTS tb_post(
   summary VARCHAR(500),
   html TEXT,
   markdown TEXT,
-  reading_number INT,
-  like_number INT,
-  commenting_number INT,
+  reading_number INT DEFAULT 0,
+  like_number INT DEFAULT 0,
+  commenting_number INT DEFAULT 0,
   finished_time TIMESTAMP,
-  created_time TIMESTAMP,
-  updated_time TIMESTAMP
+  created_time TIMESTAMP DEFAULT current_timestamp,
+  updated_time TIMESTAMP DEFAULT current_timestamp
 );
 CREATE TABLE IF NOT EXISTS tb_moment(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   content VARCHAR(500) NOT NULL,
-  created_time TIMESTAMP,
-  updated_time TIMESTAMP
+  created_time TIMESTAMP DEFAULT current_timestamp,
+  updated_time TIMESTAMP DEFAULT current_timestamp
 );
 CREATE INDEX IF NOT EXISTS tb_moment_created_time_index ON tb_moment (created_time DESC);
 CREATE TABLE IF NOT EXISTS tb_about(
@@ -37,6 +37,6 @@ CREATE TABLE IF NOT EXISTS tb_about(
   markdown text NOT NULL,
   html text NOT NULL,
   visible BIT,
-  created_time TIMESTAMP,
-  updated_time TIMESTAMP
+  created_time TIMESTAMP DEFAULT current_timestamp,
+  updated_time TIMESTAMP DEFAULT current_timestamp
 );

@@ -1,0 +1,15 @@
+{
+  "name": "bash_import",
+  "version": "1.0.0",
+  "description": "a tool parsing markdown to html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "derker",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "highlight.js": "^9.12.0",
+    "katex": "^0.9.0"
+  }
+}

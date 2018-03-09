@@ -12,7 +12,7 @@ public class MarkdownUtil {
 
     public static String markdown2html(String markdown){
         try {
-            ProcessUtil.ProcessStatus status = ProcessUtil.execute(5000, "node", "lib/markdown-1.0.0.min.js", markdown);
+            ProcessUtil.ProcessStatus status = ProcessUtil.execute(5000, "node", "tool/markdown-1.0.0.min.js", markdown);
             return status.getOutput();
         } catch (IOException | TimeoutException | InterruptedException e) {
             e.printStackTrace();

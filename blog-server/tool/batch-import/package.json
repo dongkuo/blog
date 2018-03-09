@@ -1,0 +1,15 @@
+{
+  "name": "bash_import",
+  "version": "1.0.0",
+  "description": "a script for batch-import blogs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "derker",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "better-sqlite3": "^4.1.0",
+    "yargs": "^11.0.0"
+  }
+}
