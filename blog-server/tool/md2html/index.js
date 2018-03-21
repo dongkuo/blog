@@ -33,7 +33,7 @@ renderer.inlineTex = function (tex) {
 
 renderer.blockTex = function (tex) {
   try {
-    return katex.renderToString(tex);
+    return "<p class='katex-block'>" + katex.renderToString(tex) + "</p>";
   } catch (e) {
     console.error(e.stack)
   }

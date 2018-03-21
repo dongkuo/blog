@@ -62,5 +62,9 @@
 
   .archive-list{
     padding: 0 2em;
+
+    li{
+      line-height: 2.2rem;
+    }
   }
 </style>

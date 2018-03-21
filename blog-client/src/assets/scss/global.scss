@@ -4,7 +4,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  font-family: $serif;
   font-size: $page-font-size;
   color: $page-font-color;
   background-color: $page-background-color;
@@ -12,7 +12,7 @@ html, body {
 }
 
 h1 {
-  font-size: 1.75rem;
+  font-size: 2rem;
 }
 
 h2 {
@@ -35,8 +35,17 @@ h6 {
   font-size: 1rem;
 }
 
-h1, h2, h3, h4, h5, h6, p, hr, figure, blockquote {
+h1, h2, h3, h4, h5, h6 {
+  font-family: $sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, p, hr, blockquote, pre {
   margin: 1rem 0;
+}
+
+figure{
+  text-align: center;
+  margin: 2rem 0;
 }
 
 figure img {
@@ -44,14 +53,13 @@ figure img {
 }
 
 figure figcaption {
-  text-align: center;
-  margin: $space-sm 0;
+  margin: $space-lg 0;
   font-size: $page-font-size-sm;
   color: $page-font-color-lighter;
   font-style: italic;
 }
 
-p {
+p, li {
   line-height: 1.4rem;
 }
 
@@ -66,6 +74,29 @@ a {
 
 a:hover {
   color: $text-color-primary;
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
+}
+
+table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+}
+
+table td, table th {
+  padding: .75rem;
+  vertical-align: top;
+  border-top: 1px solid $post-list-divider-background-color;
+}
+
+th {
+  text-align: inherit;
 }
 
 img {
@@ -91,9 +122,9 @@ img {
   color: $page-font-color-lighter;
 }
 
-.text-ellipsis{
+.text-ellipsis {
   overflow: hidden;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -105,17 +136,18 @@ img {
   color: $page-font-color-dark;
 }
 
-.cursor-move{
+.cursor-move {
   cursor: move;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
-.float-left{
+
+.float-left {
   float: left;
 }
 
-.float-right{
+.float-right {
   float: right;
 }

@@ -1,7 +1,11 @@
+/*font family*/
+$serif: Georgia, Times New Roman, Times, Songti SC, serif;
+$sans-serif: "Palatino Linotype", "Book Antiqua", Palatino, Helvetica, STKaiti, SimSun, serif;
 /*dimension*/
 $page-font-size-mini: 0.75rem;
 $page-font-size-sm: 0.875rem;
-$page-font-size: 16px;
+$page-font-size: 15px;
+$page-font-size-lg: 16px;
 $header-height: 40px;
 $space-sm: 4px;
 $space: 8px;
@@ -24,6 +28,7 @@ $page-background-color: #FBFBFF;
 $text-color-primary: #1296db;
 $text-color-primary-dark: darken($text-color-primary, 8%);
 $color-danger: #ffaa2a;
+$code-background-color: #f6f6fa;
 
 $header-divider-background-color: #ebeefa;
 

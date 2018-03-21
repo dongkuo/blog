@@ -13,7 +13,7 @@
         <span class="item">写于 {{post.finished_time | date('friendly')}}</span>
       </p>
       <!--封面-->
-      <figure>
+      <figure v-if="post.cover_image">
         <img :src="post.cover_image" class="img-responsive" :alt="post.cover_caption">
         <figcaption class="figure-caption text-center">{{post.cover_caption}}</figcaption>
       </figure>
@@ -28,6 +28,7 @@
 <script>
   import AppHeader from './Header'
   import AppFooter from './Footer'
+  import load from '../load'
 
   export default {
     components: {
@@ -46,7 +47,10 @@
       }).catch(e => {
         console.error(e)
       })
-    }
+      // 加载css
+      load.css("//cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-light.min.css")
+      load.css("//cdn.bootcss.com/KaTeX/0.9.0/katex.min.css")
+    },
   }
 </script>
 
@@ -64,7 +68,7 @@
     blockquote, figure, p {
       margin: 1.25rem 0;
     }
-    p {
+    p, li {
       line-height: 1.75rem;
     }
 
@@ -78,6 +82,17 @@
         margin: 0;
         padding: 0.5rem 0;
       }
+    }
+
+    pre {
+      background: #f1f1f5;
+      padding: 0.5rem 1rem;
+      overflow-y: auto;
+      border-radius: 3px;
+      line-height: 1.6rem;
+    }
+    ul, ol {
+      padding-left: 2.4rem;
     }
   }
 </style>

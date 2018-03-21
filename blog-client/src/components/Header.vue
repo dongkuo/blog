@@ -47,6 +47,7 @@
     margin-left: $header-height;
     text-align: center;
     line-height: $header-height;
+    font-size: $page-font-size-lg;
   }
   .header-link-group a{
     margin: 0 $space-lg;

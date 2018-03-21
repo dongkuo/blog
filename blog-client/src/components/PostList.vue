@@ -120,7 +120,7 @@
     font-size: $page-font-size-sm;
     position: relative;
     padding-right: $post-list-cover-width + $space-lg;
-    height: $post-list-cover-height;
+    max-height: $post-list-cover-height;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
