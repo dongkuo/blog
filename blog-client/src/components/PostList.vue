@@ -105,6 +105,7 @@
 
   .post-list {
     list-style: none;
+    margin: 1.5rem auto;
   }
 
   .post-list-item{

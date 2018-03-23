@@ -65,9 +65,6 @@
   @import "../assets/scss/variables.scss";
 
   .post-detail {
-    blockquote, figure, p {
-      margin: 1.25rem 0;
-    }
     p, li {
       line-height: 1.75rem;
     }
@@ -93,6 +90,10 @@
     }
     ul, ol {
       padding-left: 2.4rem;
+    }
+
+    .katex-block{
+      text-align: center;
     }
   }
 </style>
