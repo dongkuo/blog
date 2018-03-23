@@ -106,42 +106,57 @@
   .post-list {
     list-style: none;
     margin: 1.5rem auto;
+
+    @media screen and (max-width: 720px) {
+      padding: $header-height-phone $space 0;
+    }
   }
 
-  .post-list-item{
+  .post-list-item {
     position: relative;
   }
 
-  .finished-time{
-    position: absolute;
-    top: $space;
-    right: 0;
-  }
-  .summary{
-    font-size: $page-font-size-sm;
-    position: relative;
-    padding-right: $post-list-cover-width + $space-lg;
-    height: $post-list-cover-height;
-    overflow: hidden;
-  }
-
-  .summary .cover{
-    width: $post-list-cover-width;
-    height: $post-list-cover-height;
+  .finished-time {
     position: absolute;
     top: 0;
     right: 0;
   }
 
-  .statistic .item{
+  .summary {
+    font-size: $page-font-size-sm;
+    position: relative;
+    padding-right: $post-list-cover-width + $space-lg;
+    height: $post-list-cover-height;
+    overflow: hidden;
+
+    @media screen and (max-width: 720px) {
+      padding-right: $post-list-cover-width-phone + $space;
+      height: $post-list-cover-height-phone;
+    }
+
+    .cover {
+      width: $post-list-cover-width;
+      height: $post-list-cover-height;
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      @media screen and (max-width: 720px) {
+        width: $post-list-cover-width-phone;
+        height: $post-list-cover-height-phone;
+      }
+    }
+  }
+
+  .statistic .item {
     margin-right: $space;
   }
 
-  .statistic img{
+  .statistic img {
     margin-right: $space-sm;
   }
 
-  .divider{
+  .divider {
     border: 1px dashed $post-list-divider-background-color;
     border-top: none;
   }

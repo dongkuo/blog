@@ -1,6 +1,6 @@
 <template>
   <div class="text-align-center text-hint">
-    <p>© 2017 derker.</p>
+    <p>© 2018 derker.</p>
   </div>
 </template>
 

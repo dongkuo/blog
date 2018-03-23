@@ -9,6 +9,10 @@ html, body {
   color: $page-font-color;
   background-color: $page-background-color;
 
+  @media screen and (max-width: 720px) {
+    font-size: $page-font-size + 1;
+  }
+
 }
 
 h1 {
@@ -52,6 +56,10 @@ figure figcaption {
   margin: $space-lg 0;
   font-size: $page-font-size-sm;
   color: $page-font-color-lighter;
+
+  @media screen and (max-width: 720px) {
+    margin: $space 0;
+  }
 }
 
 p, li {

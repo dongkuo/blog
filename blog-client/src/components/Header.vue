@@ -4,7 +4,8 @@
     <div class="main-wrapper">
       <a href="#"><img src="../assets/img/logo.jpg" class="header-logo"></a>
       <div class="header-link-group">
-        <router-link v-for="category in categories" :key="category.id" :to="category.url">{{category.name}}</router-link>
+        <router-link v-for="category in categories" :key="category.id" :to="category.url">{{category.name}}
+        </router-link>
         <router-link to="/archives">归 档</router-link>
         <router-link to="/about">关 于</router-link>
       </div>
@@ -36,49 +37,70 @@
     height: $header-height;
     padding: $space 0;
     position: relative;
+
+    @media screen and (max-width: 720px) {
+      height: $header-height-phone;
+      padding: $space;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 99999;
+      background: $page-background-color;
+    }
   }
 
   .header-logo {
     width: $header-height;
     height: $header-height;
     position: absolute;
+
+    @media screen and (max-width: 720px) {
+      width: $header-height-phone;
+      height: $header-height-phone;
+    }
   }
-  .header-link-group{
+
+  .header-link-group {
     margin-left: $header-height;
     text-align: center;
     line-height: $header-height;
     font-size: $page-font-size-lg;
-  }
-  .header-link-group a{
-    margin: 0 $space-lg;
-    color: $page-font-color-lighter;
-    position: relative;
-    padding-bottom: $space;
+
+    a {
+      margin: 0 $space-lg;
+      color: $page-font-color-lighter;
+      position: relative;
+      padding-bottom: $space-sm;
+    }
+
+    a::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 2px;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      background: $text-color-primary;
+      transition: all 0.3s ease-in-out;
+      transform: scale3d(0, 1, 1);
+      transform-origin: 50% 0;
+    }
+
+    a:hover {
+      color: $text-color-primary;
+    }
+
+    a:hover::after {
+      transform: scale3d(1, 1, 1);
+    }
+
+    .router-link-active {
+      color: $text-color-primary;
+      border-bottom: 2px solid $text-color-primary;
+    }
   }
 
-  .header-link-group a::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 2px;
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    background: $text-color-primary;
-    transition: all 0.3s ease-in-out;
-    transform: scale3d(0, 1, 1);
-    transform-origin: 50% 0;
-  }
-  .header-link-group a:hover {
-    color: $text-color-primary;
-  }
-  .header-link-group a:hover::after {
-    transform: scale3d(1, 1, 1);
-  }
-  .header-link-group .router-link-active {
-    color: $text-color-primary;
-    border-bottom: 2px solid $text-color-primary;
-  }
   .divider {
     position: absolute;
     width: 100%;
