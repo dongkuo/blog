@@ -120,11 +120,8 @@
     font-size: $page-font-size-sm;
     position: relative;
     padding-right: $post-list-cover-width + $space-lg;
-    max-height: $post-list-cover-height;
+    height: $post-list-cover-height;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
   }
 
   .summary .cover{

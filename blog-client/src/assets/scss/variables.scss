@@ -1,9 +1,9 @@
 /*font family*/
 $serif: Georgia, Times New Roman, Times, Songti SC, serif;
-$sans-serif: "Palatino Linotype", "Book Antiqua", Palatino, Helvetica, STKaiti, SimSun, serif;
+$sans-serif: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
 /*dimension*/
 $page-font-size-mini: 0.75rem;
-$page-font-size-sm: 0.875rem;
+$page-font-size-sm: 0.85rem;
 $page-font-size: 15px;
 $page-font-size-lg: 16px;
 $header-height: 40px;
@@ -12,8 +12,8 @@ $space: 8px;
 $space-lg: 16px;
 $space-lg-x: 24px;
 
-$post-list-cover-width: 120px;
-$post-list-cover-height: 90px;
+$post-list-cover-width: 144px;
+$post-list-cover-height: 104px;
 
 $writer-category-list-layout-width: 250px;
 $writer-post-list-layout-width: 300px;
