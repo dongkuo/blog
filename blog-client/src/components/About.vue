@@ -1,7 +1,7 @@
 <template>
   <div>
     <app-header></app-header>
-    <div class="main-wrapper" v-html="content.html"></div>
+    <div class="main-wrapper about-wrapper" v-html="content.html"></div>
   </div>
 </template>
 
@@ -34,4 +34,11 @@
 
 <style lang="scss" scoped>
   @import "../assets/scss/variables.scss";
+
+  .about-wrapper {
+    @media screen and (max-width: 720px) {
+      padding: $header-height-phone+$space-lg $space 0;
+    }
+  }
+
 </style>
