@@ -64,10 +64,17 @@
 <style lang="scss">
   @import "../assets/scss/variables.scss";
 
-  .post-detail {
-    blockquote, figure, p {
-      margin: 1.25rem 0;
+  .post-detail-wrapper {
+
+    padding: $space 0;
+
+    @media screen and (max-width: 720px) {
+      padding: $header-height-phone + $space-lg $space 0;
     }
+  }
+
+  .post-detail {
+
     p, li {
       line-height: 1.75rem;
     }
@@ -93,6 +100,10 @@
     }
     ul, ol {
       padding-left: 2.4rem;
+    }
+
+    .katex-block {
+      text-align: center;
     }
   }
 </style>

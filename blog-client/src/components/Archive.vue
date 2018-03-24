@@ -3,14 +3,16 @@
     <!--header-->
     <app-header></app-header>
     <!--主要内容-->
-    <div class="main-wrapper" v-for="posts in archives" :key="posts.id">
-      <h3>{{posts[0].year}}</h3>
-      <ul class="archive-list">
-        <li v-for="post in posts" :key="post.id" class="item">
-          <span class="text-color-light">{{post.finished_time | date('yyyy.MM.dd')}}</span> —
-          <router-link class="link-primary" :to="'/posts/' + post.id">{{post.title}}</router-link>
-        </li>
-      </ul>
+    <div class="main-wrapper archive-wrapper">
+      <div v-for="posts in archives" :key="posts.id">
+        <h3>{{posts[0].year}}</h3>
+        <ul class="archive-list">
+          <li v-for="post in posts" :key="post.id" class="item">
+            <span class="text-color-light">{{post.finished_time | date('yyyy.MM.dd')}}</span> —
+            <router-link class="link-primary" :to="'/posts/' + post.id">{{post.title}}</router-link>
+          </li>
+        </ul>
+      </div>
     </div>
     <!--footer-->
     <app-footer></app-footer>
@@ -60,10 +62,16 @@
 <style lang="scss" scoped>
   @import "../assets/scss/variables.scss";
 
-  .archive-list{
+  .archive-wrapper {
+    @media screen and (max-width: 720px) {
+      padding: $header-height-phone + $space-lg $space 0;
+    }
+  }
+
+  .archive-list {
     padding: 0 2em;
 
-    li{
+    li {
       line-height: 2.2rem;
     }
   }
