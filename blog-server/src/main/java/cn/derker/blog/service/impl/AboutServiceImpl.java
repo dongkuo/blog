@@ -21,16 +21,23 @@ public class AboutServiceImpl implements AboutService {
     private AboutMapper aboutMapper;
 
     @Override
-    public About getAbout(Integer id, Boolean visible, Pageable pageable) {
+    public About getAbout(Integer id) {
+        return aboutMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public About getFirstVisibleAbout() {
+        List<About> aboutList = listAbout(true, new Pageable(1, 1));
+        return aboutList.isEmpty() ? null : aboutList.get(0);
+    }
+
+    @Override
+    public List<About> listAbout(Boolean visible, Pageable pageable) {
         Example example = new Example(About.class);
         example.createCriteria()
-                .andEqualTo("id", id)
                 .andEqualTo("visible", visible);
         List<About> aboutList = aboutMapper.selectByExampleAndRowBounds(example, pageable.getPageRowBounds());
-        if (aboutList.isEmpty()) {
-            return null;
-        }
-        return aboutList.get(0);
+        return aboutList;
     }
 
     @Override

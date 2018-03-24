@@ -3,7 +3,6 @@ package cn.derker.blog.web.api;
 import cn.derker.blog.annotation.ApiExclude;
 import cn.derker.blog.domain.entity.About;
 import cn.derker.blog.domain.model.ApiResult;
-import cn.derker.blog.domain.model.Pageable;
 import cn.derker.blog.service.AboutService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,7 @@ public class AboutApi {
 
     @GetMapping
     @ApiExclude(clazz = About.class, fields = "visible")
-    public ApiResult get(Integer id) {
-        return ApiResult.ok(aboutService.getAbout(id, true, new Pageable(1, 1)));
+    public ApiResult getFirstVisibleAbout() {
+        return ApiResult.ok(aboutService.getFirstVisibleAbout());
     }
 }
