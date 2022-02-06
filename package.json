@@ -1,0 +1,37 @@
+{
+  "name": "blog",
+  "version": "3.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dongkuo/blog.git"
+  },
+  "author": "dongkuo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dongkuo/blog/issues"
+  },
+  "homepage": "https://github.com/dongkuo/blog#readme",
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "better-sqlite3": "^7.5.0",
+    "config": "^3.3.7",
+    "ejs": "^3.1.6",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compress": "^5.1.0",
+    "koa-mount": "^4.0.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^8.0.0",
+    "moment": "^2.29.1",
+    "underscore": "^1.13.2",
+    "waterline": "^0.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
