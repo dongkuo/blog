@@ -1,0 +1,57 @@
+<html>
+<head>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+  <link rel="stylesheet" href="/static/css/common.css">
+  <script src="/app/static/lib/jquery-2.2.4.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="container">
+    <img class="logo" src="/app/static/img/logo.jpg">
+    <h2 class="title">Sign in</h2>
+  </div>
+</header>
+<main class="container login">
+  <form id="form-login" class="form-login">
+    <p><label for="input-username"><b>Username:</b></label></p>
+    <p><input id="input-username" name="username"></p>
+    <p><label for="input-password"><b>Password:</b></label></p>
+    <p><input id="input-password" type="password" name="password"></p>
+    <p>
+      <button id="btn-login" class="button-block">Sign in</button>
+    </p>
+  </form>
+  <script>
+    $('#btn-login').click(function () {
+      $.ajax({
+        type: "POST",
+        url: '/api/session',
+        data: $('#form-login').serialize(),
+        success: function (data) {
+          if (data.code !== 0) {
+            alert(data.message);
+            return;
+          }
+          location.href = query('referer') ||'/manage/articles';
+        },
+        error: function (err) {
+          alert(err);
+        },
+      });
+      return false;
+    });
+
+    function query(name)
+    {
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)
+        return  unescape(r[2]);
+      return null;
+    }
+  </script>
+</main>
+<% include ../common/footer.ejs %>
+</body>
+</html>

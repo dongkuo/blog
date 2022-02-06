@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <%- include('layouts/head.ejs') %>
+    <title>Blog</title>
+</head>
+
+<body>
+<!-- header -->
+<%- include('layouts/header.ejs') %>
+
+<main class="container">
+    <h1><%= article.title %></h1>
+    <time class="text-hint"><%= article.postDateTime %></time>
+    <div class="article-content">
+        <%- article.content %>
+    </div>
+    <p class="divider"><strong class="tip">End</strong></p>
+</main>
+
+<!-- footer -->
+<%- include('layouts/footer.ejs') %>
+</body>
+
+</html>

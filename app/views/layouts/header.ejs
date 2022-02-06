@@ -1,0 +1,10 @@
+<header>
+    <div class="container">
+        <img class="logo" src="/static/img/logo.jpg">
+        <div class="nav-list">
+            <% for (let nav of navs){ %>
+                <a href="<%= nav.link || '/' + nav.id %>"><%= nav.name %></a>
+            <% } %>
+        </div>
+    </div>
+</header>

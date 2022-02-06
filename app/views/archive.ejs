@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <%- include('layouts/head.ejs') %>
+    <title>Blog</title>
+</head>
+<body>
+<!-- header -->
+<%- include('layouts/header.ejs') %>
+<!--main-->
+<main class="container archives">
+    <% for (let group of articleGroup){ %>
+        <h3><%= group.year %></h3>
+        <ul class="articles-list">
+            <% for (let article of group.articles){ %>
+                <li>
+                    <time><%= article.postDate %></time>
+                    —
+                    <a class="link-primary" href="/article/<%= article.id %>"><%= article.title %></a>
+                </li>
+            <% } %>
+        </ul>
+    <% } %>
+</main>
+<!-- footer -->
+<%- include('layouts/footer.ejs') %>
+</body>
+</html>
