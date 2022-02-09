@@ -1,0 +1,36 @@
+{
+  "app": {
+    "name": "blog",
+    "version": "3.0.0"
+  },
+  "server": {
+    "port": 3000
+  },
+  "template": {
+    "path": "app/views",
+    "options": {
+      "map": {
+        "ejs": "ejs"
+      }
+    }
+  },
+  "session": {
+    "secretKey": "sid"
+  },
+  "db": "db/blog.db",
+  "navs": [
+    {
+      "id": "archive",
+      "link": "/",
+      "name": "首页",
+      "view": "date-title-group-by-year"
+    }
+  ],
+  "articles": [
+    {
+      "id": 1,
+      "title": "dddd",
+      "date": "2016-09-08"
+    }
+  ]
+}
