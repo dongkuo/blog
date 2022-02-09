@@ -178,6 +178,11 @@
   margin: 8px 0;
 }
 
+.katex-block{
+  display: block;
+  text-align: center;
+}
+
 @media screen and (max-width: 640px) {
   /*archives*/
   .archives .articles-list {

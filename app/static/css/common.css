@@ -29,8 +29,16 @@ a {
     transition: color 300ms;
 }
 
-h1, h2, h3, h4, h5, h6, p, pre, blockquote, ul, ol, figure {
+h1 {
+    margin: 24px 0;
+}
+
+h2, h3, h4, h5, h6, p, pre, blockquote, ul, ol, figure {
     margin: 16px 0;
+}
+
+pre {
+    overflow-y: auto;
 }
 
 h1 {
@@ -71,7 +79,7 @@ footer p {
 }
 
 main {
-    margin: 110px 0 32px 0;
+    margin: 80px 0 32px 0;
 }
 
 table {
@@ -293,7 +301,7 @@ header .nav-list .active {
 
     header .nav-list a {
         float: left;
-        padding: 0 8px;
+        padding: 0 16px;
     }
 
     main {

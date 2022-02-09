@@ -2,6 +2,8 @@
 <html lang="zh">
 <head>
     <%- include('layouts/head.ejs') %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.4.0/styles/default.css">
     <title>Blog</title>
 </head>
 
@@ -10,14 +12,15 @@
 <%- include('layouts/header.ejs') %>
 
 <main class="container">
-    <h1><%= article.title %></h1>
-    <time class="text-hint"><%= article.postDateTime %></time>
+    <h1><%= article.title %><br><time class="text-hint"><%= article.postDateTime %></time></h1>
     <div class="article-content">
         <%- article.content %>
     </div>
     <p class="divider"><strong class="tip">End</strong></p>
 </main>
 
+<!--<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"></script>-->
+<!--<script>hljs.highlightAll();</script>-->
 <!-- footer -->
 <%- include('layouts/footer.ejs') %>
 </body>

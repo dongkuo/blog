@@ -15,7 +15,7 @@ module.exports = {
     session: {
         secretKey: 'sid'
     },
-    db: 'test/blog.db',
+    db: 'db/blog.db',
     navs: [
         {
             id: 'archive',
