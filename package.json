@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=dev nodemon index.js",
-    "run": "cross-env NODE_ENV=prod nodemon index.js"
+    "dev": "cross-env NODE_ENV=dev nodemon index.js",
+    "start": "cross-env NODE_ENV=prod pm2 start index.js --name blog",
+    "stop": "pm2 stop blog"
   },
   "repository": {
     "type": "git",
