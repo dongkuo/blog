@@ -1,10 +1,10 @@
 const Router = require('@koa/router')
-const archive = new Router()
+const router = new Router()
 const article = require('../service/article')
 
-archive.get('/', async (ctx, next) => {
+router.get('/', async (ctx, next) => {
     let articleGroup = article.groupByYear()
-    await ctx.render('archive.ejs', {articleGroup})
+    await ctx.render('archive.ejs', {articleGroup, activeCategory: 1})
 })
 
-module.exports = archive
+module.exports = router

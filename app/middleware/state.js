@@ -1,6 +1,6 @@
-const nav = require('../service/nav')
+const category = require('../service/category')
 
 module.exports = async (ctx, next) => {
-    ctx.state.navs = nav.list()
+    ctx.state.categories = category.list()
     await next()
 }

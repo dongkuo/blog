@@ -6,7 +6,7 @@ const Database = require('better-sqlite3');
 const db = new Database(config.db, {verbose: console.log});
 
 function listAll() {
-    return db.prepare('SELECT id, title, post_time FROM article').all()
+    return db.prepare('SELECT id, title, category, post_time FROM article').all()
 }
 
 function groupByYear() {
@@ -14,7 +14,7 @@ function groupByYear() {
 }
 
 function groupByCategory(category) {
-    let articles = db.prepare('SELECT id, title, post_time FROM article where category = ?').all(category)
+    let articles = db.prepare('SELECT id, title, category, post_time FROM article where category = ?').all(category)
     return _groupByYear(articles)
 }
 

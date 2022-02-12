@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>音乐</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    <style>
+        #aplayer {
+            margin: 0;
+            border: none;
+            box-shadow: none;
+            border-radius: 2px;
+        }
+        .aplayer .aplayer-info{
+            padding: 8px;
+            height: 66px;
+            border: 1px solid #dfddd9;
+            border-left: none;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+<div id="aplayer"></div>
+<script>
+  const ap = new APlayer({
+    container: document.getElementById('aplayer'),
+    audio: [{
+      name: '<%= music.name %>',
+      url: '<%= music.url %>',
+      cover: '<%= music.cover %>',
+      theme: '#d2a63c'
+    }]
+  });
+</script>
+</body>
+</html>

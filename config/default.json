@@ -17,20 +17,5 @@
   "session": {
     "secretKey": "sid"
   },
-  "db": "app/db/blog.db",
-  "navs": [
-    {
-      "id": "archive",
-      "link": "/",
-      "name": "首页",
-      "view": "date-title-group-by-year"
-    }
-  ],
-  "articles": [
-    {
-      "id": 1,
-      "title": "dddd",
-      "date": "2016-09-08"
-    }
-  ]
+  "db": "app/db/blog.db"
 }
