@@ -7,7 +7,7 @@ body, button, input, select, textarea {
 }
 
 html, body {
-    color: #5a5239;
+    color: #48412a;
     background: #FFFFF0;
     font-size: 16px;
 }
@@ -19,7 +19,6 @@ body, ul, ol {
 
 time {
     color: #b5b59c;
-    font-size: 16px;
     font-weight: normal;
 }
 
@@ -111,7 +110,7 @@ table {
 }
 
 .link-primary {
-    color: #5a5239;
+    color: #48412a;
 }
 
 .link-primary:hover {
@@ -154,7 +153,7 @@ table {
     display: flex;
     position: relative;
     width: 50%;
-    background-color: #f5f5d7;
+    background-color: #efefd2;
     height: 1px;
     margin-top: .5em;
 }
@@ -181,7 +180,7 @@ header .title {
 header .container {
     padding: 8px 0;
     position: relative;
-    border-bottom: 1px solid #f5f5d7;
+    border-bottom: 1px solid #efefd2;
 }
 
 header .logo {
@@ -227,7 +226,7 @@ header .nav-list .active {
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: 2px solid #5a5239;
+    border-bottom: 2px solid #48412a;
     width: 100%;
     outline: none;
     font-size: 16px;
@@ -244,7 +243,7 @@ header .nav-list .active {
 }
 
 .button-sm:hover {
-    background: #5a5239;
+    background: #48412a;
 }
 
 .button-block {
@@ -261,7 +260,7 @@ header .nav-list .active {
 }
 
 .button-block:hover {
-    background: #5a5239;
+    background: #48412a;
 }
 
 .login input:focus {
@@ -282,6 +281,10 @@ header .nav-list .active {
 }
 
 @media screen and (max-width: 640px) {
+
+    html, body {
+        font-size: 18px;
+    }
 
     header .container {
         padding: 8px;

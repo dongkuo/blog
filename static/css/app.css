@@ -85,7 +85,7 @@
 }
 
 .moments .timeline-day-end a:hover {
-    color: #5a5239;
+    color: #48412a;
 }
 
 .moments .timeline-content {
@@ -97,11 +97,11 @@
     width: 100%;
     height: 300px;
     font-size: 16px;
-    border: 1px solid #5a5239;
+    border: 1px solid #48412a;
     padding: 8px;
     border-radius: 2px;
     background: #FFFFF0;
-    color: #5a5239;
+    color: #48412a;
 }
 
 .moments textarea:focus {
@@ -126,7 +126,7 @@
 
 .blog blockquote {
     padding: 1px 16px;
-    background: #f5f5d7;
+    background: #efefd2;
     border-left: 8px solid #CD9B1D;
     border-radius: 2px;
 }
@@ -136,7 +136,7 @@
 }
 
 .blog pre {
-    background: #f5f5d7;
+    background: #efefd2;
     overflow-x: scroll;
     border-radius: 2px;
     padding: 0 16px;
