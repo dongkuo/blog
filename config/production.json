@@ -1,5 +1,20 @@
 {
   "server": {
     "port": 80
+  },
+  "log4js": {
+    "appenders": {
+      "stdout": {
+        "type": "stdout"
+      }
+    },
+    "categories": {
+      "default": {
+        "appenders": [
+          "stdout"
+        ],
+        "level": "info"
+      }
+    }
   }
 }
