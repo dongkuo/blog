@@ -3,7 +3,7 @@ const router = new Router()
 const article = require('../service/article')
 
 router.get('/', async (ctx, next) => {
-    let articleGroup = article.groupByYear()
+    let articleGroup = await article.groupByYear()
     await ctx.render('archive.ejs', {articleGroup, activeCategory: 1})
 })
 

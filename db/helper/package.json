@@ -12,7 +12,9 @@
     "better-sqlite3": "^7.5.0",
     "highlight.js": "^11.4.0",
     "katex": "^0.15.2",
+    "koa-favicon": "^2.1.0",
     "marked": "^4.0.12",
+    "S": "npm:s@^1.0.0",
     "yargs": "^17.3.1"
   }
 }

@@ -1,0 +1,24 @@
+{
+  "log4js": {
+    "appenders": {
+      "stdout": {
+        "type": "stdout"
+      }
+    },
+    "categories": {
+      "default": {
+        "appenders": [
+          "stdout"
+        ],
+        "level": "debug"
+      }
+    }
+  },
+  "mysql": {
+    "connectionLimit": 20,
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "123456",
+    "database": "blog"
+  }
+}

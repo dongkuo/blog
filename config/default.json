@@ -7,7 +7,7 @@
     "port": 3000
   },
   "template": {
-    "path": "app/views",
+    "path": "views",
     "options": {
       "map": {
         "ejs": "ejs"
@@ -17,5 +17,11 @@
   "session": {
     "secretKey": "sid"
   },
-  "db": "app/db/blog.db"
+  "mysql": {
+    "connectionLimit": 20,
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "123456",
+    "database": "blog"
+  }
 }

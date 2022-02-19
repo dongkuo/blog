@@ -1,11 +1,15 @@
 const koa = require('koa')
 const config = require('config')
 const views = require('koa-views')
-const router = require('./app/routes')
+const router = require('./routes')
 const mount = require('koa-mount')
 const serve = require('koa-static')
 const compress = require('koa-compress')
-const state = require('./app/middleware/state')
+const state = require('./middleware/state')
+const log4js = require('log4js')
+const logger = log4js.getLogger('app')
+
+log4js.configure(config['log4js'])
 
 new koa()
   .use(state)
@@ -22,7 +26,9 @@ new koa()
     },
     br: false
   }))
-  .use(mount('/static', serve('app/static', {maxage: 600 * 1000})))
-  .use(views(config.template.path, config.template.options))
+  .use(mount('/static', serve('static', {maxage: 600 * 1000})))
+  .use(views(config['template'].path, config['template'].options))
   .use(router.routes())
   .listen(config.get('server.port'))
+
+logger.info(`the blog is running at: http://127.0.0.1:${config.get('server.port')}`)

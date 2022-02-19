@@ -101,9 +101,13 @@ table {
 }
 
 .text-hint {
-    color: #a0a08b;
+    color: #b5b59c;
     font-size: 14px;
     font-weight: normal;
+}
+
+.text-small {
+    font-size: 12px;
 }
 
 .link-primary {

@@ -3,7 +3,7 @@ const router = new Router()
 const musicService = require('../service/music')
 
 router.get('/:id', async (ctx, next) => {
-  let music = musicService.get(ctx.params.id)
+  let music = await musicService.get(ctx.params.id)
   await ctx.render('music.ejs', {music})
 })
 

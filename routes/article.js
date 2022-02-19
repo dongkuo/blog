@@ -4,7 +4,7 @@ const moment = require("moment");
 const router = new Router()
 
 router.get('/:id', async (ctx, next) => {
-    let article = articleService.getById(ctx.params.id)
+    let article = await articleService.getById(ctx.params.id)
     let categoryId = parseInt(ctx.query.category)
     if (!article) {
         // TODO go to 404 page
