@@ -22,6 +22,7 @@ create table music
 (
     id          integer primary key auto_increment,
     name        varchar(100) not null,
+    artist      varchar(100),
     url         varchar(500) not null,
     cover       varchar(500),
     status      tinyint      not null default 1 comment '-1 删除; 0: 隐藏; 1: 正常',
