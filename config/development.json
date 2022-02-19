@@ -1,16 +1,43 @@
 {
   "log4js": {
     "appenders": {
-      "stdout": {
+      "console": {
         "type": "stdout"
+      },
+      "access": {
+        "type": "dateFile",
+        "filename": "log/access.log",
+        "pattern": "-yyyy-MM-dd",
+        "layout": {
+          "type": "messagePassThrough"
+        }
+      },
+      "error": {
+        "type": "dateFile",
+        "filename": "log/error.log",
+        "pattern": "-yyyy-MM-dd"
       }
     },
     "categories": {
       "default": {
         "appenders": [
-          "stdout"
+          "console"
         ],
         "level": "debug"
+      },
+      "access": {
+        "appenders": [
+          "console",
+          "access"
+        ],
+        "level": "debug"
+      },
+      "error": {
+        "appenders": [
+          "console",
+          "error"
+        ],
+        "level": "error"
       }
     }
   },
