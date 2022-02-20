@@ -10,7 +10,7 @@
 <!--main-->
 <main class="container archives">
     <% for (let group of articleGroup){ %>
-        <h3><%= group.year %></h3>
+        <h3 class="title"><%= group.year %></h3>
         <ul class="articles-list">
             <% for (let article of group.articles){ %>
                 <li>

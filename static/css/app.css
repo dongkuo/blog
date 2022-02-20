@@ -3,10 +3,14 @@
     border-bottom: 1px dashed #cfd8dc;
 }
 
+.archives .title {
+    margin-bottom: 0;
+}
+
 /*archives*/
 .archives .articles-list {
     padding-left: 40px;
-    margin: 16px 0;
+    margin: 0 0 16px 0;
 }
 
 .archives .articles-list li {

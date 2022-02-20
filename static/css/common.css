@@ -9,11 +9,13 @@ body, button, input, select, textarea {
 html, body {
     color: #48412a;
     background: #FFFFF0;
-    font-size: 16px;
+    font: normal 16px/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;
+    padding: 0;
+    margin: 0;
 }
 
-body, ul, ol {
-    padding: 0;
+ul, ol {
+    padding: 0 0 0 1em;
     margin: 0;
 }
 
@@ -38,6 +40,16 @@ h2, h3, h4, h5, h6, p, pre, blockquote, ul, ol, figure {
 
 pre {
     overflow-y: auto;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 1em 1.5em;
+    display: block;
+    -webkit-overflow-scrolling: touch;
+}
+
+code, pre, pre tt {
+    font-family: Courier, 'Courier New', monospace;
+    border-radius: 3px;
 }
 
 h1 {
@@ -66,11 +78,9 @@ h6 {
 
 p {
     margin: 16px 0;
-    line-height: 1.8;
 }
 
 li {
-    line-height: 1.8;
 }
 
 footer p {
@@ -85,8 +95,21 @@ table {
     width: 100%;
 }
 
-p img {
-    width: 100%;
+th {
+    font-weight: bold;
+}
+
+th, td {
+    padding: 0.5rem 0.5rem;
+    border-bottom: 1px solid #efefd2;
+}
+
+figure {
+    text-align: center;
+}
+
+img {
+    max-width: 100%;
     border-radius: 3px;
 }
 
