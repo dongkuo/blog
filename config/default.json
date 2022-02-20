@@ -3,8 +3,15 @@
     "name": "blog",
     "version": "3.0.0"
   },
-  "server": {
+  "http": {
     "port": 3000
+  },
+  "https": {
+    "port": 3001,
+    "ssl": {
+      "key": "",
+      "cert": ""
+    }
   },
   "template": {
     "path": "views",
