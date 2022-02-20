@@ -1,15 +1,456 @@
+<h2 id="1-主要内容">1. 主要内容</h2>
+<p>本文的主要内容：</p>
+<ol>
+<li>介绍DNS是干什么的；</li>
+<li>介绍DNS是如何工作的；</li>
+<li>介绍DNS请求与响应的消息格式；</li>
+<li>编程实现一个简单的DNS服务器；</li>
+</ol>
+<h2 id="2-dns是啥">2. DNS是啥</h2>
+<p>关于DNS是啥，想必学过计算机网络的应该都知道，它是Domain Name System的简写，中文翻译过来就是域名系统，是用来将主机名转换为ip的。事实上，除了进行主机名到IP地址的转换外，DNS通常还提供主机名到以下几项的转换服务：</p>
+<ol>
+<li>主机命名（host aloasing）。有着复杂<strong>规范主机名（canonical hostname）</strong>的主机可能有一个或多个别名，通常规范主机名较复杂，而别名让人更容易记忆。应用程序可以调用DNS来获得主机别名对应的规范主机名，以及主机的ip地址。</li>
+<li>邮件服务器别名（mail server aliasing）。DNS也能完成邮件服务器别名到其规范主机名以及ip地址的转换。</li>
+<li>负载均衡（load distribution）。DNS可用于冗余的服务器之间进行负载均衡。一个繁忙的站点，如abc.com，可能被冗余部署在多台具有不同ip的服务器上。在该情况下，在DNS数据库中，该主机名可能对应着一个ip集合，但应用程序调用DNS来获取该主机名对应的ip时，DNS通过某种算法从该主机名对应的ip集合中，挑选出某一ip进行响应。</li>
+</ol>
+<p>问：为什么会有DNS，或者说为什么要弄出两种方式（主机名和IP地址）来标识一台主机呢？</p>
+<p>答：这是因为主机名便于人的记忆，而IP地址便于计算机网络设备的处理，于是需要DNS来做前者到后者的转换。</p>
+<h2 id="3-dns工作原理">3. DNS工作原理</h2>
+<p>DNS实际上是由一个分层的DNS服务器实现的<strong>分布式数据库</strong>和一个让主机能够查询分布式数据库的<strong>应用层协议</strong>组成。因此，要了解DNS的工作原理，需要从以上两个方便入手。</p>
+<h3 id="31-dns的分布式架构">3.1 DNS的分布式架构</h3>
+<p>先来了解DNS的分布式架构。</p>
+<p>DNS服务器根据域名命名空间（domian name space）组织成如下图所示的树形结构（当然，只给出部分DNS服务器，只为显示出DNS服务器的层次结构）：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/%E9%80%89%E5%8C%BA_010.jpg" alt="" title=""><figcaption></figcaption></figure></p>
+<p>在图中，根节点代表的是根DNS服务器，因特网上共有13台，编号从A到M；根DNS服务器之下的一层被称为顶级DNS服务器；再往下一层被称为权威DNS服务器。</p>
+<p>当一个应用要通过DNS来查询某个主机名，比如 <a href="http://www.google.com">www.google.com</a> 的ip时，粗略地说，查询过程是这样的：它先与根服务器之一联系，根服务器根据顶级域名com，会响应命名空间为com的顶级域服务器的ip；于是该应用接着向com顶级域服务器发出请求，com顶级域服务器会响应命名空间为google.com的权威DNS服务器的ip地址；最后该应用将请求命名空间为google.com的权威DNS服务器，该权威DNS服务器会响应主机名为 <a href="http://www.google.com">www.google.com</a> 的ip。</p>
+<p>实际上，除了上图层次结构中所展示的DNS外，还有一类与我们接触更为密切的DNS服务器，它们是本地DNS服务器，我们经常在电脑上配置的DNS服务器通常就是此类。它们一般由某公司，某大学，或某居民区提供，比如Google提供的DNS服务器8.8.8.8；比如常被人诟病的114.114.114.114等。</p>
+<p>加入了本地DNS的查询过程跟之前的查询过程基本上是一致的，查询流程如下图所示：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/%E9%80%89%E5%8C%BA_011.jpg" alt="" title=""><figcaption></figcaption></figure></p>
+<p>在实际工作中，DNS服务器是带缓存的。即DNS服务器在每次收到DNS请求时，都会先查询自身数据库包括缓存中有无要查询的主机名的ip，若有且没有过期，则直接响应该ip，否则才会按上图流程进行查询；而服务器在每次收到响应信息后，都会将响应信息缓存起来；</p>
+<h3 id="32-dns应用层协议">3.2 DNS应用层协议</h3>
+<h4 id="321-dns资源记录">3.2.1 DNS资源记录</h4>
+<p>在介绍DNS层协议之前，先了解一下DNS服务器存储的<strong>资源记录（Resource Records，RRs）</strong>，一条资源记录(RR)记载着一个映射关系。每条RR通常包含如下表所示的一些信息：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NAME</td>
+<td>名字</td>
+</tr>
+<tr>
+<td>TYPE</td>
+<td>类型</td>
+</tr>
+<tr>
+<td>CLASS</td>
+<td>类</td>
+</tr>
+<tr>
+<td>TTL</td>
+<td>生存时间</td>
+</tr>
+<tr>
+<td>RDLENGTH</td>
+<td>RDATA所占的字节数</td>
+</tr>
+<tr>
+<td>RDATA</td>
+<td>数据</td>
+</tr>
+</tbody></table>
+<p>NAME和RDATA表示的含义根据TYPE的取值不同而不同，常见的：</p>
+<ol>
+<li>若TYPE=A，则name是主机名，value是其对应的ip；</li>
+<li>若TYPE=NS，则name是一个域，value是一个权威DNS服务器的主机名。该记录表示name域的域名解析将由value主机名对应的DNS服务器来做；</li>
+<li>若TYPE=CNAME，则value是别名为name的主机对应的规范主机名；</li>
+<li>若TYPE=MX，则value是别名为name的邮件服务器的规范主机名；</li>
+<li>……</li>
+</ol>
+<p>TYPE实际上还有其他类型，所有可能的type及其约定的数值表示如下：</p>
+<table>
+<thead>
+<tr>
+<th>TYPE</th>
+<th>value</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>1</td>
+<td>a host address</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>2</td>
+<td>an authoritative name server</td>
+</tr>
+<tr>
+<td>MD</td>
+<td>3</td>
+<td>a mail destination (Obsolete - use MX)</td>
+</tr>
+<tr>
+<td>MF</td>
+<td>4</td>
+<td>a mail forwarder (Obsolete - use MX)</td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>5</td>
+<td>the canonical name for an alias</td>
+</tr>
+<tr>
+<td>SOA</td>
+<td>6</td>
+<td>marks the start of a zone of authority</td>
+</tr>
+<tr>
+<td>MB</td>
+<td>7</td>
+<td>a mailbox domain name (EXPERIMENTAL)</td>
+</tr>
+<tr>
+<td>MG</td>
+<td>8</td>
+<td>a mail group member (EXPERIMENTAL)</td>
+</tr>
+<tr>
+<td>MR</td>
+<td>9</td>
+<td>a mail rename domain name (EXPERIMENTAL)</td>
+</tr>
+<tr>
+<td>NULL</td>
+<td>10</td>
+<td>a null RR (EXPERIMENTAL)</td>
+</tr>
+<tr>
+<td>WKS</td>
+<td>11</td>
+<td>a well known service description</td>
+</tr>
+<tr>
+<td>PTR</td>
+<td>12</td>
+<td>a domain name pointer</td>
+</tr>
+<tr>
+<td>HINFO</td>
+<td>13</td>
+<td>host information</td>
+</tr>
+<tr>
+<td>MINFO</td>
+<td>14</td>
+<td>mailbox or mail list information</td>
+</tr>
+<tr>
+<td>MX</td>
+<td>15</td>
+<td>mail exchange</td>
+</tr>
+<tr>
+<td>TXT</td>
+<td>16</td>
+<td>text strings</td>
+</tr>
+</tbody></table>
+<h4 id="322-整体及header部分">3.2.2 整体及Header部分</h4>
+<p>下面介绍第二个方面，DNS协议。</p>
+<p>DNS请求与响应的格式是一致的，其整体分为Header、Question、Answer、Authority、Additional5部分，如下图所示：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/2017-04-15%2003-02-39%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="" title=""><figcaption></figcaption></figure></p>
+<p>Header部分是一定有的，长度固定为12个字节；其余4部分可能有也可能没有，并且长度也不一定，这个在Header部分中有指明。Header的结构如下：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/2017-04-15%2003-06-31%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="" title=""><figcaption></figcaption></figure></p>
+<p>下面说明一下各个字段的含义:</p>
+<ol>
+<li>ID：占16位。该值由发出DNS请求的程序生成，DNS服务器在响应时会使用该ID，这样便于请求程序区分不同的DNS响应。</li>
+<li>QR：占1位。指示该消息是请求还是响应。0表示请求；1表示响应。</li>
+<li>OPCODE：占4位。指示请求的类型，有请求发起者设定，响应消息中复用该值。0表示标准查询；1表示反转查询；2表示服务器状态查询。3~15目前保留，以备将来使用。</li>
+<li>AA（Authoritative Answer，权威应答）：占1位。表示响应的服务器是否是权威DNS服务器。只在响应消息中有效。</li>
+<li>TC（TrunCation，截断）：占1位。指示消息是否因为传输大小限制而被截断。</li>
+<li>RD（Recursion Desired，期望递归）：占1位。该值在请求消息中被设置，响应消息复用该值。如果被设置，表示希望服务器递归查询。但服务器不一定支持递归查询。</li>
+<li>RA（Recursion Available，递归可用性）：占1位。该值在响应消息中被设置或被清除，以表明服务器是否支持递归查询。</li>
+<li>Z：占3位。保留备用。</li>
+<li>RCODE（Response code）：占4位。该值在响应消息中被设置。取值及含义如下：<ul>
+<li>0：No error condition，没有错误条件；</li>
+<li>1：Format error，请求格式有误，服务器无法解析请求；</li>
+<li>2：Server failure，服务器出错。</li>
+<li>3：Name Error，只在权威DNS服务器的响应中有意义，表示请求中的域名不存在。</li>
+<li>4：Not Implemented，服务器不支持该请求类型。</li>
+<li>5：Refused，服务器拒绝执行请求操作。</li>
+<li>6~15：保留备用。</li>
+</ul>
+</li>
+<li>QDCOUNT：占16位（无符号）。指明Question部分的包含的实体数量。</li>
+<li>ANCOUNT：占16位（无符号）。指明Answer部分的包含的RR（Resource Record）数量。</li>
+<li>NSCOUNT：占16位（无符号）。指明Authority部分的包含的RR（Resource Record）数量。</li>
+<li>ARCOUNT：占16位（无符号）。指明Additional部分的包含的RR（Resource Record）数量。</li>
+</ol>
+<h4 id="323--question部分">3.2.3  Question部分</h4>
+<p>Question部分的每一个实体的格式如下图所示：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/2017-04-15%2003-08-09%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="" title=""><figcaption></figcaption></figure></p>
+<ol>
+<li>QNAME：字节数不定，以0x00作为结束符。表示查询的主机名。注意：众所周知，主机名被&quot;.&quot;号分割成了多段标签。在QNAME中，每段标签前面加一个数字，表示接下来标签的长度。比如：api.sina.com.cn表示成QNAME时，会在&quot;api&quot;前面加上一个字节0x03，&quot;sina&quot;前面加上一个字节0x04，&quot;com&quot;前面加上一个字节0x03，而&quot;cn&quot;前面加上一个字节0x02；</li>
+<li>QTYPE：占2个字节。表示RR类型，见以上RR介绍；</li>
+<li>QCLASS：占2个字节。表示RR分类，见以上RR介绍。</li>
+</ol>
+<h4 id="324--answer、authority、additional部分">3.2.4  Answer、Authority、Additional部分</h4>
+<p>Answer、Authority、Additional部分格式一致，每部分都由若干实体组成，每个实体即为一条RR，之前有过介绍，格式如下图所示：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/2017-04-15%2003-11-32%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="" title=""><figcaption></figcaption></figure></p>
+<ol>
+<li>NAME：长度不定，可能是真正的数据，也有可能是指针（其值表示的是真正的数据在整个数据中的字节索引数），还有可能是二者的混合（以指针结尾）。若是真正的数据，会以0x00结尾；若是指针，指针占2个字节，第一个字节的高2位为11。</li>
+<li>TYPE：占2个字节。表示RR的类型，如A、CNAME、NS等，见以上RR介绍；</li>
+<li>CLASS：占2个字节。表示RR的分类，见以上RR介绍；</li>
+<li>TTL：占4个字节。表示RR生命周期，即RR缓存时长，单位是秒；</li>
+<li>RDLENGTH：占2个字节。指定RDATA字段的字节数；</li>
+<li>RDATA：即之前介绍的value，含义与TYPE有关，见以上RR介绍。</li>
+</ol>
+<p>DNS协议是工作在应用层的，运输层依赖的是UDP协议。下面尝试使用Python3.6来实现一个简单的DNS服务器。</p>
+<p>在此之前先用<a href="https://www.wireshark.org">Wireshark</a>抓一下DNS包，验证一下上面的DNS协议的格式，也便于之后的实现。Wireshark的用法就不做介绍了，相信装好随便点点就知道怎么用了。先打开监听，添加过滤条件，然后用nslookup命令发送一个DNS包，比如我们尝试查询<a href="http://www.baidu.com%E7%9A%84ip%EF%BC%9A">www.baidu.com的ip：</a></p>
+<pre><code class="language-shell">nslookup www.baidu.com
+</code></pre>
+<p>然后可以在Wireshark中看到如下图所示的请求数据包：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/%E9%80%89%E5%8C%BA_022.jpg" alt="" title=""><figcaption></figcaption></figure></p>
+<p>响应数据如下图所示：</p>
+<p><figure><img src="https://blog-1251252991.cos.ap-chengdu.myqcloud.com/%E9%80%89%E5%8C%BA_023.jpg" alt="" title=""><figcaption></figcaption></figure></p>
+<h2 id="4-实现一个简单的dns服务器">4. 实现一个简单的DNS服务器</h2>
+<p>下面用Python来实现一个非常简单的DNS服务器。</p>
+<h3 id="41-代理功能">4.1 代理功能</h3>
+<p>首先，它应该具有最基本的“代理”功能，即我们的DNS服务器在接到DNS请求后，直接将请求转发到某DNS服务器（如114.114.114.114）上，然后再将那台DNS的响应结果返回给DNS客户端：</p>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> threading
+<span class="hljs-keyword">import</span> socket
+<span class="hljs-keyword">import</span> socketserver
 
-<!doctype html>
-<html lang="zh">
-<head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
-</head>
-<body>
-<p>heloo <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mn>1</mn><mn>100</mn></msubsup></mrow><annotation encoding="application/x-tex">\sum_1^{100}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2537em;vertical-align:-0.2997em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.954em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">100</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span></span></span></span> world</p>
-<span class="katex katex-block"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mi>P</mi><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mi>P</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>n</mi><mo>≥</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">P(n)  =
-\begin {cases}
-1 &amp; n = 1\\
-\sum_{k=1}^{n-1}P(k)P(n-k) &amp; n \geq 1
-\end{cases}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.954em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">1</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>
-</body>
-</html>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Handler</span>(socketserver.BaseRequestHandler):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">handle</span>(<span class="hljs-params">self</span>):
+        request_data = self.request[<span class="hljs-number">0</span>]
+        <span class="hljs-comment"># 将请求转发到 114 DNS</span>
+        redirect_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        redirect_socket.sendto(request_data, (<span class="hljs-string">&#x27;114.114.114.114&#x27;</span>, <span class="hljs-number">53</span>))
+        response_data, address = redirect_socket.recvfrom(<span class="hljs-number">1024</span>)
+    
+        <span class="hljs-comment"># 将114响应响应给客户</span>
+        client_socket = self.request[<span class="hljs-number">1</span>]
+        client_socket.sendto(response_data, self.client_address)
+
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Server</span>(socketserver.ThreadingMixIn, socketserver.UDPServer):
+    <span class="hljs-keyword">pass</span>
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
+    <span class="hljs-comment"># 一下ip需换成自己电脑的ip</span>
+    server = Server((<span class="hljs-string">&#x27;172.16.42.254&#x27;</span>, <span class="hljs-number">53</span>), Handler)
+    <span class="hljs-keyword">with</span> server:
+        server_thread = threading.Thread(target=server.serve_forever)
+        server_thread.daemon = <span class="hljs-literal">True</span>
+        server_thread.start()
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;The DNS server is running at 172.16.42.254...&#x27;</span>)
+        server_thread.join()
+</code></pre>
+<p>现在我们的DNS服务器就可以进行转发工作了。运行以上程序（需root权限），然后用nsloop命令，向我们的服务器发送DNS请求，一切OK：</p>
+<pre><code class="language-shell"><span class="hljs-meta">$ </span><span class="language-bash">nslookup baidu.com 172.16.42.254</span>
+Server:        172.16.42.254
+Address:    172.16.42.254#53
+
+Non-authoritative answer:
+Name:    baidu.com
+Address: 123.125.114.144
+Name:    baidu.com
+Address: 180.149.132.47
+Name:    baidu.com
+Address: 111.13.101.208
+Name:    baidu.com
+Address: 220.181.57.217
+</code></pre>
+<h3 id="42-缓存功能">4.2 缓存功能</h3>
+<p>如果仅仅做一下代理转发，那也太无聊了。现在我们再加上缓存功能，即它能够将其他DNS服务器的响应结果缓存起来。当收到请求时，若请求主机号在缓存中，且没有过期，则直接响应缓存结果；否则进行上一功能中的操作。这一功能的关键在于对DNS消息的解析，代码如下：</p>
+<pre><code class="language-python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Message</span>:
+    <span class="hljs-string">u&quot;&quot;&quot;All communications inside of the domain protocol are carried in a single format called a message&quot;&quot;&quot;</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, header, question=<span class="hljs-literal">None</span>, answer=<span class="hljs-literal">None</span>, authority=<span class="hljs-literal">None</span>, additional=<span class="hljs-literal">None</span></span>):
+        self.header = header
+        self.question = question
+        self.answer = answer
+        self.authority = authority
+        self.additional = additional
+
+<span class="hljs-meta">    @classmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">from_bytes</span>(<span class="hljs-params">cls, data</span>):
+        scanner = Scanner(data)
+        <span class="hljs-comment"># 读取header</span>
+        header = <span class="hljs-built_in">dict</span>()
+        header[<span class="hljs-string">&#x27;ID&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+        header[<span class="hljs-string">&#x27;QR&#x27;</span>] = scanner.next_bits(<span class="hljs-number">1</span>)
+        header[<span class="hljs-string">&#x27;OPCODE&#x27;</span>] = scanner.next_bits(<span class="hljs-number">4</span>)
+        header[<span class="hljs-string">&#x27;AA&#x27;</span>] = scanner.next_bits(<span class="hljs-number">1</span>)
+        header[<span class="hljs-string">&#x27;TC&#x27;</span>] = scanner.next_bits(<span class="hljs-number">1</span>)
+        header[<span class="hljs-string">&#x27;RD&#x27;</span>] = scanner.next_bits(<span class="hljs-number">1</span>)
+        header[<span class="hljs-string">&#x27;RA&#x27;</span>] = scanner.next_bits(<span class="hljs-number">1</span>)
+        header[<span class="hljs-string">&#x27;Z&#x27;</span>] = scanner.next_bits(<span class="hljs-number">3</span>)
+        header[<span class="hljs-string">&#x27;RCODE&#x27;</span>] = scanner.next_bits(<span class="hljs-number">4</span>)
+        header[<span class="hljs-string">&#x27;QDCOUNT&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+        header[<span class="hljs-string">&#x27;ANCOUNT&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+        header[<span class="hljs-string">&#x27;NSCOUNT&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+        header[<span class="hljs-string">&#x27;ARCOUNT&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;header:&#x27;</span>, header)
+        <span class="hljs-comment"># 读取question</span>
+        questions = <span class="hljs-built_in">list</span>()
+        <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(header[<span class="hljs-string">&#x27;QDCOUNT&#x27;</span>]):
+            question = <span class="hljs-built_in">dict</span>()
+            question[<span class="hljs-string">&#x27;QNAME&#x27;</span>] = scanner.next_bytes_until(<span class="hljs-keyword">lambda</span> current, _: current == <span class="hljs-number">0</span>)
+            scanner.next_bytes(<span class="hljs-number">1</span>)  <span class="hljs-comment"># 跳过0</span>
+            question[<span class="hljs-string">&#x27;QTYPE&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+            question[<span class="hljs-string">&#x27;QCLASS&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+            questions.append(question)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;questions:&#x27;</span>, questions)
+        message = Message(header)
+        <span class="hljs-comment"># 读取answer、authority、additional</span>
+        rrs = <span class="hljs-built_in">list</span>()
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(header[<span class="hljs-string">&#x27;ANCOUNT&#x27;</span>] + header[<span class="hljs-string">&#x27;NSCOUNT&#x27;</span>] + header[<span class="hljs-string">&#x27;ARCOUNT&#x27;</span>]):
+            rr = <span class="hljs-built_in">dict</span>()
+            rr[<span class="hljs-string">&#x27;NAME&#x27;</span>] = cls.handle_compression(scanner)
+            rr[<span class="hljs-string">&#x27;TYPE&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+            rr[<span class="hljs-string">&#x27;CLASS&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+            rr[<span class="hljs-string">&#x27;TTL&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">4</span>)
+            rr[<span class="hljs-string">&#x27;RDLENGTH&#x27;</span>] = scanner.next_bytes(<span class="hljs-number">2</span>)
+            <span class="hljs-comment"># 处理data</span>
+            <span class="hljs-keyword">if</span> rr[<span class="hljs-string">&#x27;TYPE&#x27;</span>] == <span class="hljs-number">1</span>:  <span class="hljs-comment"># A记录</span>
+                r_data = scanner.next_bytes(rr[<span class="hljs-string">&#x27;RDLENGTH&#x27;</span>], <span class="hljs-literal">False</span>)
+                rr[<span class="hljs-string">&#x27;RDATA&#x27;</span>] = reduce(<span class="hljs-keyword">lambda</span> x, y: y <span class="hljs-keyword">if</span> (<span class="hljs-built_in">len</span>(x) == <span class="hljs-number">0</span>) <span class="hljs-keyword">else</span> x + <span class="hljs-string">&#x27;.&#x27;</span> + y,
+                                     <span class="hljs-built_in">map</span>(<span class="hljs-keyword">lambda</span> num: <span class="hljs-built_in">str</span>(num), r_data))
+            <span class="hljs-keyword">elif</span> rr[<span class="hljs-string">&#x27;TYPE&#x27;</span>] == <span class="hljs-number">2</span> <span class="hljs-keyword">or</span> rr[<span class="hljs-string">&#x27;TYPE&#x27;</span>] == <span class="hljs-number">5</span>:  <span class="hljs-comment"># NS与CNAME记录</span>
+                rr[<span class="hljs-string">&#x27;RDATA&#x27;</span>] = cls.handle_compression(scanner, rr[<span class="hljs-string">&#x27;RDLENGTH&#x27;</span>])
+            rrs.append(rr)
+        answer, authority, additional = <span class="hljs-built_in">list</span>(), <span class="hljs-built_in">list</span>(), <span class="hljs-built_in">list</span>()
+        <span class="hljs-keyword">for</span> i, rr <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(rrs):
+            <span class="hljs-keyword">if</span> i &lt; header[<span class="hljs-string">&#x27;ANCOUNT&#x27;</span>]:
+                answer.append(rr)
+            <span class="hljs-keyword">elif</span> i &lt; header[<span class="hljs-string">&#x27;ANCOUNT&#x27;</span>] + header[<span class="hljs-string">&#x27;NSCOUNT&#x27;</span>]:
+                authority.append(rr)
+            <span class="hljs-keyword">else</span>:
+                additional.append(rr)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;answer:&#x27;</span>, answer)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;authority:&#x27;</span>, authority)
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;additional:&#x27;</span>, additional)
+        <span class="hljs-keyword">return</span> message
+
+<span class="hljs-meta">    @classmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">handle_compression</span>(<span class="hljs-params">cls, scanner, length=<span class="hljs-built_in">float</span>(<span class="hljs-params"><span class="hljs-string">&quot;inf&quot;</span></span>)</span>):
+        <span class="hljs-string">&quot;&quot;&quot;
+        The compression scheme allows a domain name in a message to be represented as either:
+            - a pointer
+            - a sequence of labels ending in a zero octet
+            - a sequence of labels ending with a pointer
+        &quot;&quot;&quot;</span>
+        byte = scanner.next_bytes()
+        <span class="hljs-keyword">if</span> byte &gt;&gt; <span class="hljs-number">6</span> == <span class="hljs-number">3</span>:  <span class="hljs-comment"># a pointer</span>
+            pointer = (byte &amp; <span class="hljs-number">0x3F</span> &lt;&lt; <span class="hljs-number">8</span>) + scanner.next_bytes()
+            <span class="hljs-keyword">return</span> cls.handle_compression(Scanner(scanner.data, pointer))
+        data = scanner.next_bytes_until(<span class="hljs-keyword">lambda</span> current, offset: current == <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> current &gt;&gt; <span class="hljs-number">6</span> == <span class="hljs-number">3</span> <span class="hljs-keyword">or</span> offset &gt; length)
+        <span class="hljs-keyword">if</span> scanner.next_bytes(move=<span class="hljs-literal">False</span>) == <span class="hljs-number">0</span>:  <span class="hljs-comment"># a sequence of labels ending in a zero octet</span>
+            scanner.next_bytes()
+            <span class="hljs-keyword">return</span> data
+        <span class="hljs-comment"># a sequence of labels ending with a pointer</span>
+        result = data + <span class="hljs-string">&#x27;.&#x27;</span> + cls.handle_compression(Scanner(scanner.data, *scanner.position()))
+        scanner.next_bytes(<span class="hljs-number">2</span>)  <span class="hljs-comment"># 跳过2个字节的指针</span>
+        <span class="hljs-keyword">return</span> result
+</code></pre>
+<p>其中用到了一个自定义的Scanner类，用来帮助我们从bytes中按字节或位读取数据，其定义如下：</p>
+<pre><code class="language-python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Scanner</span>:
+    <span class="hljs-string">&quot;&quot;&quot;scan bytes&quot;&quot;&quot;</span>
+    __mark_offset_byte, __mark_offset_bit = <span class="hljs-number">0</span>, <span class="hljs-number">0</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, data: <span class="hljs-built_in">bytes</span>, offset_byte=<span class="hljs-number">0</span>, offset_bit=<span class="hljs-number">0</span></span>):
+        self.data = data
+        self.__offset_byte = offset_byte
+        self.__offset_bit = offset_bit
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">next_bits</span>(<span class="hljs-params">self, n=<span class="hljs-number">1</span></span>):
+        <span class="hljs-keyword">if</span> n &gt; (<span class="hljs-built_in">len</span>(self.data) - self.__offset_byte) * <span class="hljs-number">8</span> - self.__offset_bit:
+            <span class="hljs-keyword">raise</span> RuntimeError(<span class="hljs-string">&#x27;剩余数据不足{}位&#x27;</span>.<span class="hljs-built_in">format</span>(n))
+        <span class="hljs-keyword">if</span> n &gt; <span class="hljs-number">8</span> - self.__offset_bit:
+            <span class="hljs-keyword">raise</span> RuntimeError(<span class="hljs-string">&#x27;不能跨字节读取读取位&#x27;</span>)
+        result = self.data[self.__offset_byte] &gt;&gt; <span class="hljs-number">8</span> - self.__offset_bit - n &amp; (<span class="hljs-number">1</span> &lt;&lt; n) - <span class="hljs-number">1</span>
+        self.__offset_bit += n
+        <span class="hljs-keyword">if</span> self.__offset_bit == <span class="hljs-number">8</span>:
+            self.__offset_bit = <span class="hljs-number">0</span>
+            self.__offset_byte += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">return</span> result
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">next_bytes</span>(<span class="hljs-params">self, n=<span class="hljs-number">1</span>, convert=<span class="hljs-literal">True</span>, move=<span class="hljs-literal">True</span></span>):
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> self.__offset_bit == <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">raise</span> RuntimeError(<span class="hljs-string">&#x27;当前字节不完整，请先读取完当前字节的所有位&#x27;</span>)
+        <span class="hljs-keyword">if</span> n &gt; <span class="hljs-built_in">len</span>(self.data) - self.__offset_byte:
+            <span class="hljs-keyword">raise</span> RuntimeError(<span class="hljs-string">&#x27;剩余数据不足{}字节&#x27;</span>.<span class="hljs-built_in">format</span>(n))
+        result = self.data[self.__offset_byte: self.__offset_byte + n]
+        <span class="hljs-keyword">if</span> move:
+            self.__offset_byte += n
+        <span class="hljs-keyword">if</span> convert:
+            result = <span class="hljs-built_in">int</span>.from_bytes(result, <span class="hljs-string">&#x27;big&#x27;</span>)
+        <span class="hljs-keyword">return</span> result
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">next_bytes_until</span>(<span class="hljs-params">self, stop, convert=<span class="hljs-literal">True</span></span>):
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> self.__offset_bit == <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">raise</span> RuntimeError(<span class="hljs-string">&#x27;当前字节不完整，请先读取完当前字节的所有位&#x27;</span>)
+        end = self.__offset_byte
+        <span class="hljs-keyword">while</span> <span class="hljs-keyword">not</span> stop(self.data[end], end - self.__offset_byte):
+            end += <span class="hljs-number">1</span>
+        result = self.data[self.__offset_byte: end]
+        self.__offset_byte = end
+        <span class="hljs-keyword">if</span> convert:
+            <span class="hljs-keyword">if</span> result:
+                result = reduce(<span class="hljs-keyword">lambda</span> x, y: y <span class="hljs-keyword">if</span> (x == <span class="hljs-string">&#x27;.&#x27;</span>) <span class="hljs-keyword">else</span> x + y,
+                                <span class="hljs-built_in">map</span>(<span class="hljs-keyword">lambda</span> x: <span class="hljs-built_in">chr</span>(x) <span class="hljs-keyword">if</span> (<span class="hljs-number">31</span> &lt; x &lt; <span class="hljs-number">127</span>) <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;.&#x27;</span>, result))
+            <span class="hljs-keyword">else</span>:
+                result = <span class="hljs-string">&#x27;&#x27;</span>
+        <span class="hljs-keyword">return</span> result
+</code></pre>
+<p>然后需要做的是当收到114 DNS服务器的响应消息后，将消息缓存起来：</p>
+<pre><code class="language-python"><span class="hljs-comment"># 缓存响应结果</span>
+message = Message.from_bytes(response_data)
+message.save()
+</code></pre>
+<p>以上save方法就是将message中包含的各条RR保存起来，可以直接用一个集合来保存，也可以保存在一些专业的缓存设施中，比如redis。需要注意的是TTL的处理，若用redis缓存，它自带了TTL功能，可以直接使用。若是自己实现的，需要在保存的时候记录当前的时间，以便取出的时候能够判断是否过期。这些应该很容易实现，但是本人比较懒，这里就不写了……</p>
+<h3 id="43-添加记录功能">4.3 添加记录功能</h3>
+<p>最后，它需要具备能够读取我们自定义的记录，并将记录加入缓存。。这个也不想写了……</p>
+<p>另外，Message类还应该有一个<code>to_bytes</code>方法，它能将一个Message对象转换为bytes对象，用于将 从缓存中取出的数据（即RR记录）转换为bytes，返回给用户。这个其实就是<code>from_bytes</code>的逆过程，但实现起来应该比<code>from_bytes</code>简单许多，因为你可以不使用指针来压缩数据，这样处理起来就没什么难度了。同样不想写了……</p>
+<p>最后稍微做一下测试，算是做个结束：</p>
+<pre><code class="language-python"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:
+    server = Server(<span class="hljs-string">&#x27;172.16.42.254&#x27;</span>)
+    server.start()
+</code></pre>
+<p>使用nsloop发送DNS请求到我们自己写的服务器上，响应结果如下：</p>
+<pre><code>$ nslookup api<span class="hljs-selector-class">.sina</span><span class="hljs-selector-class">.com</span><span class="hljs-selector-class">.cn</span> <span class="hljs-number">172.16</span>.<span class="hljs-number">42.254</span>
+Server:        <span class="hljs-number">172.16</span>.<span class="hljs-number">42.254</span>
+Address:    <span class="hljs-number">172.16</span>.<span class="hljs-number">42.254</span>#<span class="hljs-number">53</span>
+
+Non-authoritative answer:
+api<span class="hljs-selector-class">.sina</span><span class="hljs-selector-class">.com</span><span class="hljs-selector-class">.cn</span>    canonical name = common6<span class="hljs-selector-class">.dpool</span><span class="hljs-selector-class">.sina</span><span class="hljs-selector-class">.com</span><span class="hljs-selector-class">.cn</span>.
+Name:    common6<span class="hljs-selector-class">.dpool</span><span class="hljs-selector-class">.sina</span><span class="hljs-selector-class">.com</span><span class="hljs-selector-class">.cn</span>
+Address: <span class="hljs-number">123.126</span>.<span class="hljs-number">56.253</span>
+</code></pre>
+<p>在运行的控制台中，打印出了从114 DNS返回的数据的解析结果：</p>
+<pre><code class="language-shell"><span class="hljs-meta">$ </span><span class="language-bash">sudo python3 dns.py</span> 
+The DNS server is running at 172.16.42.254...
+header: {&#x27;ID&#x27;: 25835, &#x27;QR&#x27;: 1, &#x27;OPCODE&#x27;: 0, &#x27;AA&#x27;: 0, &#x27;TC&#x27;: 0, &#x27;RD&#x27;: 1, &#x27;RA&#x27;: 1, &#x27;Z&#x27;: 0, &#x27;RCODE&#x27;: 0, &#x27;QDCOUNT&#x27;: 1, &#x27;ANCOUNT&#x27;: 2, &#x27;NSCOUNT&#x27;: 4, &#x27;ARCOUNT&#x27;: 4}
+questions: [{&#x27;QNAME&#x27;: &#x27;api.sina.com.cn&#x27;, &#x27;QTYPE&#x27;: 1, &#x27;QCLASS&#x27;: 1}]
+answer: [{&#x27;NAME&#x27;: &#x27;api.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 5, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 56, &#x27;RDLENGTH&#x27;: 16, &#x27;RDATA&#x27;: &#x27;common6.dpool.sina.com.cn&#x27;}, {&#x27;NAME&#x27;: &#x27;common6.dpool.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 1, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 34, &#x27;RDLENGTH&#x27;: 4, &#x27;RDATA&#x27;: &#x27;123.126.56.253&#x27;}]
+authority: [{&#x27;NAME&#x27;: &#x27;dpool.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 2, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26753, &#x27;RDLENGTH&#x27;: 6, &#x27;RDATA&#x27;: &#x27;ns1.sina.com.cn&#x27;}, {&#x27;NAME&#x27;: &#x27;dpool.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 2, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26753, &#x27;RDLENGTH&#x27;: 6, &#x27;RDATA&#x27;: &#x27;ns3.sina.com.cn&#x27;}, {&#x27;NAME&#x27;: &#x27;dpool.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 2, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26753, &#x27;RDLENGTH&#x27;: 6, &#x27;RDATA&#x27;: &#x27;ns2.sina.com.cn&#x27;}, {&#x27;NAME&#x27;: &#x27;dpool.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 2, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26753, &#x27;RDLENGTH&#x27;: 6, &#x27;RDATA&#x27;: &#x27;ns4.sina.com.cn&#x27;}]
+additional: [{&#x27;NAME&#x27;: &#x27;ns1.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 1, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26674, &#x27;RDLENGTH&#x27;: 4, &#x27;RDATA&#x27;: &#x27;202.106.184.166&#x27;}, {&#x27;NAME&#x27;: &#x27;ns2.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 1, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26652, &#x27;RDLENGTH&#x27;: 4, &#x27;RDATA&#x27;: &#x27;61.172.201.254&#x27;}, {&#x27;NAME&#x27;: &#x27;ns3.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 1, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26509, &#x27;RDLENGTH&#x27;: 4, &#x27;RDATA&#x27;: &#x27;123.125.29.99&#x27;}, {&#x27;NAME&#x27;: &#x27;ns4.sina.com.cn&#x27;, &#x27;TYPE&#x27;: 1, &#x27;CLASS&#x27;: 1, &#x27;TTL&#x27;: 26497, &#x27;RDLENGTH&#x27;: 4, &#x27;RDATA&#x27;: &#x27;121.14.1.22&#x27;}]
+</code></pre>
+<p>以上完整代码，见<a href="https://github.com/derker94/dns-server/blob/master/dns.py">这里</a></p>
+<h2 id="5-参考资料">5. 参考资料</h2>
+<ul>
+<li>计算机网络，自顶向下方法（原书第6版）/（美）库罗斯（Kurose，J.F.），（美）罗斯（Ross，K.W.）著；陈鸣译.——北京：机械工业出版社，2014.9</li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc1034">RFC 1034</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc1035">RFC 1035</a></li>
+<li><a href="https://github.com/code4craft/blackhole">BlackHole</a></li>
+<li><a href="http://blog.csdn.net/hunanchenxingyu/article/details/21488291">结合Wireshark分析DNS 协议</a></li>
+</ul>
