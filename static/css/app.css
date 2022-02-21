@@ -139,6 +139,10 @@
     margin: 8px 0;
 }
 
+.blog .table-wrapper {
+    overflow-y: auto;
+}
+
 .blog pre {
     background: #efefd2;
     overflow-x: scroll;
@@ -197,7 +201,6 @@
     /*archives*/
     .archives .articles-list {
         padding-left: 32px;
-        margin: 16px 0;
     }
 
     .archives .articles-list li {

@@ -24,8 +24,21 @@ const {blockTex, inlineTex} = texExtension((tex, level) => {
 
 marked.use({
   renderer: {
-    image: (href, title, text) => {
-      return `<figure><img src="${href}" alt="${text}" title="${text}"><figcaption>${text}</figcaption></figure>`
+    image(href, title, text) {
+      return `<figure class="image-wrapper"><img src="${href}" alt="${text}" title="${text}"><figcaption>${text}</figcaption></figure>`
+    },
+    table(header, body) {
+      if (body) {
+        body = '<tbody>' + body + '</tbody>'
+      }
+      return '<div class="table-wrapper">\n' +
+        '<table>\n'
+        + '<thead>\n'
+        + header
+        + '</thead>\n'
+        + body
+        + '</table>\n' +
+        '</div>';
     }
   },
   extensions: [blockTex, inlineTex]
