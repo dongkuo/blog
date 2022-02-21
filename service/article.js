@@ -3,7 +3,7 @@ const _ = require('underscore')
 const db = require('../dao/db')
 
 async function listAll() {
-  let [rows] = await db.query('SELECT id, title, category, post_time FROM article where status = 1')
+  let [rows] = await db.query('SELECT id, title, category, post_time FROM article WHERE status = 1')
   return rows
 }
 
@@ -12,12 +12,12 @@ async function groupByYear() {
 }
 
 async function groupByCategory(category) {
-  let [articles] = await db.query('SELECT id, title, category, post_time FROM article where category = ?', [category])
+  let [articles] = await db.query('SELECT id, title, category, post_time FROM article WHERE status = 1 AND category = ?', [category])
   return _groupByYear(articles)
 }
 
 async function getById(id) {
-  let [articles] = await db.query('SELECT * FROM article WHERE id = ?', [id])
+  let [articles] = await db.query('SELECT * FROM article WHERE id = ? AND status != -1', [id])
   return articles[0]
 }
 
