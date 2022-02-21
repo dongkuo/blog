@@ -3,7 +3,7 @@ const _ = require('underscore')
 const db = require('../dao/db')
 
 async function listAll() {
-  let [rows] = await db.query('SELECT id, title, category, post_time FROM article')
+  let [rows] = await db.query('SELECT id, title, category, post_time FROM article where status = 1')
   return rows
 }
 
