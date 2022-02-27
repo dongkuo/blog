@@ -116,7 +116,7 @@
 .moments .word {
     position: absolute;
     right: 8px;
-    bottom: 0px;
+    bottom: 0;
 }
 
 .moments .word-limit {

@@ -22,6 +22,7 @@ ul, ol {
 time {
     color: #b5b59c;
     font-weight: normal;
+    font-family: monospace, ui-monospace;
 }
 
 a {
