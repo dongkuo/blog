@@ -125,7 +125,7 @@
 
 /*blog*/
 .blog p {
-    margin: 24px 0;
+    margin: 16px 0;
 }
 
 .blog blockquote {
@@ -158,6 +158,7 @@
 .blog figure img {
     max-width: 100%;
     border-radius: 3px;
+    background: #efefd2;
 }
 
 .blog figure figcaption {
