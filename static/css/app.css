@@ -190,6 +190,7 @@
 .katex-block {
     display: block;
     text-align: center;
+    overflow-y: auto;
 }
 
 .player-iframe {
