@@ -199,7 +199,7 @@
     height: 86px;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 680px) {
     /*archives*/
     .archives .articles-list {
         padding-left: 32px;
