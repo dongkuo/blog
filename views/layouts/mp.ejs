@@ -15,7 +15,7 @@
         timestamp: resp.data.data.timestamp,
         nonceStr: resp.data.data.nonceStr,
         signature: resp.data.data.signature,
-        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData', 'onMenuShareAppMessage','onMenuShareTimeline', 'onMenuShareQQ', 'onMenuShareQZone']
+        jsApiList: ['onMenuShareAppMessage','onMenuShareTimeline', 'onMenuShareQQ', 'onMenuShareQZone']
       });
       wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
         wx.onMenuShareAppMessage({
