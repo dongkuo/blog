@@ -15,9 +15,9 @@ marked.setOptions({
 })
 
 const {blockTex, inlineTex} = texExtension((tex, level) => {
-  let html = katex.renderToString(tex)
+  let html = katex.renderToString(tex, {displayMode: level === 'block'})
   if (html && level === 'block') {
-    html = html.replace(/class="katex"/g, 'class="katex katex-block"')
+    html = `<p class="katex-block">${html}</p>`
   }
   return html
 })
