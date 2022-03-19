@@ -10,7 +10,7 @@
   axios.get(`https://chuandaoshi.cn/api/weixin/signature?url=${encodeURIComponent(window.location.href)}`)
     .then(resp => {
       wx.config({
-        debug: true,
+        debug: false,
         appId: resp.data.data.appId,
         timestamp: resp.data.data.timestamp,
         nonceStr: resp.data.data.nonceStr,
