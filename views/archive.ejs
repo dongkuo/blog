@@ -15,7 +15,7 @@
             <% for (let article of group.articles){ %>
                 <li>
                     <time><%= article.postDate %></time>
-                    —
+                    -
                     <a class="link-primary"
                        href="/article/<%= article.id %>?category=<%= article.category %>"><%= article.title %></a>
                 </li>

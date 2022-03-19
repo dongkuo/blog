@@ -29,7 +29,7 @@ function _groupByYear(allArticles) {
   for (let i = sortedArticles.length - 1; i >= 0; i--) {
     let article = sortedArticles[i]
     let postDateTime = moment(article['post_time'])
-    article.postDate = postDateTime.format('YYYY-MM-DD')
+    article.postDate = postDateTime.format('MM/DD')
     let year = moment(article['post_time']).year()
     if (!currentGroup || year !== currentGroup.year) {
       currentGroup = {year, articles: []}
