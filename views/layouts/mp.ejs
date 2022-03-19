@@ -1,28 +1,28 @@
 <!--微信公众号-->
 <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 <script>
-    function defaultWxShare() {
-        let firstImg = document.querySelector('main img') || document.querySelector('body img')
-        let imgUrl = firstImg && firstImg.src ? firstImg.src : window.location.origin + '/static/img/logo.jpg'
-        return {title: window.document.title, link: window.location.href, imgUrl};
-    }
+  function defaultWxShare() {
+    let firstImg = document.querySelector('main img') || document.querySelector('body img')
+    let imgUrl = firstImg && firstImg.src ? firstImg.src : window.location.origin + '/static/img/logo.jpg'
+    return {title: window.document.title, link: window.location.href, imgUrl};
+  }
 
-    axios.get(`https://chuandaoshi.cn/api/weixin/signature?url=${encodeURIComponent(window.location.href)}`)
-        .then(resp => {
-            wx.config({
-                debug: false,
-                appId: resp.data.data.appId,
-                timestamp: resp.data.data.timestamp,
-                nonceStr: resp.data.data.nonceStr,
-                signature: resp.data.data.signature,
-                jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
-            });
-            wx.ready(function () {
-                let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
-              wx.updateAppMessageShareData(wxShare);
-              wx.updateTimelineShareData(wxShare);
-            });
-        })
-        .catch(err => {
-        })
+  axios.get(`https://chuandaoshi.cn/api/weixin/signature?url=${encodeURIComponent(window.location.href)}`)
+    .then(resp => {
+      wx.config({
+        debug: false,
+        appId: resp.data.data.appId,
+        timestamp: resp.data.data.timestamp,
+        nonceStr: resp.data.data.nonceStr,
+        signature: resp.data.data.signature,
+        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+      });
+      wx.ready(function () {
+        let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
+        wx.updateAppMessageShareData(wxShare);
+        wx.updateTimelineShareData(wxShare);
+      });
+    })
+    .catch(err => {
+    })
 </script>
