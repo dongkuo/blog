@@ -112,7 +112,7 @@ img {
 }
 
 .container {
-    max-width: 680px;
+    max-width: 720px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -306,7 +306,7 @@ header .nav-list .active {
     margin-bottom: 32px;
 }
 
-@media screen and (max-width: 680px) {
+@media screen and (max-width: 720px) {
 
     header .container {
         padding: 8px;
