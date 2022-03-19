@@ -15,13 +15,15 @@
         timestamp: resp.data.data.timestamp,
         nonceStr: resp.data.data.nonceStr,
         signature: resp.data.data.signature,
-        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData', 'onMenuShareAppMessage','onMenuShareTimeline', 'onMenuShareQQ', 'onMenuShareQZone']
       });
       wx.ready(function () {
         let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
         wx.updateAppMessageShareData(wxShare);
         wx.updateTimelineShareData(wxShare);
       });
+      wx.error(function (res) {
+      })
     })
     .catch(err => {
     })
