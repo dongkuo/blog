@@ -26,10 +26,13 @@
           },
           cancel: function () {
           }
-        })
+        });
+
         wx.error(function (e) {
           window.alert('微信SDK加载出错:' + e)
         });
+
+        wx.showOptionMenu();
       });
 
       // wx.ready(function () {
