@@ -10,38 +10,18 @@
   axios.get(`https://chuandaoshi.cn/api/weixin/signature?url=${encodeURIComponent(window.location.href)}`)
     .then(resp => {
       wx.config({
-        debug: false,
+        debug: true,
         appId: resp.data.data.appId,
         timestamp: resp.data.data.timestamp,
         nonceStr: resp.data.data.nonceStr,
         signature: resp.data.data.signature,
-        jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline', 'onMenuShareQQ', 'onMenuShareQZone']
+        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
       });
-      wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
-        wx.onMenuShareTimeline({
-          title: 'hello',
-          link: 'https://derker.site',
-          imgUrl: 'https://derker.site/static/img/logo.jpg',
-          success: function () {
-          },
-          cancel: function () {
-          }
-        });
-
-        wx.error(function (e) {
-          window.alert('微信SDK加载出错:' + e)
-        });
-
-        wx.showOptionMenu();
+      wx.ready(function () {
+        let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
+        wx.updateAppMessageShareData(wxShare);
+        wx.updateTimelineShareData(wxShare);
       });
-
-      // wx.ready(function () {
-      //   let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
-      //   wx.updateAppMessageShareData(wxShare);
-      //   wx.updateTimelineShareData(wxShare);
-      // });
-      // wx.error(function (res) {
-      // });
     })
     .catch(err => {
     })
