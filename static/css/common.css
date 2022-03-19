@@ -308,10 +308,6 @@ header .nav-list .active {
 
 @media screen and (max-width: 680px) {
 
-    html, body {
-        font-size: 18px;
-    }
-
     header .container {
         padding: 8px;
     }
