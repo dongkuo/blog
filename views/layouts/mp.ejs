@@ -17,13 +17,24 @@
         signature: resp.data.data.signature,
         jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData', 'onMenuShareAppMessage','onMenuShareTimeline', 'onMenuShareQQ', 'onMenuShareQZone']
       });
-      wx.ready(function () {
-        let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
-        wx.updateAppMessageShareData(wxShare);
-        wx.updateTimelineShareData(wxShare);
+      wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
+        wx.updateAppMessageShareData({
+          title: 'hello', // 分享标题
+          desc: '11111', // 分享描述
+          link: 'https://derker.site', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: 'https://derker.site/static/img/logo.jpg', // 分享图标
+          success: function () {
+            // 设置成功
+          }
+        })
       });
-      wx.error(function (res) {
-      })
+      // wx.ready(function () {
+      //   let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
+      //   wx.updateAppMessageShareData(wxShare);
+      //   wx.updateTimelineShareData(wxShare);
+      // });
+      // wx.error(function (res) {
+      // });
     })
     .catch(err => {
     })
