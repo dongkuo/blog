@@ -19,7 +19,8 @@
             });
             wx.ready(function () {
                 let wxShare = typeof window.wxShare === 'undefined' ? defaultWxShare() : window.wxShare
-                wx.updateTimelineShareData(wxShare)
+              wx.updateAppMessageShareData(wxShare);
+              wx.updateTimelineShareData(wxShare);
             });
         })
         .catch(err => {
