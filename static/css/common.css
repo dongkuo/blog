@@ -54,6 +54,11 @@ code, pre, pre tt {
     border-radius: 3px;
 }
 
+p code {
+    background: #efefd2;
+    padding: 2px 4px;
+}
+
 h1 {
     font-size: 28px;
 }
