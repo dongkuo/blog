@@ -13,7 +13,8 @@
             box-shadow: none;
             border-radius: 2px;
         }
-        .aplayer .aplayer-info{
+
+        .aplayer .aplayer-info {
             padding: 8px;
             height: 66px;
             border: 1px solid #dfddd9;
@@ -27,6 +28,7 @@
 <script>
   const ap = new APlayer({
     container: document.getElementById('aplayer'),
+    preload: 'none',
     audio: [{
       name: '<%= music.name %>',
       artist: '<%= music.artist %>',
