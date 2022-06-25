@@ -52,7 +52,7 @@
     left: 0;
     top: 0;
     z-index: 2;
-    background: #FFFFF0;
+    background: #FFFFF8;
 }
 
 .moments .timeline-month {
@@ -104,7 +104,7 @@
     border: 1px solid #48412a;
     padding: 8px;
     border-radius: 2px;
-    background: #FFFFF0;
+    background: #FFFFF8;
     color: #48412a;
 }
 

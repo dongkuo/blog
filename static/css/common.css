@@ -1,16 +1,17 @@
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
-    line-height: 1;
+    font-weight: 900;
 }
 
 body, button, input, select, textarea {
-    font-weight: 400;
+    font-weight: normal;
 }
 
 html, body {
     color: #48412a;
-    background: #FFFFF0;
-    font: normal 16px/1.8 PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;
+    background: #FFFFF8;
+    font-family: "source-han-serif-sc", "SimSun", "\5B8B\4F53", charter, Georgia, Cambria, 'Times New Roman', Times, serif;
+    line-height: 1.8;
+    font-size: 18px;
     padding: 0;
     margin: 0;
 }
@@ -199,7 +200,7 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    background: #FFFFF0;
+    background: #FFFFF8;
     z-index: 9999;
 }
 
@@ -226,11 +227,13 @@ header .nav-list {
     margin-left: 40px;
     line-height: 40px;
     text-align: center;
+    font-weight: 800;
 }
 
 header .nav-list a {
     color: #37474f;
     padding: 0 16px;
+    font-weight: 800;
 }
 
 header .nav-list a:hover {
@@ -239,7 +242,6 @@ header .nav-list a:hover {
 
 header .nav-list .active {
     color: #CD9B1D;
-    font-weight: bold;
 }
 
 /*login*/
