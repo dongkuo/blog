@@ -127,6 +127,7 @@
 /*blog*/
 .blog p {
     margin: 16px 0;
+    letter-spacing: 2px;
 }
 
 .blog blockquote {
