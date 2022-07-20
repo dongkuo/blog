@@ -5,11 +5,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.4.0/styles/default.css">
     <title><%= article.title %> - derker的博客</title>
-    <style>
-        .title{
-            line-height: 1;
-        }
-    </style>
 </head>
 
 <body>
@@ -17,8 +12,9 @@
 <%- include('layouts/header.ejs') %>
 
 <main class="container blog">
-    <h1 class="title"><%= article.title %><br>
-        <time class="text-hint"><%= article.postDateTime %></time>
+    <h1 class="title">
+        <div class="title"><%= article.title %></div>
+        <div class="time text-hint"><%= article.postDateTime %></div>
     </h1>
     <div class="article-content">
         <%- article.content %>
