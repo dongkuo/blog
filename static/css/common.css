@@ -227,13 +227,13 @@ header .nav-list {
     margin-left: 40px;
     line-height: 40px;
     text-align: center;
-    font-weight: 800;
+    font-weight: 900;
 }
 
 header .nav-list a {
     color: #37474f;
     padding: 0 16px;
-    font-weight: 800;
+    font-weight: 900;
 }
 
 header .nav-list a:hover {
