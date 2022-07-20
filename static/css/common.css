@@ -34,7 +34,7 @@ a {
 }
 
 h1 {
-    margin: 24px 0;
+    margin: 20px 0;
 }
 
 h2, h3, h4, h5, h6, p, pre, blockquote, ul, ol, figure {
@@ -96,7 +96,7 @@ footer p {
 }
 
 main {
-    margin: 80px 0 32px 0;
+    margin: 72px 0 32px 0;
 }
 
 table {
@@ -341,7 +341,7 @@ header .nav-list .active {
     }
 
     main {
-        margin: 64px 0 32px 0;
+        margin: 56px 0 32px 0;
         padding: 0 16px;
     }
 
