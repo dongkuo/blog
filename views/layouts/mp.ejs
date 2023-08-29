@@ -7,7 +7,7 @@
     return {title: window.document.title, link: window.location.href, imgUrl};
   }
 
-  axios.get(`https://chuandaoshi.cn/api/weixin/signature?url=${encodeURIComponent(window.location.href)}`)
+  axios.get(`https://api.chuandaoshi.cn/weixin/signature?url=${encodeURIComponent(window.location.href)}`)
     .then(resp => {
       wx.config({
         debug: false,
